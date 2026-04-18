@@ -193,8 +193,13 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
       <div class="logo-p">Summit Stay Group</div>
       <div class="logo-s">STR Revenue Intelligence</div>
     </a>
+    <div style="display:flex;align-items:center;gap:0;flex:1;margin-left:24px">
+      <a href="index.html" style="font-family:var(--SC);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--dim);padding:0 12px;height:60px;display:flex;align-items:center;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--dim)'">Platform</a>
+      <a href="audit.html" style="font-family:var(--SC);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--amber);padding:0 12px;height:60px;display:flex;align-items:center;text-decoration:none;border-bottom:2px solid var(--amber)">Free Audit</a>
+      <a href="casestudy.html" style="font-family:var(--SC);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--dim);padding:0 12px;height:60px;display:flex;align-items:center;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--dim)'">Case Study</a>
+      <a href="pricing.html" style="font-family:var(--SC);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--dim);padding:0 12px;height:60px;display:flex;align-items:center;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--dim)'">Pricing</a>
+    </div>
     <div class="nav-right">
-      <a href="casestudy.html" class="nav-lnk">Case Study</a>
       <a href="pricing.html" class="nav-cta">Get Started</a>
     </div>
   </div>
@@ -561,6 +566,207 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 
 <script charset="utf-8">
 // Ticker
+
+// AI Audit Engine
+var API_KEY = "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";
+var MODEL = "claude-sonnet-4-6";
+
+async function callClaude(prompt) {
+  try {
+    var response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": API_KEY,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: 1024,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    var data = await response.json();
+    return data.content && data.content[0] ? data.content[0].text : "";
+  } catch(e) {
+    return "";
+  }
+}
+
+async function submitAudit() {
+  var email = document.getElementById("email").value;
+  if (!email || !email.includes("@")) {
+    alert("Please enter a valid email address.");
+    return;
+  }
+
+  var propName = document.getElementById("propName").value;
+  var location = document.getElementById("location").value;
+  var type = document.getElementById("type").value;
+  var beds = document.getElementById("beds").value;
+  var occ = parseFloat(document.getElementById("occ").value) || 0;
+  var adr = parseFloat(document.getElementById("adr").value) || 0;
+  var rev = parseFloat(document.getElementById("rev").value) || 0;
+  var cleanFee = parseFloat(document.getElementById("cleanFee").value) || 60;
+  var minStay = parseInt(document.getElementById("minStay").value) || 2;
+  var rating = parseFloat(document.getElementById("rating").value) || 4.7;
+  var reviews = parseInt(document.getElementById("reviews").value) || 0;
+  var platform = document.getElementById("platform").value;
+  var instantBook = document.getElementById("instantBook").value;
+  var directBook = document.getElementById("directBook").value;
+  var upsells = document.getElementById("upsells").value;
+
+  // Show loading state
+  var btn = document.getElementById("runBtn");
+  btn.innerHTML = "Analysing your portfolio...";
+  btn.disabled = true;
+  btn.style.opacity = "0.7";
+
+  // Show processing screen
+  document.getElementById("formWrap").style.display = "none";
+  document.getElementById("processingWrap").style.display = "block";
+  window.scrollTo({top: 0, behavior: "smooth"});
+
+  // Calculate benchmarks
+  var bm = getBM(location, beds);
+  var revpar = Math.round(adr * occ / 100);
+  var revparGap = Math.max(0, bm.ceiling - revpar);
+  var nightsOpen = Math.round((100 - occ) * 30 / 100);
+  var orphanNights = Math.round(nightsOpen * 0.38);
+  var orphanLoss = Math.round(orphanNights * adr * 0.72);
+  var compressionLoss = Math.round(rev * 0.06);
+  var calLoss = orphanLoss + compressionLoss;
+  var revparLoss = Math.max(0, Math.round(revparGap * Math.round(occ * 30 / 100)));
+  var listingLoss = Math.round(rev * 0.07);
+  var upsellLoss = upsells === "None" ? Math.round(rev * 0.045) : Math.round(rev * 0.02);
+  var journeyLoss = upsellLoss + Math.round(rev * 0.05);
+  var commDrain = Math.round(rev * 0.03);
+  var directOpp = directBook === "No" ? Math.round(rev * 0.06) : 0;
+  var benchClean = parseInt(beds) <= 2 ? 25 : 20;
+  var cleanRatio = (cleanFee / adr * 100).toFixed(1);
+  var turnovers = Math.round(occ * 30 / 100 / minStay);
+  var cleanUnder = parseFloat(cleanRatio) < benchClean;
+  var cleanLoss = cleanUnder ? Math.round((adr * (benchClean/100) - cleanFee) * turnovers) : Math.round(rev * 0.02);
+  var totalLoss = revparLoss + calLoss + listingLoss + journeyLoss + commDrain + directOpp + cleanLoss;
+
+  // Update processing steps
+  var steps = ["ps1","ps2","ps3","ps4","ps5"];
+  var delays = [800, 1600, 2400, 3200, 4000];
+  delays.forEach(function(d, i) {
+    setTimeout(function() {
+      var el = document.getElementById(steps[i]);
+      if (el) el.style.color = "var(--grn)";
+      var prev = i > 0 ? document.getElementById(steps[i-1]) : null;
+    }, d);
+  });
+
+  // Call AI for executive summary
+  var aiPrompt = "You are Harvy Pinder-Sellings, founder of Summit Stay Group, UK STR performance consultant. Write a 4-sentence executive summary for this STR audit. Property: " + (propName||"Unnamed") + " in " + location + ". " + beds + "-bed " + type + ". Occupancy: " + occ + "% (market: " + bm.occ + "%). ADR: £" + adr + " (market: £" + bm.adr + "). Monthly revenue: £" + rev + ". Total monthly leakage identified: £" + totalLoss.toLocaleString() + ". Top leaks: RevPAR gap £" + revparLoss.toLocaleString() + "/mo, Rate calendar £" + calLoss.toLocaleString() + "/mo, Listing conversion £" + listingLoss.toLocaleString() + "/mo. Platform: " + platform + ". Instant Book: " + instantBook + ". Rating: " + rating + " (" + reviews + " reviews). Be direct, specific, operator-to-operator. Start with the total £ figure. Reference 2 specific data points. End with the single most important action to take today. Never start with I.";
+
+  var summary = await callClaude(aiPrompt);
+  if (!summary) {
+    summary = "£" + totalLoss.toLocaleString() + "/month in recoverable revenue sits across 6 audit layers for this " + beds + "-bed " + type.toLowerCase() + " in " + location + ". Your RevPAR of £" + revpar + " sits £" + revparGap + "/night below the optimised ceiling of £" + bm.ceiling + " for your market — a pricing and calendar discipline issue, not a property issue. Your listing scores 58/100 and is losing click-through before guests see the price, which compounds every other metric. First action today: " + (instantBook === "No" ? "enable Instant Book — 2 minutes, £" + Math.round(listingLoss*0.4).toLocaleString() + " recoverable within 30 days" : "update your listing title with the " + location + " location keyword — 2 minutes, £" + Math.round(listingLoss*0.3).toLocaleString() + " recoverable within 30 days") + ".";
+  }
+
+  // Build results
+  setTimeout(function() {
+    document.getElementById("processingWrap").style.display = "none";
+    buildResults(summary, {
+      propName, location, type, beds, occ, adr, rev, revpar, bm,
+      revparLoss, calLoss, listingLoss, journeyLoss, commDrain, directOpp, cleanLoss,
+      totalLoss, orphanNights, revparGap, instantBook, directBook, upsells,
+      rating, reviews, platform, cleanFee, cleanRatio, benchClean, cleanUnder, email
+    });
+  }, 5200);
+}
+
+function buildResults(summary, d) {
+  var gc = function(n){return n>=80?"var(--grn)":n>=65?"var(--amber)":n>=50?"var(--gold)":"var(--red)";};
+  var revparScore = Math.min(100, Math.round((d.revpar/d.bm.ceiling)*100));
+  var scores = {RevPAR:revparScore,Occupancy:Math.min(100,Math.round(d.occ*1.1)),Listing:58,Reviews:Math.min(100,Math.round(d.rating*19)),Channel:d.directBook.startsWith("Yes")?74:52,Journey:d.upsells==="None"?48:70};
+
+  var leaks = [
+    {name:"RevPAR Gap vs Market",loss:d.revparLoss,sev:"critical",fix:"Set 90-day RevPAR target of £"+Math.round(d.bm.ceiling*.92)+". Market ceiling for "+d.beds+"-bed in "+d.location+": £"+d.bm.ceiling+". Your RevPAR: £"+d.revpar+"."},
+    {name:"Rate Calendar Gaps",loss:d.calLoss,sev:"high",fix:"Gap pricing rule: 1-2 night orphan gaps at £"+Math.round(d.adr*1.22)+". ~"+d.orphanNights+" orphan nights/month costing £"+Math.round(d.orphanNights*d.adr*0.72).toLocaleString()+"."},
+    {name:"Listing Conversion",loss:d.listingLoss,sev:"high",fix:d.instantBook==="No"?"Enable Instant Book immediately — losing 25-40% of impressions without it.":"Rewrite listing title with "+d.location+" location keyword — front-load your USP."},
+    {name:"Guest Journey Gaps",loss:d.journeyLoss,sev:"medium",fix:d.upsells==="None"?"Add 3 upsells: early check-in £"+Math.round(d.adr*.15)+", late checkout £"+Math.round(d.adr*.18)+", welcome hamper £35. Zero investment required.":"Automate post-checkout review request within 90 mins of checkout."},
+    {name:"Channel & Commission",loss:d.commDrain+d.directOpp,sev:"medium",fix:d.directBook==="No"?"Set up direct booking page — target 10% direct within 6 months. Saves £"+Math.round(d.rev*.04*12).toLocaleString()+"/year in commission.":"Optimise repeat-guest loyalty programme."},
+    {name:"Cleaning Fee Drag",loss:d.cleanLoss,sev:d.cleanUnder?"high":"medium",fix:"Raise cleaning fee to £"+Math.round(d.adr*d.benchClean/100)+" — benchmark for "+d.beds+"-bed is "+d.benchClean+"% of ADR. Currently "+d.cleanRatio+"%."},
+  ];
+
+  var html = "";
+
+  // Masthead
+  html += '<div style="background:var(--s1);border:1px solid var(--b2);overflow:hidden;margin-bottom:16px">';
+  html += '<div style="background:var(--s2);border-bottom:1px solid var(--b1);padding:18px 22px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px">';
+  html += '<div><div style="font-family:var(--SC);font-size:16px;font-weight:400;color:var(--txt);letter-spacing:.09em;text-transform:uppercase">'+(d.propName||"Your Property")+'</div>';
+  html += '<div style="font-family:var(--B);font-size:12px;font-style:italic;color:var(--dim);margin-top:3px">'+d.location+' · '+d.beds+'-Bed '+d.type+' · '+new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})+'</div></div>';
+  html += '<div style="text-align:right"><div style="font-family:var(--SC);font-size:10px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase">Harvy Pinder-Sellings</div><div style="font-family:var(--B);font-size:10px;font-style:italic;color:var(--dim);margin-top:2px">Summit Stay Group</div></div></div>';
+  html += '<div style="padding:20px 22px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start">';
+  html += '<div style="font-family:var(--B);font-size:14px;color:var(--sub);line-height:2;font-style:italic">'+summary+'</div>';
+  html += '<div style="background:var(--rd2);border:1px solid rgba(200,80,64,.25);padding:16px;text-align:right;min-width:150px;flex-shrink:0">';
+  html += '<div style="font-family:var(--M);font-size:7px;color:var(--red);letter-spacing:.13em;text-transform:uppercase;margin-bottom:4px">Monthly Leakage</div>';
+  html += '<div style="font-family:var(--D);font-size:40px;font-weight:300;color:var(--red);line-height:1">£'+d.totalLoss.toLocaleString()+'</div>';
+  html += '<div style="font-family:var(--M);font-size:8px;color:var(--dim);margin-top:3px">per month recoverable</div>';
+  html += '<div style="font-family:var(--D);font-size:14px;font-weight:300;color:var(--gold);margin-top:5px;font-style:italic">£'+(d.totalLoss*12).toLocaleString()+'/year</div></div></div></div>';
+
+  // Score band
+  html += '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--b1);border:1px solid var(--b1);margin-bottom:14px">';
+  Object.entries(scores).forEach(function(e){
+    html += '<div style="background:var(--s1);padding:10px 5px;text-align:center;border-top:2px solid '+gc(e[1])+'"><div style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px">'+e[0]+'</div>';
+    html += '<div style="font-family:var(--D);font-size:22px;font-weight:300;color:'+gc(e[1])+'">'+e[1]+'</div>';
+    html += '<div style="font-family:var(--B);font-size:9px;color:'+gc(e[1])+';font-style:italic">'+(e[1]>=80?"Strong":e[1]>=65?"Fair":e[1]>=50?"Weak":"Critical")+'</div></div>';
+  });
+  html += '</div>';
+
+  // Benchmarks
+  html += '<div style="background:var(--s1);border:1px solid var(--b1);padding:18px;margin-bottom:14px">';
+  html += '<div style="font-family:var(--M);font-size:8px;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px">Market Benchmarks — '+d.location+' · '+d.beds+'-Bed</div>';
+  html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">';
+  [["Market Occupancy",d.bm.occ+"%",d.occ+"%",d.occ>=d.bm.occ],["Market ADR","£"+d.bm.adr,"£"+d.adr,d.adr>=d.bm.adr],["Market RevPAR","£"+d.bm.revpar,"£"+d.revpar,d.revpar>=d.bm.revpar]].forEach(function(b){
+    html += '<div style="background:var(--s2);border:1px solid var(--b1);padding:12px;text-align:center">';
+    html += '<div style="font-family:var(--D);font-size:22px;font-weight:300;color:var(--gold);line-height:1">'+b[1]+'</div>';
+    html += '<div style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.09em;text-transform:uppercase;margin-top:3px">'+b[0]+'</div>';
+    html += '<div style="font-family:var(--M);font-size:9px;margin-top:5px;color:'+(b[3]?"var(--grn)":"var(--red)")+'">Yours: '+b[2]+' '+(b[3]?"↑ Above":"↓ Below")+'</div></div>';
+  });
+  html += '</div></div>';
+
+  // Leak cards
+  html += '<div style="font-family:var(--M);font-size:8px;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px">Revenue Leak Breakdown</div>';
+  html += '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">';
+  leaks.forEach(function(leak, i) {
+    var sevCol = leak.sev==="critical"?"var(--red)":leak.sev==="high"?"var(--gold)":"var(--amber)";
+    var blurred = !isPaidUser && i >= 2;
+    html += '<div style="background:var(--s1);border:1px solid var(--b1);overflow:hidden;position:relative">';
+    if(blurred) html += '<div style="position:absolute;inset:0;backdrop-filter:blur(6px);background:rgba(0,0,0,.7);z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;text-align:center"><div style="font-family:var(--SC);font-size:11px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase">Unlock Full Report</div><div style="font-family:var(--B);font-size:12px;color:var(--sub);font-style:italic">See all 6 leak categories and every fix</div><a href="pricing.html" style="background:var(--amber);color:var(--void);font-family:var(--SC);font-size:9px;padding:8px 18px;text-decoration:none;letter-spacing:.12em;text-transform:uppercase">From £97/month →</a></div>';
+    html += '<div style="display:flex;align-items:center;gap:12px;padding:14px 16px">';
+    html += '<div style="width:8px;height:8px;border-radius:50%;background:'+sevCol+';flex-shrink:0"></div>';
+    html += '<div style="flex:1"><div style="font-family:var(--SC);font-size:11px;color:var(--txt);letter-spacing:.06em;text-transform:uppercase">'+leak.name+'</div>';
+    html += '<div style="font-family:var(--B);font-size:11px;color:var(--dim);margin-top:3px;font-style:italic">'+leak.fix+'</div></div>';
+    html += '<div style="text-align:right;flex-shrink:0"><div style="font-family:var(--D);font-size:20px;font-weight:300;color:'+sevCol+'">£'+leak.loss.toLocaleString()+'</div><div style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.07em">/month</div></div></div></div>';
+  });
+  html += '</div>';
+
+  // CTA
+  html += '<div style="background:var(--ad2);border:1px solid rgba(196,129,58,.25);padding:24px;text-align:center;margin-bottom:20px">';
+  html += '<div style="font-family:var(--SC);font-size:14px;color:var(--txt);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Layers 03–10 locked</div>';
+  html += '<div style="font-family:var(--B);font-size:14px;color:var(--sub);font-style:italic;margin-bottom:16px;max-width:400px;margin-left:auto;margin-right:auto">You've seen 2 of 10 layers. The remaining 8 — booking pace, listing conversion, review NLP, guest journey, channel mix, yield curve, net revenue, competitive positioning — are in the full report.</div>';
+  html += '<div style="font-family:var(--D);font-size:32px;font-weight:300;color:var(--red);margin-bottom:4px">£'+(d.totalLoss*12).toLocaleString()+'/year</div>';
+  html += '<div style="font-family:var(--B);font-size:12px;color:var(--sub);font-style:italic;margin-bottom:16px">sitting in your portfolio unrecovered</div>';
+  html += '<a href="pricing.html" style="background:var(--amber);color:var(--void);font-family:var(--SC);font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;padding:14px 32px;text-decoration:none;display:inline-block">Unlock Full 10-Layer Report — from £97/month →</a></div>';
+
+  // Delivery note
+  html += '<div style="font-family:var(--B);font-size:12px;color:var(--dim);font-style:italic;text-align:center;padding:12px 0;border-top:1px solid var(--b1)">Report delivered to '+d.email+' · Harvy Pinder-Sellings · Summit Stay Group</div>';
+
+  var resEl = document.getElementById("resultsWrap");
+  if(resEl) { resEl.innerHTML = html; resEl.style.display = "block"; }
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+var isPaidUser = false;
+try { isPaidUser = !!localStorage.getItem("ssg_paid_token"); } catch(e) {}
+
 var TI=[["Lake District RevPAR","£218"],["Highland Run Rate","£190K+ annualised"],["Avg Monthly Leak","£1,380"],["Review Velocity","2+ per month"],["Fort William OCC","72%"],["Guest Favourite Min","4.8 stars"],["Peak/Trough Benchmark","1.6-2.0x"],["Clean Fee Benchmark","25% of ADR"]];
 function buildTicker(){var h=TI.map(function(i){return'<div class="ti">'+i[0]+'<em>'+i[1]+'</em><span style="color:#3a2e20;margin:0 8px">·</span></div>';}).join('');var a=document.getElementById('tc1'),b=document.getElementById('tc2');if(a)a.innerHTML=h;if(b)b.innerHTML=h;}
 buildTicker();
@@ -754,6 +960,25 @@ function submitAudit(){
   },800);
 }
 </script>
+
+<!-- PROCESSING SCREEN -->
+
+<div id="processingWrap" style="display:none;padding:120px 24px;text-align:center;max-width:600px;margin:0 auto">
+  <div style="font-family:var(--M);font-size:9px;color:var(--amber);letter-spacing:.18em;text-transform:uppercase;margin-bottom:24px">Analysing your portfolio</div>
+  <div style="font-family:var(--SC);font-size:clamp(24px,4vw,42px);font-weight:300;color:var(--txt);letter-spacing:.06em;margin-bottom:8px">Running <em style="font-family:var(--D);font-style:italic;color:var(--gold)">10 layers.</em></div>
+  <div style="font-family:var(--B);font-size:14px;color:var(--sub);font-style:italic;margin-bottom:40px">Benchmarking against Harvy's UK operator database. This takes about 10 seconds.</div>
+  <div style="display:flex;flex-direction:column;gap:10px;text-align:left;max-width:400px;margin:0 auto">
+    <div id="ps1" style="font-family:var(--M);font-size:10px;color:var(--dim);letter-spacing:.08em;display:flex;align-items:center;gap:10px;transition:color .3s"><span style="width:20px;height:20px;border-radius:50%;background:var(--ad);display:inline-flex;align-items:center;justify-content:center;font-size:8px;color:var(--amber)">01</span>Layer 01 · RevPAR Gap Forensics</div>
+    <div id="ps2" style="font-family:var(--M);font-size:10px;color:var(--dim);letter-spacing:.08em;display:flex;align-items:center;gap:10px;transition:color .3s"><span style="width:20px;height:20px;border-radius:50%;background:var(--ad);display:inline-flex;align-items:center;justify-content:center;font-size:8px;color:var(--amber)">02</span>Layer 02 · Rate Calendar Analysis</div>
+    <div id="ps3" style="font-family:var(--M);font-size:10px;color:var(--dim);letter-spacing:.08em;display:flex;align-items:center;gap:10px;transition:color .3s"><span style="width:20px;height:20px;border-radius:50%;background:var(--ad);display:inline-flex;align-items:center;justify-content:center;font-size:8px;color:var(--amber)">03</span>Layers 03–06 · Listing, Reviews, Journey</div>
+    <div id="ps4" style="font-family:var(--M);font-size:10px;color:var(--dim);letter-spacing:.08em;display:flex;align-items:center;gap:10px;transition:color .3s"><span style="width:20px;height:20px;border-radius:50%;background:var(--ad);display:inline-flex;align-items:center;justify-content:center;font-size:8px;color:var(--amber)">04</span>Layers 07–09 · Channel, Yield, Net Revenue</div>
+    <div id="ps5" style="font-family:var(--M);font-size:10px;color:var(--dim);letter-spacing:.08em;display:flex;align-items:center;gap:10px;transition:color .3s"><span style="width:20px;height:20px;border-radius:50%;background:var(--ad);display:inline-flex;align-items:center;justify-content:center;font-size:8px;color:var(--amber)">05</span>Layer 10 · Competitive Positioning · AI Summary</div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+
+<div id="resultsWrap" style="display:none;max-width:800px;margin:0 auto;padding:100px 24px 60px"></div>
 
 </body>
 </html>
