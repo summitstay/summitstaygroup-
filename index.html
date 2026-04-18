@@ -600,7 +600,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
       <div class="logo-s">STR Revenue Intelligence</div>
     </div>
     <div class="nav-links">
-      <button class="nl active" onclick="alert('showPage called');showPage('audit')" id="nl-home">Platform</button>
+      <button class="nl active" onclick="showPage('home')" id="nl-home">Platform</button>
       <button class="nl" onclick="showPage('audit')" id="nl-audit">Free Audit</button>
       <button class="nl" onclick="showPage('casestudy')" id="nl-casestudy">Case Study</button>
       <button class="nl" onclick="showPage('pricing')" id="nl-pricing">Pricing</button>
@@ -1290,19 +1290,9 @@ const html=TICKER_ITEMS.map(([l,v])=>`<div class="ti">${l}<em>${v}</em><span sty
 document.getElementById(‘tc1’).innerHTML=html;
 document.getElementById(‘tc2’).innerHTML=html;
 }
-buildTicker();
+// buildTicker called in DOMContentLoaded
 
-// ── SEASONAL GRID ──
-const sg=document.getElementById(‘seasonGrid’);
-if(sg) MONTHS.forEach((m,i)=>{const d=document.createElement(‘div’);d.className=‘smon’;d.innerHTML=`<div class="smon-l">${m}</div><input class="smon-i" id="m${i+1}" type="number" value="${DEFAULTS[i]}">`;sg.appendChild(d);});
-
-// Upload zone
-const upz=document.getElementById(‘upzEl’);
-if(upz){
-upz.addEventListener(‘dragover’,e=>{e.preventDefault();upz.style.borderColor=‘var(–amber)’});
-upz.addEventListener(‘dragleave’,()=>upz.style.borderColor=’’);
-upz.addEventListener(‘drop’,e=>{e.preventDefault();upz.style.borderColor=’’;const f=e.dataTransfer.files[0];if(f)document.getElementById(‘upzTxt’).textContent=f.name;});
-}
+// DOM elements initialised in DOMContentLoaded below
 
 // ── UTILS ──
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -1773,9 +1763,37 @@ if(!document.getElementById(‘invPreview’).classList.contains(‘show’)){ge
 }
 
 // ── INIT ──
+document.addEventListener(‘DOMContentLoaded’, function(){
 const invDateEl=document.getElementById(‘invDate’);
 if(invDateEl)invDateEl.value=new Date().toISOString().split(‘T’)[0];
 calcROI();
+buildTicker();
+
+// Build seasonal grid
+const sg=document.getElementById(‘seasonGrid’);
+if(sg && sg.children.length === 0){
+const MONTHS2=[“Jan”,“Feb”,“Mar”,“Apr”,“May”,“Jun”,“Jul”,“Aug”,“Sep”,“Oct”,“Nov”,“Dec”];
+const DEFAULTS2=[140,140,160,180,200,220,240,240,190,165,150,155];
+MONTHS2.forEach((m,i)=>{
+const d=document.createElement(‘div’);
+d.className=‘smon’;
+d.innerHTML=`<div class="smon-l">${m}</div><input class="smon-i" id="m${i+1}" type="number" value="${DEFAULTS2[i]}">`;
+sg.appendChild(d);
+});
+}
+
+// Upload zone
+const upz2=document.getElementById(‘upzEl’);
+if(upz2){
+upz2.addEventListener(‘dragover’,e=>{e.preventDefault();upz2.style.borderColor=‘var(–amber)’});
+upz2.addEventListener(‘dragleave’,()=>upz2.style.borderColor=’’);
+upz2.addEventListener(‘drop’,e=>{
+e.preventDefault();upz2.style.borderColor=’’;
+const f=e.dataTransfer.files[0];
+if(f)document.getElementById(‘upzTxt’).textContent=f.name;
+});
+}
+});
 </script>
 
 </body>
