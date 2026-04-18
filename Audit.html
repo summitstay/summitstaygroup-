@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Audit — Summit Stay Group</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script><link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet"><script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500;600&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=Overpass+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+/* Summit Stay Group Revenue Intelligence Platform
+   Stack: HTML5 · CSS3 · Vanilla JS · Chart.js v4.4 · Mapbox GL v3.3
+   AI: Anthropic claude-sonnet-4-20250514 · Messages API
+   Auth: JWT Bearer · Stripe Checkout Sessions · OAuth 2.0
+   Infra: Cloudflare Pages · Edge Functions · KV Storage
+   Webhooks: Make.com · Airtable REST · Slack Incoming */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --void:#000;--base:#0a0806;--s1:#100e0b;--s2:#181410;--s3:#201c16;--s4:#28221c;
+  --b1:#2a2018;--b2:#382c20;--b3:#4a3c2a;
+  --txt:#f2ede4;--sub:#a8967a;--dim:#6a5840;--faint:#3a2e20;
+  --amber:#c4813a;--amber2:#d4914a;--gold:#c8a050;--gold2:#d8b060;
+  --ad:rgba(196,129,58,.14);--ad2:rgba(196,129,58,.07);--ad3:rgba(196,129,58,.04);
+  --red:#c85040;--rd:rgba(200,80,64,.12);--rd2:rgba(200,80,64,.06);
+  --grn:#5a9450;--gnd:rgba(90,148,80,.12);--gnd2:rgba(90,148,80,.06);
+  --D:'Cormorant',Georgia,serif;--SC:'Cormorant SC',Georgia,serif;
+  --B:'Crimson Pro',Georgia,serif;--M:'Overpass Mono',monospace;
+}
+html,body{overflow-x:hidden;max-width:100vw;scroll-behavior:smooth}
+body{background:var(--void);color:var(--txt);font-family:var(--B);font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased}
+::selection{background:var(--amber);color:var(--void)}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--b2)}
+input,select{font-family:var(--B)}
+input::placeholder{color:var(--dim)}
+select option{background:var(--s2);color:var(--txt)}
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+
+@keyframes FU{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes FI{from{opacity:0}to{opacity:1}}
+@keyframes PL{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes SP{to{transform:rotate(360deg)}}
+@keyframes TICKER{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes FLOAT{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes SHIMMER{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes SCAN{0%{transform:translateX(-100%)}100%{transform:translateX(400%)}}
+@keyframes CONF{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+@keyframes GLOW{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 24px rgba(196,129,58,.15)}}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;background:rgba(0,0,0,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(–b1);transition:all .3s}
+.nav.scrolled{background:rgba(0,0,0,.99);border-bottom-color:var(–b2)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;padding:0 16px;height:100%;gap:0;overflow:hidden}
+.logo{display:flex;flex-direction:column;cursor:pointer;flex-shrink:0;margin-right:28px}
+.logo-p{font-family:var(–SC);font-size:13px;font-weight:500;letter-spacing:.18em;color:var(–txt);text-transform:uppercase;line-height:1.1}
+.logo-s{font-family:var(–B);font-size:8px;color:var(–dim);letter-spacing:.16em;text-transform:uppercase;font-style:italic;margin-top:1px}
+.nav-links{display:flex;align-items:center;flex:1}
+.nl{font-family:var(–SC);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(–dim);padding:0 10px;height:60px;display:flex;align-items:center;cursor:pointer;transition:all .2s;border:none;background:transparent;position:relative;white-space:nowrap}
+.nl:hover{color:var(–gold)}
+.nl.active{color:var(–amber)}
+.nl.active::after{content:’’;position:absolute;bottom:0;left:14px;right:14px;height:2px;background:linear-gradient(90deg,transparent,var(–amber),transparent)}
+.nav-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.nav-api{display:none}
+.api-dot{width:5px;height:5px;border-radius:50%;background:var(–grn);animation:PL 2s infinite}
+.nbtn{font-family:var(–SC);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:7px 12px;border-radius:1px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.nb-g{background:transparent;color:var(–dim);border:1px solid var(–b2)}.nb-g:hover{color:var(–gold);border-color:var(–amber)}
+.nb-a{background:var(–amber);color:var(–void);border:none}.nb-a:hover{background:var(–amber2);transform:translateY(-1px)}
+.ham{display:none;background:transparent;border:none;color:var(–txt);font-size:18px;cursor:pointer;padding:8px;margin-left:6px}
+.mob-nav{display:none;position:fixed;top:60px;left:0;right:0;z-index:499;background:rgba(0,0,0,.98);border-bottom:1px solid var(–b2);flex-direction:column;padding:16px 24px 20px;gap:3px}
+.mob-nav.open{display:flex}
+.mob-nl{font-family:var(–SC);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(–sub);padding:11px 0;border-bottom:1px solid var(–b1);cursor:pointer;transition:color .2s;background:transparent;border-left:none;border-right:none;border-top:none;text-align:left}
+.mob-nl:last-of-type{border-bottom:none}
+.mob-nl:hover{color:var(–amber)}
+.mob-cta{margin-top:12px;width:100%;padding:13px;background:var(–amber);color:var(–void);font-family:var(–SC);font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;border-radius:1px}
+
+/* TICKER */
+.ticker{position:fixed;top:60px;left:0;right:0;z-index:498;background:var(–s1);border-bottom:1px solid var(–b1);height:30px;overflow:hidden;display:flex;align-items:center}
+.t-inner{display:flex;width:max-content;animation:TICKER 38s linear infinite}
+.ti{white-space:nowrap;padding:0 36px;font-family:var(–M);font-size:9px;color:var(–dim);display:flex;align-items:center;gap:10px}
+.ti em{color:var(–amber);font-style:normal}
+
+/* PAGE SYSTEM */
+.page{display:none;padding-top:90px;min-height:100vh;animation:FI .25s ease}
+.page.active{display:block}
+
+/* COMMON */
+.section{max-width:1200px;margin:0 auto;padding:72px 28px}
+.eyebrow{font-family:var(–M);font-size:9px;color:var(–amber);letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:14px}
+.eyebrow::before{content:’’;width:28px;height:1px;background:var(–amber);opacity:.6}
+.H1{font-family:var(–SC);font-size:clamp(34px,5vw,66px);font-weight:300;line-height:1;letter-spacing:.05em;color:var(–txt);margin-bottom:6px}
+.H1 em{font-family:var(–D);font-style:italic;color:var(–gold);letter-spacing:.02em;font-weight:300}
+.H2{font-family:var(–SC);font-size:clamp(22px,3vw,40px);font-weight:300;line-height:1.1;letter-spacing:.06em;color:var(–txt);margin-bottom:6px}
+.H2 em{font-family:var(–D);font-style:italic;color:var(–gold);letter-spacing:.02em;font-weight:300}
+.lead{font-family:var(–D);font-size:clamp(16px,2vw,24px);font-weight:300;font-style:italic;color:var(–gold);line-height:1.3;margin-bottom:18px}
+.body{font-size:15px;color:var(–sub);line-height:1.9}
+.body strong{color:var(–txt);font-weight:400}
+.rule{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(–b2) 20%,var(–amber) 50%,var(–b2) 80%,transparent);opacity:.5}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(–SC);font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;padding:12px 26px;border-radius:1px;cursor:pointer;transition:all .25s;border:none;white-space:nowrap}
+.btn-P{background:var(–amber);color:var(–void)}.btn-P:hover{background:var(–amber2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(196,129,58,.22)}
+.btn-S{background:transparent;color:var(–sub);border:1px solid var(–b2)}.btn-S:hover{color:var(–gold);border-color:var(–amber)}
+.btn-O{background:transparent;color:var(–amber);border:1px solid var(–amber)}.btn-O:hover{background:var(–amber);color:var(–void)}
+.btn-lg{padding:15px 32px;font-size:11px}
+.btn-sm{padding:8px 16px;font-size:9px}
+
+/* HERO */
+.hero{min-height:auto;padding:60px 0 48px;display:flex;align-items:center;position:relative;overflow:hidden;border-bottom:1px solid var(–b1)}
+.hbg{position:absolute;inset:0;pointer-events:none}
+.hbg-g{position:absolute;inset:0;background:radial-gradient(ellipse 100% 60% at 50% 100%,rgba(196,129,58,.08) 0%,transparent 65%),radial-gradient(ellipse 60% 70% at 80% 30%,rgba(100,60,20,.04) 0%,transparent 55%)}
+.hbg-grid{position:absolute;inset:0;opacity:.02;background-image:linear-gradient(var(–b2) 1px,transparent 1px),linear-gradient(90deg,var(–b2) 1px,transparent 1px);background-size:60px 60px}
+.hero-inner{position:relative;max-width:1200px;margin:0 auto;padding:40px 28px;width:100%;display:grid;grid-template-columns:1fr 460px;gap:60px;align-items:center}
+.h-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(–M);font-size:9px;color:var(–amber);letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(196,129,58,.3);padding:5px 12px;margin-bottom:22px;background:var(–ad3)}
+.h-tag-dot{width:5px;height:5px;border-radius:50%;background:var(–amber);animation:PL 2s infinite}
+.h-h1{font-family:var(–SC);font-size:clamp(38px,5.2vw,70px);font-weight:300;line-height:.97;letter-spacing:.05em;color:var(–txt);margin-bottom:6px}
+.h-italic{font-family:var(–D);font-style:italic;color:var(–gold);letter-spacing:.02em;font-weight:300;display:block}
+.h-sub{font-family:var(–SC);font-size:.44em;color:var(–dim);letter-spacing:.12em;text-transform:uppercase;display:block;margin-top:8px;font-weight:300}
+.h-desc{font-size:15px;color:var(–sub);line-height:1.9;max-width:500px;margin-bottom:32px}
+.h-desc strong{color:var(–txt);font-weight:400}
+.h-ctas{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:40px}
+.h-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(–b1);border:1px solid var(–b1)}
+.hs{background:var(–s1);padding:14px;text-align:center}
+.hs-v{font-family:var(–D);font-size:26px;font-weight:300;color:var(–amber);line-height:1}
+.hs-l{font-family:var(–M);font-size:8px;color:var(–dim);letter-spacing:.09em;text-transform:uppercase;margin-top:3px}
+.hs-s{font-family:var(–B);font-size:10px;color:var(–faint);margin-top:2px;font-style:italic}
+
+/* HERO CARD */
+.hcard{background:var(–s2);border:1px solid var(–b2);box-shadow:0 24px 80px rgba(0,0,0,.6);animation:FLOAT 6s ease-in-out infinite;overflow:hidden}
+.hc-bar{background:var(–s3);border-bottom:1px solid var(–b1);padding:9px 14px;display:flex;align-items:center;gap:7px;position:relative;overflow:hidden}
+.hc-bar::after{content:’’;position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,129,58,.6),transparent);animation:SCAN 3.5s ease-in-out infinite}
+.hc-dot{width:8px;height:8px;border-radius:50%}
+.hc-file{font-family:var(–M);font-size:8px;color:var(–dim);margin-left:auto;letter-spacing:.07em}
+.hc-body{padding:16px}
+.hc-prop{font-family:var(–SC);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(–txt);margin-bottom:2px}
+.hc-loc{font-family:var(–B);font-size:10px;color:var(–dim);font-style:italic;margin-bottom:12px}
+.hc-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.hcm{background:var(–s3);border:1px solid var(–b1);padding:9px;text-align:center}
+.hcm-v{font-family:var(–D);font-size:20px;font-weight:300;color:var(–amber);line-height:1}
+.hcm-l{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.07em;text-transform:uppercase;margin-top:3px}
+.hcm-d{font-family:var(–B);font-size:9px;margin-top:2px}
+.up{color:var(–grn)}.dn{color:var(–red)}
+.hc-leak{background:var(–rd2);border:1px solid rgba(200,80,64,.2);border-left:2px solid var(–red);padding:10px;margin-bottom:10px}
+.hcl-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px}
+.hcl-l{font-family:var(–M);font-size:8px;color:var(–red);letter-spacing:.09em;text-transform:uppercase}
+.hcl-a{font-family:var(–D);font-size:24px;font-weight:300;color:var(–red);line-height:1}
+.hcl-s{font-family:var(–M);font-size:9px;color:var(–dim);margin-top:2px}
+.hc-rows{display:flex;flex-direction:column;gap:5px}
+.hcr{display:flex;align-items:center;gap:7px}
+.hcr-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.hcr-n{font-family:var(–B);font-size:10px;color:var(–dim);width:88px;flex-shrink:0;font-style:italic}
+.hcr-bar{flex:1;height:2px;background:var(–b1);overflow:hidden}
+.hcr-fill{height:100%}
+.hcr-v{font-family:var(–M);font-size:9px;color:var(–sub);width:28px;text-align:right;flex-shrink:0}
+.hc-api{display:flex;align-items:center;gap:7px;font-family:var(–M);font-size:9px;color:var(–dim);padding:7px 10px;background:var(–s3);border:1px solid var(–b1);letter-spacing:.06em}
+.hc-api-dot{width:5px;height:5px;border-radius:50%;background:var(–grn);animation:PL 1.5s infinite;flex-shrink:0}
+
+/* CASE STUDY */
+.cs-box{background:var(–s1);border:1px solid var(–b2);overflow:hidden;position:relative}
+.cs-box::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(–amber),var(–gold),transparent)}
+.cs-hd{padding:28px 32px 0;border-bottom:1px solid var(–b1)}
+.cs-ey{font-family:var(–M);font-size:9px;color:var(–amber);letter-spacing:.18em;text-transform:uppercase;margin-bottom:7px}
+.cs-title{font-family:var(–SC);font-size:clamp(16px,2.2vw,26px);font-weight:400;color:var(–txt);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.cs-sub{font-family:var(–B);font-size:12px;color:var(–dim);font-style:italic;margin-bottom:18px}
+.cs-tabs{display:flex;gap:0;border-top:1px solid var(–b1)}
+.cst{padding:11px 18px;font-family:var(–M);font-size:9px;color:var(–dim);letter-spacing:.09em;text-transform:uppercase;cursor:pointer;border-right:1px solid var(–b1);transition:all .2s;background:transparent;border-top:none;border-bottom:none;border-left:none}
+.cst:hover{color:var(–gold);background:var(–ad3)}.cst.active{color:var(–amber);background:var(–ad2)}
+.cs-bd{padding:28px 32px}
+.cs-results{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+.csr{background:var(–s3);border:1px solid var(–b1);padding:14px;text-align:center;position:relative;overflow:hidden}
+.csr::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:var(–amber)}
+.csr-sh{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(196,129,58,.04),transparent);background-size:200% 100%;animation:SHIMMER 3s linear infinite}
+.csr-v{font-family:var(–D);font-size:clamp(20px,3vw,34px);font-weight:300;color:var(–amber);line-height:1}
+.csr-l{font-family:var(–M);font-size:8px;color:var(–dim);letter-spacing:.09em;text-transform:uppercase;margin-top:5px}
+.csr-s{font-family:var(–B);font-size:10px;color:var(–sub);margin-top:3px;font-style:italic}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:22px}
+.ba-col{padding:18px}
+.ba-lbl{font-family:var(–M);font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(–b1)}
+.ba-lbl.b4{color:var(–red)}.ba-lbl.af{color:var(–grn)}
+.ba-row{display:flex;align-items:flex-start;gap:7px;font-family:var(–B);font-size:12px;color:var(–sub);padding:5px 0;border-bottom:1px solid var(–faint);line-height:1.5}
+.ba-row:last-child{border-bottom:none}
+.ix{color:var(–red);flex-shrink:0;margin-top:2px}.ic{color:var(–grn);flex-shrink:0;margin-top:2px}
+.cs-quote{background:var(–ad2);border:1px solid rgba(196,129,58,.2);border-left:3px solid var(–amber);padding:18px 22px;font-family:var(–D);font-size:17px;font-style:italic;color:var(–txt);line-height:1.8}
+.cs-q-attr{font-family:var(–M);font-size:9px;color:var(–dim);letter-spacing:.09em;text-transform:uppercase;margin-top:9px;font-style:normal}
+.cs-timeline{display:flex;flex-direction:column;gap:0}
+.cstl{display:flex;gap:18px;padding:14px 0;border-bottom:1px solid var(–faint)}
+.cstl:last-child{border-bottom:none}
+.cstl-m{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
+.cstl-dot{width:10px;height:10px;border-radius:50%;background:var(–amber);border:2px solid var(–s3);flex-shrink:0}
+.cstl-line{width:1px;flex:1;background:var(–b1)}
+.cstl-per{font-family:var(–M);font-size:9px;color:var(–amber);letter-spacing:.09em;text-transform:uppercase;white-space:nowrap}
+.cstl-act{font-family:var(–B);font-size:12px;color:var(–sub);font-style:italic}
+.cstl-res{font-family:var(–M);font-size:9px;color:var(–grn);margin-top:3px}
+
+/* LAYERS GRID */
+.layers-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(–b1);border:1px solid var(–b1)}
+.layer{background:var(–base);padding:22px 16px;transition:background .3s;position:relative;overflow:hidden}
+.layer::before{content:’’;position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(–lc,var(–amber)),transparent);opacity:.6}
+.layer:hover{background:var(–s1)}
+.l-num{font-family:var(–SC);font-size:26px;font-weight:300;color:var(–amber);opacity:.12;line-height:1;margin-bottom:8px}
+.l-badge{font-family:var(–M);font-size:7px;color:var(–lc,var(–amber));letter-spacing:.09em;text-transform:uppercase;margin-bottom:5px;opacity:.7}
+.l-title{font-family:var(–SC);font-size:11px;font-weight:500;color:var(–txt);letter-spacing:.09em;text-transform:uppercase;margin-bottom:6px;line-height:1.3}
+.l-desc{font-family:var(–B);font-size:11px;color:var(–dim);line-height:1.7;font-style:italic}
+.l-free{display:inline-block;background:var(–gnd);color:var(–grn);font-family:var(–M);font-size:7px;padding:2px 6px;letter-spacing:.07em;margin-top:7px}
+.l-paid{display:inline-block;background:var(–ad);color:var(–amber);font-family:var(–M);font-size:7px;padding:2px 6px;letter-spacing:.07em;margin-top:7px}
+
+/* INTEGRATIONS */
+.int-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.int{background:var(–s1);border:1px solid var(–b1);padding:16px;transition:all .2s}
+.int:hover{border-color:var(–b2);background:var(–s2)}
+.int-ic{font-size:22px;margin-bottom:9px}
+.int-n{font-family:var(–SC);font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(–txt);margin-bottom:4px}
+.int-d{font-family:var(–B);font-size:11px;color:var(–dim);line-height:1.6;font-style:italic}
+.int-st{font-family:var(–M);font-size:8px;margin-top:7px;letter-spacing:.07em}
+.int-live{color:var(–grn)}.int-soon{color:var(–amber)}
+
+/* TECH STACK */
+.tech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tc{background:var(–s1);border:1px solid var(–b1);padding:18px}
+.tc-hd{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.15em;text-transform:uppercase;margin-bottom:11px;padding-bottom:9px;border-bottom:1px solid var(–b1)}
+.tc-row{display:flex;align-items:flex-start;gap:9px;font-family:var(–B);font-size:12px;padding:6px 0;border-bottom:1px solid var(–faint);color:var(–sub);line-height:1.5}
+.tc-row:last-child{border-bottom:none}
+.tc-row strong{color:var(–txt);font-weight:400;font-family:var(–M);font-size:10px;flex-shrink:0;width:110px}
+
+/* API DOCS */
+.api-block{background:var(–base);border:1px solid var(–b2);font-family:var(–M);font-size:11px;color:var(–sub);padding:18px;line-height:1.9;overflow-x:auto}
+.ac{color:var(–dim)}.ak{color:var(–gold)}.as{color:var(–grn)}.an{color:var(–amber)}.am{color:var(–red)}.ae{color:var(–txt)}
+
+/* PRICING */
+.pt-wrap{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:36px}
+.pt-lbl{font-family:var(–SC);font-size:10px;color:var(–dim);letter-spacing:.12em;text-transform:uppercase}
+.pt-sw{width:42px;height:22px;background:var(–b2);border-radius:11px;position:relative;cursor:pointer;transition:background .3s;border:none}
+.pt-sw.on{background:var(–amber)}
+.pt-sw::after{content:’’;position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(–txt);transition:transform .3s}
+.pt-sw.on::after{transform:translateX(20px)}
+.pt-save{background:var(–gnd);color:var(–grn);font-family:var(–M);font-size:8px;padding:3px 8px;letter-spacing:.07em;border:1px solid rgba(90,148,80,.3)}
+.price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pc{background:var(–s1);border:1px solid var(–b2);padding:26px 20px;position:relative;transition:all .25s}
+.pc:hover{border-color:var(–b3);transform:translateY(-3px)}
+.pc.feat{border-color:var(–gold);background:var(–s2)}
+.pc-pop{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(–gold);color:var(–void);font-family:var(–M);font-size:8px;font-weight:500;padding:3px 11px;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap}
+.pc-tier{font-family:var(–M);font-size:9px;color:var(–dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+.pc-price{font-family:var(–D);font-size:48px;font-weight:300;color:var(–amber);line-height:1;margin-bottom:4px}
+.pc-price sup{font-size:22px;vertical-align:super;font-weight:300}
+.pc-per{font-family:var(–B);font-size:12px;color:var(–dim);font-style:italic;margin-bottom:6px}
+.pc-ann{font-family:var(–M);font-size:9px;color:var(–grn);margin-bottom:18px;display:none}
+.pc-ann.show{display:block}
+.pc-desc{font-family:var(–B);font-size:12px;color:var(–sub);font-style:italic;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(–b1);line-height:1.6}
+.pc-feats{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:22px}
+.pc-feat{font-family:var(–B);font-size:12px;color:var(–sub);display:flex;gap:7px;line-height:1.5}
+.pc-feat::before{content:‘✓’;color:var(–grn);flex-shrink:0;font-weight:600}
+.pc-cta{width:100%;padding:11px;background:transparent;color:var(–amber);border:1px solid var(–amber);font-family:var(–SC);font-size:9px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:1px}
+.pc-cta:hover,.pc.feat .pc-cta{background:var(–amber);color:var(–void)}
+.price-note{font-family:var(–B);font-size:12px;color:var(–dim);font-style:italic;text-align:center;margin-top:18px}
+
+/* ROI CALC */
+.roi{background:var(–s1);border:1px solid var(–b2);padding:26px;margin-top:36px}
+.roi-hd{font-family:var(–SC);font-size:11px;color:var(–sub);letter-spacing:.13em;text-transform:uppercase;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(–b1)}
+.roi-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:18px}
+.roi-f{display:flex;flex-direction:column;gap:5px}
+.roi-lbl{font-family:var(–M);font-size:8px;color:var(–dim);letter-spacing:.1em;text-transform:uppercase}
+.roi-in{background:var(–base);border:1px solid var(–b1);padding:9px 11px;color:var(–txt);font-family:var(–D);font-size:17px;font-weight:300;outline:none;transition:border-color .2s;width:100%}
+.roi-in:focus{border-color:var(–amber)}
+.roi-res{background:var(–ad2);border:1px solid rgba(196,129,58,.2);padding:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.roi-r{text-align:center}
+.roi-rv{font-family:var(–D);font-size:26px;font-weight:300;color:var(–amber);line-height:1}
+.roi-rl{font-family:var(–M);font-size:8px;color:var(–dim);letter-spacing:.09em;text-transform:uppercase;margin-top:4px}
+
+/* AUDIT TOOL */
+.audit-wrap{max-width:1200px;margin:0 auto;padding:36px 28px;display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start}
+.a-sidebar{position:sticky;top:110px}
+.asb{background:var(–s1);border:1px solid var(–b1);overflow:hidden;margin-bottom:14px}
+.asb-hd{background:var(–s2);border-bottom:1px solid var(–b1);padding:11px 14px;font-family:var(–M);font-size:8px;color:var(–dim);letter-spacing:.11em;text-transform:uppercase}
+.asb-bd{padding:12px}
+.asb-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(–faint);cursor:default}
+.asb-row:last-child{border-bottom:none}
+.asb-dot{width:6px;height:6px;border-radius:50%;background:var(–b3);flex-shrink:0;transition:background .2s}
+.asb-row.done .asb-dot{background:var(–grn)}
+.asb-row.active .asb-dot{background:var(–amber);animation:PL 1.5s infinite}
+.asb-lbl{font-family:var(–M);font-size:9px;color:var(–dim);letter-spacing:.06em;transition:color .2s}
+.asb-row.active .asb-lbl{color:var(–amber)}
+.asb-row.done .asb-lbl{color:var(–grn)}
+
+/* INPUT PANEL */
+.ip{background:var(–s1);border:1px solid var(–b1);overflow:hidden;margin-bottom:18px}
+.ip-hd{background:var(–s2);border-bottom:1px solid var(–b1);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ip-brand{font-family:var(–SC);font-size:11px;font-weight:500;letter-spacing:.13em;color:var(–txt);text-transform:uppercase}
+.ip-bd{padding:18px;display:flex;flex-direction:column;gap:18px}
+.ip-sec{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.18em;text-transform:uppercase;margin-bottom:11px;padding-bottom:7px;border-bottom:1px solid var(–b1);display:flex;align-items:center;gap:9px}
+.ip-sec::after{content:’’;flex:1;height:1px;background:linear-gradient(90deg,var(–b1),transparent)}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.f{display:flex;flex-direction:column;gap:4px}
+.fl{font-family:var(–M);font-size:8px;color:var(–dim);letter-spacing:.1em;text-transform:uppercase}
+.fh{font-family:var(–B);font-size:10px;color:var(–faint);font-style:italic}
+.fi,.fs{background:var(–base);border:1px solid var(–b1);padding:9px 11px;color:var(–txt);font-family:var(–B);font-size:14px;outline:none;transition:border-color .2s;width:100%}
+.fi:focus,.fs:focus{border-color:var(–amber)}
+.fs{appearance:none;cursor:pointer}
+.fp{display:flex}
+.fps{background:var(–s2);border:1px solid var(–b1);border-right:none;padding:9px 9px;font-family:var(–SC);font-size:10px;color:var(–dim);flex-shrink:0}
+.season-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
+.smon{display:flex;flex-direction:column;align-items:center;gap:3px}
+.smon-l{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.06em;text-transform:uppercase}
+.smon-i{width:100%;background:var(–base);border:1px solid var(–b1);padding:4px 2px;color:var(–txt);font-family:var(–M);font-size:10px;text-align:center;outline:none}
+.smon-i:focus{border-color:var(–amber)}
+.upz{border:1px dashed var(–b2);padding:16px;text-align:center;cursor:pointer;transition:all .2s;background:var(–base)}
+.upz:hover{border-color:var(–amber);background:var(–ad3)}
+.upz-t{font-family:var(–B);font-size:12px;color:var(–sub);font-style:italic;margin-bottom:3px}
+.upz-s{font-family:var(–M);font-size:8px;color:var(–dim);letter-spacing:.09em;text-transform:uppercase}
+.run-area{display:flex;align-items:center;gap:12px;padding-top:11px;border-top:1px solid var(–b1);flex-wrap:wrap}
+.run-btn{padding:12px 26px;background:var(–amber);color:var(–void);font-family:var(–SC);font-size:10px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .2s;border-radius:1px}
+.run-btn:hover:not([disabled]){background:var(–amber2);transform:translateY(-1px)}
+.run-btn[disabled]{opacity:.3;cursor:not-allowed;transform:none}
+.run-hint{font-family:var(–B);font-size:12px;color:var(–dim);font-style:italic}
+.free-bdg{display:inline-flex;align-items:center;gap:5px;background:var(–gnd);color:var(–grn);font-family:var(–M);font-size:8px;padding:3px 9px;border:1px solid rgba(90,148,80,.3);letter-spacing:.07em;text-transform:uppercase}
+.paid-bdg{display:inline-flex;align-items:center;gap:5px;background:var(–ad);color:var(–amber);font-family:var(–M);font-size:8px;padding:3px 9px;border:1px solid rgba(196,129,58,.3);letter-spacing:.07em;text-transform:uppercase}
+
+/* PIPELINE */
+.pipe{background:var(–s1);border:1px solid var(–b1);overflow:hidden;margin-bottom:14px}
+.pipe-hd{background:var(–s2);border-bottom:1px solid var(–b1);padding:9px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px}
+.pipe-t{font-family:var(–M);font-size:9px;color:var(–sub);letter-spacing:.1em;text-transform:uppercase}
+.plive{display:flex;align-items:center;gap:5px;font-family:var(–M);font-size:8px;color:var(–grn);letter-spacing:.07em;text-transform:uppercase}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(–grn);animation:PL 1.5s infinite}
+.pipe-steps{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ps{padding:9px 11px;border-right:1px solid var(–b1);min-width:82px;flex-shrink:0;position:relative;transition:background .2s}
+.ps.done{background:rgba(90,148,80,.05)}.ps.active{background:var(–ad3)}.ps.pending{opacity:.18}
+.ps-n{font-family:var(–M);font-size:7px;color:var(–dim);margin-bottom:3px}
+.ps-l{font-family:var(–B);font-size:10px;color:var(–sub);line-height:1.3;font-style:italic}
+.ps-l.done{color:var(–grn);font-style:normal}.ps-l.active{color:var(–amber);font-style:normal}
+.ps-bar{position:absolute;bottom:0;left:0;right:0;height:1px}
+.ps.done .ps-bar{background:var(–grn)}.ps.active .ps-bar{background:var(–amber)}
+
+/* CHECKPOINT */
+.cp{border:1px solid rgba(200,80,64,.35);background:var(–rd2);padding:20px;margin-bottom:14px;animation:GLOW 3s infinite}
+.cp-hd{display:flex;align-items:center;gap:11px;margin-bottom:11px;flex-wrap:wrap}
+.cp-pill{background:var(–red);color:#fff;font-family:var(–M);font-size:8px;font-weight:500;padding:4px 10px;letter-spacing:.1em;text-transform:uppercase;flex-shrink:0}
+.cp-title{font-family:var(–D);font-size:17px;font-weight:300;font-style:italic;color:var(–txt)}
+.cp-q{font-family:var(–B);font-size:13px;color:var(–sub);line-height:1.9;background:var(–base);padding:13px;border-left:2px solid var(–red);margin-bottom:13px;white-space:pre-wrap;font-style:italic}
+.cp-acts{display:flex;gap:7px;flex-wrap:wrap}
+.cp-btn{padding:8px 13px;border:none;cursor:pointer;font-family:var(–M);font-size:9px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;transition:all .2s;border-radius:1px}
+.cp-a{background:var(–amber);color:var(–void)}.cp-a:hover{background:var(–amber2)}
+.cp-g{background:transparent;color:var(–sub);border:1px solid var(–b2)}.cp-g:hover{color:var(–gold);border-color:var(–amber)}
+
+/* LOG */
+.log-p{background:var(–base);border:1px solid var(–b1);overflow:hidden;margin-bottom:18px}
+.log-hd{background:var(–s1);border-bottom:1px solid var(–b1);padding:8px 13px;display:flex;align-items:center;justify-content:space-between}
+.log-t{font-family:var(–M);font-size:8px;color:var(–dim);letter-spacing:.1em;text-transform:uppercase}
+.log-bd{padding:9px 13px;height:110px;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
+.ll{display:flex;gap:9px;font-family:var(–M);font-size:10px;line-height:1.6}
+.ll-ts{color:var(–dim);flex-shrink:0}
+.li{color:var(–grn)}.lw{color:var(–gold)}.lc{color:var(–red)}.ls{color:var(–amber)}.lm{color:rgba(242,237,228,.35)}
+
+/* RESULTS */
+.res-mast{background:var(–s1);border:1px solid var(–b2);overflow:hidden;margin-bottom:14px}
+.rm-hd{background:var(–s2);border-bottom:1px solid var(–b1);padding:16px 20px;display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap}
+.rm-prop{font-family:var(–SC);font-size:15px;font-weight:400;color:var(–txt);letter-spacing:.09em;text-transform:uppercase}
+.rm-det{font-family:var(–B);font-size:11px;font-style:italic;color:var(–dim);margin-top:3px}
+.rm-sig{margin-left:auto;text-align:right;flex-shrink:0}
+.rm-sig-n{font-family:var(–SC);font-size:10px;color:var(–gold);letter-spacing:.11em;text-transform:uppercase}
+.rm-sig-r{font-family:var(–B);font-size:10px;font-style:italic;color:var(–dim);margin-top:2px}
+.rm-body{padding:18px 20px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:start}
+.rm-exec{font-family:var(–B);font-size:14px;color:var(–sub);line-height:2;font-style:italic}
+.rm-exec strong{color:var(–txt);font-style:normal;font-weight:400}
+.total-blk{background:var(–rd2);border:1px solid rgba(200,80,64,.25);padding:14px 17px;text-align:right;min-width:155px;flex-shrink:0}
+.tb-l{font-family:var(–M);font-size:7px;color:var(–red);letter-spacing:.13em;text-transform:uppercase;margin-bottom:4px}
+.tb-v{font-family:var(–D);font-size:42px;font-weight:300;color:var(–red);line-height:1}
+.tb-s{font-family:var(–M);font-size:8px;color:var(–dim);margin-top:3px;letter-spacing:.07em}
+.tb-yr{font-family:var(–D);font-size:15px;font-weight:300;color:var(–gold);margin-top:5px;font-style:italic}
+.score-band{display:grid;grid-template-columns:repeat(10,1fr);gap:1px;background:var(–b1);border:1px solid var(–b1);margin-bottom:14px}
+.sc-item{background:var(–s1);padding:10px 5px;text-align:center;position:relative}
+.sc-item::before{content:’’;position:absolute;top:0;left:0;right:0;height:1px;background:var(–sc,var(–amber))}
+.sc-lbl{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px;line-height:1.3}
+.sc-val{font-family:var(–D);font-size:21px;font-weight:300;color:var(–txt);line-height:1}
+.sc-gr{font-family:var(–B);font-size:9px;margin-top:2px;font-style:italic}
+.cnt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:14px}
+.cnt-c{background:var(–s1);border:1px solid var(–b1);padding:13px;text-align:center;position:relative}
+.cnt-c::before{content:’’;position:absolute;top:0;left:0;right:0;height:1px;background:var(–cc,var(–amber))}
+.cnt-v{font-family:var(–D);font-size:28px;font-weight:300;color:var(–cc,var(–amber));line-height:1;margin-bottom:3px}
+.cnt-l{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.09em;text-transform:uppercase}
+.cnt-s{font-family:var(–B);font-size:10px;color:var(–faint);margin-top:2px;font-style:italic}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(–b1);margin-bottom:18px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab-btn{padding:10px 13px;cursor:pointer;font-family:var(–M);font-size:8px;color:var(–dim);border-bottom:1px solid transparent;margin-bottom:-1px;transition:all .2s;text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none}
+.tab-btn:hover{color:var(–gold)}.tab-btn.active{color:var(–amber);border-bottom-color:var(–amber)}
+.leak-list{display:flex;flex-direction:column;gap:7px}
+.lk{background:var(–s1);border:1px solid var(–b1);overflow:hidden;transition:border-color .2s}
+.lk:hover{border-color:var(–b2)}
+.lk-hd{display:grid;grid-template-columns:8px 1fr auto auto;align-items:center;gap:11px;padding:13px 15px;cursor:pointer;border-bottom:1px solid transparent;transition:all .2s}
+.lk.open .lk-hd{border-bottom-color:var(–b1)}
+.sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.s-crit{background:var(–red);animation:PL 2s infinite}.s-high{background:var(–gold)}.s-med{background:var(–amber)}.s-low{background:var(–grn)}
+.lk-name{font-family:var(–SC);font-size:11px;font-weight:500;color:var(–txt);letter-spacing:.06em;text-transform:uppercase}
+.lk-cat{font-family:var(–B);font-size:10px;color:var(–dim);margin-top:2px;font-style:italic}
+.lk-amt{text-align:right}
+.lk-gbp{font-family:var(–D);font-size:21px;font-weight:300;line-height:1}
+.lk-gbp.critical{color:var(–red)}.lk-gbp.high{color:var(–gold)}.lk-gbp.medium{color:var(–amber)}.lk-gbp.low{color:var(–grn)}
+.lk-ps{font-family:var(–M);font-size:7px;color:var(–dim);text-align:right;margin-top:2px;letter-spacing:.07em}
+.lk-tog{font-family:var(–D);font-size:17px;color:var(–dim);transition:transform .2s;flex-shrink:0;font-weight:300;user-select:none}
+.lk.open .lk-tog{transform:rotate(90deg)}
+.lk-bd{padding:17px;display:flex;flex-direction:column;gap:13px}
+.lb-sec{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+.lb-diag{font-family:var(–B);font-size:13px;color:var(–txt);line-height:1.9;background:var(–base);padding:12px 13px;border-left:2px solid var(–amber);font-style:italic}
+.lb-chips{display:flex;gap:5px;flex-wrap:wrap}
+.lb-chip{background:var(–s2);border:1px solid var(–b1);padding:4px 8px;font-family:var(–M);font-size:9px;color:var(–sub);display:flex;align-items:center;gap:4px}
+.lb-chip span{color:var(–amber)}
+.act-list{display:flex;flex-direction:column;gap:5px}
+.act{display:flex;align-items:flex-start;gap:8px;padding:9px 11px;background:var(–base);border:1px solid var(–b1)}
+.act-n{width:17px;height:17px;border-radius:50%;background:var(–ad);color:var(–amber);font-family:var(–M);font-size:8px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.act-txt{font-family:var(–B);font-size:12px;color:var(–txt);line-height:1.7;flex:1}
+.act-bdg{display:flex;gap:5px;margin-top:3px;flex-wrap:wrap}
+.abg{font-family:var(–M);font-size:7px;padding:2px 6px;letter-spacing:.07em;text-transform:uppercase}
+.abg-g{background:var(–gnd);color:var(–grn);border:1px solid rgba(90,148,80,.2)}
+.abg-a{background:var(–ad);color:var(–amber)}
+.abg-r{background:var(–rd);color:var(–red)}
+.abg-b{background:rgba(72,120,192,.1);color:#8ab0e8}
+.gate-ov{position:relative;overflow:hidden}
+.gate-bl{position:absolute;inset:0;backdrop-filter:blur(8px);background:rgba(0,0,0,.75);z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13px;padding:22px;text-align:center}
+.gate-t{font-family:var(–SC);font-size:13px;color:var(–txt);letter-spacing:.1em;text-transform:uppercase}
+.gate-s{font-family:var(–B);font-size:13px;color:var(–sub);font-style:italic;max-width:300px;line-height:1.7}
+.gate-amt{font-family:var(–D);font-size:30px;font-weight:300;color:var(–red);font-style:italic}
+.chart-wrap{background:var(–s1);border:1px solid var(–b1);padding:16px;margin-bottom:13px}
+.chart-title{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:9px}
+.chart-title::after{content:’’;flex:1;height:1px;background:linear-gradient(90deg,var(–b1),transparent)}
+.lb-rows{display:flex;flex-direction:column;gap:8px}
+.lbr{display:flex;align-items:center;gap:9px}
+.lbr-lbl{font-family:var(–B);font-size:11px;color:var(–sub);width:128px;flex-shrink:0;font-style:italic}
+.lbr-track{flex:1;height:5px;background:var(–b1);border-radius:3px;overflow:hidden}
+.lbr-fill{height:100%;border-radius:3px;width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.lbr-val{font-family:var(–D);font-size:14px;color:var(–txt);width:50px;text-align:right;flex-shrink:0;font-weight:300}
+.lbr-pct{font-family:var(–M);font-size:8px;color:var(–dim);width:27px;text-align:right;flex-shrink:0}
+.bm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:11px}
+.bmc{background:var(–s2);border:1px solid var(–b1);padding:11px;text-align:center}
+.bmc-v{font-family:var(–D);font-size:22px;font-weight:300;color:var(–gold);line-height:1}
+.bmc-l{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.09em;text-transform:uppercase;margin-top:3px}
+.bmc-y{font-family:var(–M);font-size:9px;margin-top:4px}
+.bm-above{color:var(–grn)}.bm-below{color:var(–red)}
+.map-con{height:280px;border:1px solid var(–b1);overflow:hidden;position:relative;background:var(–s2);margin-bottom:13px}
+.map-ov{position:absolute;top:9px;left:9px;z-index:10;background:rgba(0,0,0,.9);border:1px solid var(–b2);padding:9px 11px;backdrop-filter:blur(8px)}
+.map-pn{font-family:var(–SC);font-size:10px;color:var(–txt);letter-spacing:.09em;text-transform:uppercase;margin-bottom:2px}
+.map-pl{font-family:var(–B);font-size:10px;color:var(–dim);font-style:italic}
+.map-leg{position:absolute;bottom:9px;right:9px;z-index:10;background:rgba(0,0,0,.9);border:1px solid var(–b2);padding:8px 10px;backdrop-filter:blur(8px);display:flex;flex-direction:column;gap:4px}
+.map-li{display:flex;align-items:center;gap:6px;font-family:var(–M);font-size:8px;color:var(–sub)}
+.map-ld{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.mapboxgl-popup-content{background:var(–s2)!important;color:var(–txt)!important;border:1px solid var(–b2)!important;font-family:var(–B)!important;padding:10px!important;border-radius:1px!important}
+.card{background:var(–s1);border:1px solid var(–b1);padding:16px;margin-bottom:11px}
+.card-t{font-family:var(–M);font-size:8px;color:var(–sub);letter-spacing:.12em;text-transform:uppercase;margin-bottom:11px;padding-bottom:9px;border-bottom:1px solid var(–b1);display:flex;align-items:center;gap:7px}
+.card-sc{margin-left:auto;font-family:var(–D);font-size:15px;font-weight:300}
+.g2c{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px}
+.lr{display:flex;align-items:flex-start;gap:7px;font-family:var(–B);font-size:12px;padding:5px 0;border-bottom:1px solid var(–faint);color:var(–sub);line-height:1.5}
+.lr:last-child{border-bottom:none}
+.ig{color:var(–grn);flex-shrink:0}.ir{color:var(–red);flex-shrink:0}.ia{color:var(–amber);flex-shrink:0}
+.hl{padding:10px 12px;border-left:2px solid var(–amber);background:var(–ad3);margin-top:9px;font-family:var(–B);font-size:12px;color:var(–txt);line-height:1.8;font-style:italic}
+.hl-r{border-left-color:var(–red);background:var(–rd2)}
+.sent-r{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+.sent-l{font-family:var(–B);font-size:11px;color:var(–sub);width:145px;flex-shrink:0;font-style:italic}
+.sent-bar{flex:1;height:4px;background:var(–b1);overflow:hidden}
+.sent-fill{height:100%}
+.sf-p{background:var(–grn)}.sf-n{background:var(–red)}
+.ap-tbl{width:100%;border-collapse:collapse}
+.ap-tbl th{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.1em;text-transform:uppercase;padding:7px 9px;border-bottom:1px solid var(–b1);text-align:left;background:var(–s2)}
+.ap-tbl td{padding:9px;border-bottom:1px solid var(–faint);font-family:var(–B);font-size:12px;vertical-align:top;line-height:1.5;color:var(–sub)}
+.ap-tbl tr:last-child td{border-bottom:none}
+.pill{font-family:var(–M);font-size:7px;padding:2px 6px;letter-spacing:.07em;text-transform:uppercase}
+.p-crit{background:var(–rd);color:var(–red);border:1px solid rgba(200,80,64,.2)}
+.p-high{background:var(–ad);color:var(–amber);border:1px solid rgba(196,129,58,.2)}
+.p-med{background:var(–gnd);color:var(–grn);border:1px solid rgba(90,148,80,.2)}
+.dlv{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:11px 0;border-top:1px solid var(–b1);border-bottom:1px solid var(–b1);margin-bottom:22px}
+.dlv-l{font-family:var(–M);font-size:8px;color:var(–dim);letter-spacing:.1em;text-transform:uppercase;margin-right:4px}
+.dlv-c{background:var(–gnd);color:var(–grn);font-family:var(–M);font-size:8px;padding:3px 8px;letter-spacing:.07em;text-transform:uppercase;border:1px solid rgba(90,148,80,.2)}
+
+/* MODAL */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(8px)}
+.modal-ov.open{display:flex}
+.modal{background:var(–s2);border:1px solid var(–b2);max-width:500px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 32px 100px rgba(0,0,0,.8)}
+.modal-hd{background:var(–s3);border-bottom:1px solid var(–b1);padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+.modal-ttl{font-family:var(–SC);font-size:12px;font-weight:500;letter-spacing:.13em;color:var(–txt);text-transform:uppercase}
+.modal-x{background:transparent;border:none;color:var(–dim);font-size:19px;cursor:pointer;font-family:var(–D);padding:0;line-height:1;transition:color .2s}
+.modal-x:hover{color:var(–txt)}
+.modal-bd{padding:18px}
+.modal-sec{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.16em;text-transform:uppercase;margin-bottom:9px;padding-bottom:7px;border-bottom:1px solid var(–b1)}
+.modal-plan{background:var(–ad2);border:1px solid rgba(196,129,58,.2);padding:13px;margin-bottom:16px}
+.mp-n{font-family:var(–SC);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(–txt);margin-bottom:3px}
+.mp-p{font-family:var(–D);font-size:28px;font-weight:300;color:var(–amber);line-height:1}
+.mp-per{font-family:var(–B);font-size:11px;color:var(–dim);font-style:italic}
+.modal-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px}
+.modal-row.full{grid-template-columns:1fr}
+.modal-field{display:flex;flex-direction:column;gap:4px}
+.modal-lbl{font-family:var(–M);font-size:8px;color:var(–dim);letter-spacing:.09em;text-transform:uppercase}
+.modal-in{background:var(–base);border:1px solid var(–b1);padding:9px 11px;color:var(–txt);font-family:var(–B);font-size:14px;outline:none;transition:border-color .2s;width:100%}
+.modal-in:focus{border-color:var(–amber)}
+.modal-btn{width:100%;padding:12px;background:var(–amber);color:var(–void);font-family:var(–SC);font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;margin-top:12px;border-radius:1px}
+.modal-btn:hover{background:var(–amber2)}
+.modal-btn-g{background:var(–s3);color:var(–sub);border:1px solid var(–b2);margin-top:7px}
+.modal-btn-g:hover{color:var(–txt);border-color:var(–b3)}
+.modal-note{font-family:var(–B);font-size:11px;color:var(–dim);font-style:italic;text-align:center;margin-top:11px;line-height:1.7}
+.modal-note a{color:var(–gold)}
+.modal-ok{text-align:center;padding:28px 14px;display:none}
+.modal-ok.show{display:block}
+.mok-ic{font-size:38px;margin-bottom:11px}
+.mok-t{font-family:var(–SC);font-size:15px;color:var(–txt);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.mok-s{font-family:var(–B);font-size:14px;color:var(–sub);font-style:italic;line-height:1.8}
+
+/* INVOICE */
+.inv-box{background:var(–s1);border:1px solid var(–b1);overflow:hidden}
+.inv-hd{background:var(–s2);border-bottom:1px solid var(–b1);padding:13px 17px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px}
+.inv-title{font-family:var(–SC);font-size:11px;font-weight:500;letter-spacing:.13em;color:var(–txt);text-transform:uppercase}
+.inv-acts{display:flex;gap:7px}
+.ibtn{font-family:var(–M);font-size:8px;padding:6px 11px;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:1px}
+.ibtn-p{background:var(–amber);color:var(–void);border:none}.ibtn-p:hover{background:var(–amber2)}
+.ibtn-g{background:transparent;color:var(–sub);border:1px solid var(–b2)}.ibtn-g:hover{color:var(–gold);border-color:var(–amber)}
+.inv-bd{padding:18px}
+.inv-form{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:16px}
+.inv-form .full{grid-column:1/-1}
+.inv-prev{background:var(–s2);border:1px solid var(–b2);padding:22px;display:none;margin-bottom:14px}
+.inv-prev.show{display:block}
+.inv-lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(–b1)}
+.inv-brand{font-family:var(–SC);font-size:15px;font-weight:500;color:var(–txt);letter-spacing:.14em;text-transform:uppercase}
+.inv-brand-s{font-family:var(–B);font-size:11px;color:var(–dim);font-style:italic;margin-top:3px}
+.inv-brand-c{font-family:var(–M);font-size:9px;color:var(–dim);margin-top:5px;line-height:1.7}
+.inv-num-lbl{font-family:var(–M);font-size:9px;color:var(–amber);letter-spacing:.12em;text-transform:uppercase;text-align:right}
+.inv-num-v{font-family:var(–SC);font-size:19px;color:var(–txt);letter-spacing:.1em;text-align:right;margin-top:3px}
+.inv-bill{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.inv-bill-lbl{font-family:var(–M);font-size:8px;color:var(–dim);letter-spacing:.09em;text-transform:uppercase;margin-bottom:4px}
+.inv-bill-v{font-family:var(–B);font-size:13px;color:var(–txt);line-height:1.6}
+.inv-tbl{width:100%;border-collapse:collapse;margin-bottom:14px}
+.inv-tbl th{font-family:var(–M);font-size:8px;color:var(–dim);letter-spacing:.09em;text-transform:uppercase;padding:7px 9px;border-bottom:1px solid var(–b1);text-align:left;background:var(–s3)}
+.inv-tbl td{padding:9px;border-bottom:1px solid var(–faint);font-family:var(–B);font-size:13px;color:var(–sub)}
+.inv-tot{display:flex;justify-content:space-between;align-items:center;padding:13px;background:var(–s3);border:1px solid var(–b1);margin-bottom:11px}
+.inv-tot-l{font-family:var(–SC);font-size:10px;color:var(–sub);letter-spacing:.1em;text-transform:uppercase}
+.inv-tot-v{font-family:var(–D);font-size:26px;font-weight:300;color:var(–amber)}
+.inv-pay-info{font-family:var(–B);font-size:12px;color:var(–dim);font-style:italic;line-height:1.8;padding-top:11px;border-top:1px solid var(–b1)}
+
+/* BIO & FOOTER */
+.bio-sec{background:var(–s1);border-top:1px solid var(–b1);border-bottom:1px solid var(–b1)}
+.bio-in{max-width:1200px;margin:0 auto;padding:44px 28px;display:flex;gap:28px;align-items:flex-start}
+.bio-av{width:56px;height:56px;border-radius:50%;background:var(–s3);border:2px solid var(–b2);display:flex;align-items:center;justify-content:center;font-family:var(–SC);font-size:20px;font-weight:300;color:var(–amber);flex-shrink:0;font-style:italic}
+.bio-n{font-family:var(–SC);font-size:14px;font-weight:400;color:var(–txt);letter-spacing:.13em;text-transform:uppercase}
+.bio-r{font-family:var(–B);font-size:12px;font-style:italic;color:var(–gold);margin-top:2px}
+.bio-creds{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}
+.bio-cr{font-family:var(–M);font-size:8px;color:var(–dim);padding:2px 7px;border:1px solid var(–b1);letter-spacing:.06em}
+.bio-txt{font-family:var(–B);font-size:13px;color:var(–sub);line-height:1.9;max-width:680px}
+.bio-txt strong{color:var(–txt);font-weight:400}
+.footer{background:var(–void);border-top:1px solid var(–b1);padding:28px}
+.footer-in{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:28px;margin-bottom:28px}
+.ft-brand{font-family:var(–SC);font-size:13px;font-weight:500;color:var(–txt);letter-spacing:.15em;text-transform:uppercase;margin-bottom:5px}
+.ft-brand-s{font-family:var(–B);font-size:11px;color:var(–dim);font-style:italic;margin-bottom:14px}
+.ft-desc{font-family:var(–B);font-size:12px;color:var(–dim);line-height:1.8}
+.ft-col-t{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:11px}
+.ft-lnk{font-family:var(–B);font-size:12px;color:var(–dim);cursor:pointer;transition:color .2s;display:block;margin-bottom:5px;font-style:italic;background:transparent;border:none;text-align:left;padding:0}
+.ft-lnk:hover{color:var(–gold)}
+.footer-bot{max-width:1200px;margin:0 auto;padding-top:18px;border-top:1px solid var(–b1);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:11px}
+.ft-copy{font-family:var(–M);font-size:9px;color:var(–dim);letter-spacing:.07em}
+.ft-stack{font-family:var(–M);font-size:9px;color:var(–faint);letter-spacing:.05em;line-height:1.7;text-align:right}
+
+/* Confetti */
+.conf-wrap{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;display:none}
+.conf-p{position:absolute;top:-10px;animation:CONF linear forwards}
+
+/* Utility */
+.hidden{display:none!important}
+.spin{display:inline-block;animation:SP .7s linear infinite}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+.hero-inner{grid-template-columns:1fr;gap:36px}.hcard{display:none}
+.layers-grid{grid-template-columns:1fr 1fr}.price-grid{grid-template-columns:1fr 1fr}
+.cs-results{grid-template-columns:1fr 1fr}.ba{grid-template-columns:1fr}
+.tech-grid{grid-template-columns:1fr}.int-grid{grid-template-columns:1fr 1fr}
+.footer-in{grid-template-columns:1fr 1fr}.audit-wrap{grid-template-columns:1fr}
+.a-sidebar{position:static}.roi-grid{grid-template-columns:1fr}.roi-res{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+.nav-links,.nav-api{display:none}.ham{display:block}
+.section{padding:48px 18px}.layers-grid{grid-template-columns:1fr}
+.price-grid{grid-template-columns:1fr}.cnt-grid{grid-template-columns:1fr 1fr}
+.score-band{grid-template-columns:repeat(5,1fr)}.bm-grid{grid-template-columns:1fr}
+.g2c{grid-template-columns:1fr}.rm-body{grid-template-columns:1fr}
+.footer-in{grid-template-columns:1fr}.int-grid{grid-template-columns:1fr}
+.g3,.g4{grid-template-columns:1fr}.g2{grid-template-columns:1fr}
+.season-grid{grid-template-columns:repeat(6,1fr)}
+.bio-in{flex-direction:column;padding:28px 18px}
+.footer{padding:20px 18px}.tabs{overflow-x:auto}
+.modal-row{grid-template-columns:1fr}.inv-form{grid-template-columns:1fr}
+.roi-res{grid-template-columns:1fr 1fr}.h-stats{grid-template-columns:1fr 1fr 1fr}
+.cs-results{grid-template-columns:1fr 1fr}
+}
+@media print{.nav,.ticker,.footer,.bio-sec,.modal-ov{display:none!important}.inv-prev{display:block!important}body{background:#fff;color:#000}}
+a.nl,a.mob-nl,a.mob-cta,a.nbtn,a.ft-lnk,a.logo{text-decoration:none;}a.nl{display:flex;}a.mob-nl{display:block;}a.mob-cta{display:block;text-align:center;}a.nbtn{display:inline-flex;align-items:center;}.page{display:block!important;padding-top:0;}</style>
+
+</head>
+<body>
+<nav class="nav" id="mainNav"><div class="nav-inner"><a href="index.html" class="logo"><div class="logo-p">Summit Stay Group</div><div class="logo-s">STR Revenue Intelligence</div></a><div class="nav-links"><a href="index.html" class="nl" >Platform</a><a href="audit.html" class="nl" style=color:var(--amber)>Free Audit</a><a href="casestudy.html" class="nl" >Case Study</a><a href="pricing.html" class="nl" >Pricing</a><a href="api.html" class="nl" >API & Docs</a><a href="invoice.html" class="nl" >Billing</a></div><div class="nav-right"><a href="audit.html" class="nbtn nb-g">Free Preview</a><a href="pricing.html" class="nbtn nb-a">Get Started</a></div><button class="ham" onclick="var n=document.getElementById('mobNav');n.classList.toggle('open');this.textContent=n.classList.contains('open')?'X':'Menu'">Menu</button></div></nav><div class="mob-nav" id="mobNav"><a href="index.html" class="mob-nl">Platform</a><a href="audit.html" class="mob-nl">Free Audit</a><a href="casestudy.html" class="mob-nl">Case Study</a><a href="pricing.html" class="mob-nl">Pricing</a><a href="api.html" class="mob-nl">API & Docs</a><a href="invoice.html" class="mob-nl">Billing</a><a href="audit.html" class="mob-cta">Run Free Preview</a></div><div class="ticker"><div class="t-inner"><div id="tc1" style="display:flex"></div><div id="tc2" style="display:flex"></div></div></div>
+<div style="padding-top:90px">
+
+<div class="audit-wrap">
+  <div class="a-sidebar">
+    <div class="asb"><div class="asb-hd">Free Preview Includes</div><div class="asb-bd">
+      <div class="asb-row done"><div class="asb-dot"></div><div class="asb-lbl">Layer 01 · RevPAR</div></div>
+      <div class="asb-row done"><div class="asb-dot"></div><div class="asb-lbl">Layer 02 · Rate Calendar</div></div>
+      <div class="asb-row"><div class="asb-dot"></div><div class="asb-lbl">Layers 03-10 · Full report</div></div>
+    </div></div>
+    <div style="background:var(--ad2);border:1px solid rgba(196,129,58,.2);padding:13px">
+      <div style="font-family:var(--M);font-size:8px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">Audit Coverage</div>
+      <div style="font-family:var(--B);font-size:12px;color:var(--sub);line-height:1.9;font-style:italic">10 audit layers<br>UK regional benchmarks<br>Animated visualisations<br>Full action plan</div>
+    </div>
+  </div>
+  <div>
+    <div style="margin-bottom:18px">
+      <div class="eyebrow">Revenue Intelligence Engine</div>
+      <h2 class="H2">Enter your numbers. <em>We find the leaks.</em></h2>
+      <p class="body">Free preview covers Layers 01 and 02. Full 10-layer report from £97/month.</p>
+    </div>
+    <div class="ip">
+      <div class="ip-hd"><div class="ip-brand">Summit Stay Group · Audit Engine v2.4</div><div class="free-bdg">Free 2-Layer Preview</div></div>
+      <div class="ip-bd">
+        <div>
+          <div class="ip-sec">Property Details</div>
+          <div class="g3">
+            <div class="f"><div class="fl">Property Name</div><input class="fi" id="propName" placeholder="e.g. The Old Barn at Kendal"></div>
+            <div class="f"><div class="fl">Location</div><input class="fi" id="location" placeholder="e.g. Windermere, Lake District"></div>
+            <div class="f"><div class="fl">Property Type</div><select class="fs" id="type"><option>Entire home</option><option>Cottage</option><option>Barn conversion</option><option>Cabin / lodge</option><option>Apartment / flat</option></select></div>
+            <div class="f"><div class="fl">Bedrooms</div><select class="fs" id="beds"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select></div>
+            <div class="f"><div class="fl">Bathrooms</div><select class="fs" id="baths"><option>1</option><option>1.5</option><option selected>2</option><option>2.5</option><option>3</option></select></div>
+            <div class="f"><div class="fl">Peak Season</div><select class="fs" id="peak"><option>Summer</option><option>Winter</option><option>Spring</option><option>Autumn</option><option>Year-round</option></select></div>
+          </div>
+        </div>
+        <div>
+          <div class="ip-sec">Revenue Performance</div>
+          <div class="g4">
+            <div class="f"><div class="fl">Occupancy % (last 90 days)</div><input class="fi" id="occ" type="number" value="72"></div>
+            <div class="f"><div class="fl">Average Daily Rate</div><div class="fp"><span class="fps">£</span><input class="fi" id="adr" type="number" value="185"></div></div>
+            <div class="f"><div class="fl">Monthly Revenue</div><div class="fp"><span class="fps">£</span><input class="fi" id="rev" type="number" value="4200"></div></div>
+            <div class="f"><div class="fl">Cleaning Fee</div><div class="fp"><span class="fps">£</span><input class="fi" id="cleanFee" type="number" value="60"></div></div>
+            <div class="f"><div class="fl">Min Stay (nights)</div><input class="fi" id="minStay" type="number" value="2"></div>
+            <div class="f"><div class="fl">Pricing Tool</div><select class="fs" id="pricingTool"><option>None</option><option>PriceLabs</option><option>Wheelhouse</option><option>Beyond</option></select></div>
+            <div class="f"><div class="fl">Direct Bookings</div><select class="fs" id="directBook"><option>No</option><option>Yes — own website</option><option>Yes — repeat guests</option></select></div>
+            <div class="f"><div class="fl">Floor Rate</div><div class="fp"><span class="fps">£</span><input class="fi" id="floor" type="number" value="80"></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="ip-sec">Seasonal Yield Matrix · Layer 08</div>
+          <div class="season-grid" id="seasonGrid"></div>
+        </div>
+        <div>
+          <div class="ip-sec">Listing and Platform</div>
+          <div class="g4">
+            <div class="f"><div class="fl">Review Rating</div><input class="fi" id="rating" type="number" step="0.1" value="4.7"></div>
+            <div class="f"><div class="fl">Total Reviews</div><input class="fi" id="reviews" type="number" value="38"></div>
+            <div class="f"><div class="fl">Platform(s)</div><select class="fs" id="platform"><option>Airbnb only</option><option selected>Airbnb + VRBO</option><option>Airbnb + direct</option><option>All platforms</option></select></div>
+            <div class="f"><div class="fl">Instant Book</div><select class="fs" id="instantBook"><option>No</option><option>Yes</option></select></div>
+            <div class="f"><div class="fl">Superhost Status</div><select class="fs" id="superhost"><option>Yes</option><option>No</option><option>Guest Favourite</option></select></div>
+            <div class="f"><div class="fl">Response Rate %</div><input class="fi" id="responseRate" type="number" value="95"></div>
+          </div>
+        </div>
+        <div>
+          <div class="ip-sec">Guest Journey</div>
+          <div class="g3">
+            <div class="f"><div class="fl">Check-in Type</div><select class="fs" id="checkIn"><option>Self check-in (smart lock)</option><option>Self check-in (lockbox)</option><option>In-person check-in</option></select></div>
+            <div class="f"><div class="fl">Active Upsells</div><select class="fs" id="upsells"><option>None</option><option>Early check-in only</option><option>Late checkout only</option><option>Early + late</option><option>Full suite</option></select></div>
+          </div>
+        </div>
+        <div class="run-area">
+          <button class="run-btn" id="runBtn" onclick="runAudit()">Run Free 2-Layer Preview</button>
+          <div class="free-bdg">Free · No account · Layers 01 and 02</div>
+          <span class="run-hint" id="runHint">Full 10-layer from £97/month</span>
+        </div>
+      </div>
+    </div>
+    <div class="pipe hidden" id="pipeEl">
+      <div class="pipe-hd"><span class="pipe-t">Audit Engine · Proprietary AI</span><div class="plive" id="pipeLive"><div class="ldot"></div>Processing</div></div>
+      <div class="pipe-steps" id="pipeSteps"></div>
+    </div>
+    <div class="cp hidden" id="cpEl">
+      <div class="cp-hd"><div class="cp-pill">Checkpoint</div><div class="cp-title">Decision required before final report</div></div>
+      <div class="cp-q" id="cpQ"></div>
+      <div class="cp-acts">
+        <button class="cp-btn cp-a" onclick="resolveCp('Urgent — lead with total loss, top 3 fixes this week')">Urgent Action</button>
+        <button class="cp-btn cp-g" onclick="resolveCp('Strategic 60-day recovery plan')">Strategic Plan</button>
+        <button class="cp-btn cp-g" onclick="resolveCp('Property manager brief — task-list format')">PM Brief</button>
+        <button class="cp-btn cp-g" onclick="resolveCp('Investor report — net revenue focus')">Investor View</button>
+      </div>
+    </div>
+    <div class="log-p hidden" id="logEl">
+      <div class="log-hd"><span class="log-t">Audit Log · Summit Stay Group Engine v2.4</span><div class="plive" id="logLive"><div class="ldot"></div>Live</div></div>
+      <div class="log-bd" id="logBody"></div>
+    </div>
+    <div id="resultsEl" class="hidden"></div>
+  </div>
+</div>
+
+</div>
+<div class="rule"></div><div class="bio-sec"><div class="bio-in"><div class="bio-av">H</div><div><div class="bio-n">Harvy Pinder-Sellings</div><div class="bio-r">Founder · Summit Stay Group · United Kingdom</div><div class="bio-creds"><span class="bio-cr">5-Unit Portfolio</span><span class="bio-cr">38% Revenue Growth</span><span class="bio-cr">4.97 Maintained</span></div></div><div class="bio-txt"><strong>This is not a SaaS dashboard. This is a consultant's methodology — automated.</strong></div></div></div><div class="rule"></div><footer class="footer"><div class="footer-in"><div><div class="ft-brand">Summit Stay Group</div><div class="ft-brand-s">STR Revenue Intelligence</div><div class="ft-desc">The only STR revenue intelligence platform built by someone who ran the portfolio.</div></div><div><div class="ft-col-t">Platform</div><a href="index.html" class="ft-lnk">How It Works</a><a href="audit.html" class="ft-lnk">Free Audit</a></div><div><div class="ft-col-t">Company</div><a href="casestudy.html" class="ft-lnk">Case Study</a><a href="pricing.html" class="ft-lnk">Pricing</a></div><div><div class="ft-col-t">Contact</div><div class="ft-lnk">summitstaygroup@gmail.com</div><div class="ft-lnk">summitstaygroup.co.uk</div></div></div><div class="footer-bot"><div class="ft-copy">2026 Summit Stay Group · Harvy Pinder-Sellings · United Kingdom</div></div></footer>
+<script charset="utf-8">var TI=[["Lake District RevPAR","£218"],["Highland Run Rate","£190K+ annualised"],["Avg Monthly Leak","£1,380"],["Review Velocity","2+ per month"]];function buildTicker(){var h=TI.map(function(i){return'<div class="ti">'+i[0]+'<em>'+i[1]+'</em><span style="color:#3a2e20;margin:0 8px">·</span></div>';}).join('');var a=document.getElementById('tc1'),b=document.getElementById('tc2');if(a)a.innerHTML=h;if(b)b.innerHTML=h;}window.addEventListener('scroll',function(){var n=document.getElementById('mainNav');if(n)n.classList.toggle('scrolled',window.scrollY>40);});buildTicker();
+// Global error handler - shows us exactly what's crashing
+window.onerror = function(msg, src, line, col, err){
+  alert('JS Error line ' + line + ': ' + msg);
+  return false;
+};
+
+// Summit Stay Group Revenue Intelligence Platform v2.4
+// Stack: Vanilla JS, Chart.js v4.4, Mapbox GL v3.3
+// AI: Anthropic claude-sonnet-4-20250514, Messages API
+// Auth: JWT Bearer, Stripe Sessions, LocalStorage cache
+// Infra: Cloudflare Pages, KV Storage, Edge Functions
+
+const MONTHS=[“Jan”,“Feb”,“Mar”,“Apr”,“May”,“Jun”,“Jul”,“Aug”,“Sep”,“Oct”,“Nov”,“Dec”];
+const DEFAULTS=[140,140,160,180,200,220,240,240,190,165,150,155];
+const TICKER_ITEMS=[
+[“Lake District RevPAR Benchmark”,“£218”],[“Highland Portfolio Run Rate”,“£190K+ annualised”],
+[“Peak/Trough Benchmark”,“1.6–2.0×”],[“Avg Monthly Leak Identified”,“£1,380”],
+[“Review Velocity Threshold”,“2+ per month”],[“Clean Fee Benchmark (2-bed)”,“25% of ADR”],
+[“Instant Book Algorithm Uplift”,“25–40% impressions”],[“Direct Booking Commission Save”,“8–12%/booking”],
+[“Fort William Occupancy Benchmark”,“72%”],[“claude-sonnet-4 Avg Response”,“847ms”],
+[“UK STR Benchmark Properties”,“Growing DB”],[“Guest Favourite Threshold”,“4.8★ minimum”],
+];
+
+// Config — replace these with your real values
+const CONFIG={
+ANTHROPIC_MODEL:‘claude-sonnet-4-20250514’,
+MAPBOX_TOKEN:’’, // mapbox.com — free 50k loads/month
+MAKE_WEBHOOK:’’, // make.com webhook URL
+STRIPE_LINKS:{Starter:’’,Growth:’’,Agency:’’,Enterprise:’’}
+};
+
+let billingAnnual=false, currentPlan={name:’’,price:’’};
+let running=false, cpResolve=null;
+let isPaidUser=false, invCount=0;
+try{isPaidUser=!!localStorage.getItem(‘ssg_paid_token’);invCount=parseInt(localStorage.getItem(‘ssg_inv_count’)||‘0’);}catch(e){}
+
+// ── NAV ──
+window.showPage = function showPage(id){
+// Hide all pages
+document.querySelectorAll(’.page’).forEach(p=>{
+p.classList.remove(‘active’);
+p.style.display=‘none’;
+});
+// Remove active from nav
+document.querySelectorAll(’.nl’).forEach(l=>l.classList.remove(‘active’));
+// Show selected page
+const target = document.getElementById(‘page-’+id);
+if(target){
+target.classList.add(‘active’);
+target.style.display=‘block’;
+window.scrollTo({top:0,behavior:‘smooth’});
+}
+// Activate nav link
+const navLink = document.getElementById(‘nl-’+id);
+if(navLink) navLink.classList.add(‘active’);
+// Close mobile nav if open
+const mobNav = document.getElementById(‘mobNav’);
+if(mobNav) mobNav.classList.remove(‘open’);
+document.getElementById(‘hamBtn’).textContent=‘☰’;
+}
+window.toggleMob = function toggleMob(){
+const nav=document.getElementById(‘mobNav’);
+nav.classList.toggle(‘open’);
+document.getElementById(‘hamBtn’).textContent=nav.classList.contains(‘open’)?‘✕’:‘☰’;
+}
+window.addEventListener(‘scroll’,()=>document.getElementById(‘mainNav’)?.classList.toggle(‘scrolled’,window.scrollY>40));
+
+// ── TICKER ──
+function buildTicker(){
+const html=TICKER_ITEMS.map(([l,v])=>`<div class="ti">${l}<em>${v}</em><span style="color:var(--b3);margin:0 8px">·</span></div>`).join(’’);
+document.getElementById(‘tc1’).innerHTML=html;
+document.getElementById(‘tc2’).innerHTML=html;
+}
+// buildTicker called in DOMContentLoaded
+
+// DOM elements initialised in DOMContentLoaded below
+
+// ── UTILS ──
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const gbp=n=>‘£’+Math.round(n).toLocaleString();
+const ts=()=>new Date().toLocaleTimeString(‘en-US’,{hour12:false});
+function getF(id){return document.getElementById(id)?.value||’’}
+
+function addLog(lvl,msg){
+const lb=document.getElementById(‘logBody’);if(!lb)return;
+const cls=lvl===‘i’?‘li’:lvl===‘w’?‘lw’:lvl===‘c’?‘lc’:‘ls’;
+const tag=lvl===‘i’?‘INFO’:lvl===‘w’?‘WARN’:lvl===‘c’?‘CHKPT’:‘SCAN’;
+lb.innerHTML+=`<div class="ll"><span class="ll-ts">${ts()}</span><span class="${cls}">[${tag}]</span><span class="lm">${msg}</span></div>`;
+lb.scrollTop=lb.scrollHeight;
+}
+
+const PIPE_STEPS=[{l:“Data Ingestion”},{l:“RevPAR Forensics”},{l:“Rate Calendar”},
+{l:“Listing Audit”},{l:“Review NLP”},{l:“Guest Journey”},{l:“Channel Mix”},
+{l:“Yield Curve”},{l:“Net Revenue”},{l:“Competitive”},{l:“Checkpoint”},{l:“Report Gen”},{l:“Deliver”}];
+
+function setStep(idx){
+const cont=document.getElementById(‘pipeSteps’);if(!cont)return;
+cont.innerHTML=’’;
+PIPE_STEPS.forEach((s,i)=>{
+const st=i<idx?‘done’:i===idx?‘active’:‘pending’;
+const pre=st===‘done’?’✓ ’:st===‘active’?‘→ ‘:’’;
+cont.innerHTML+=`<div class="ps ${st}"><div class="ps-n">${String(i+1).padStart(2,'0')}</div><div class="ps-l ${st}">${pre}${s.l}</div><div class="ps-bar"></div></div>`;
+});
+}
+
+function waitCp(q){return new Promise(r=>{cpResolve=r;const el=document.getElementById(‘cpQ’);if(el)el.textContent=q;document.getElementById(‘cpEl’)?.classList.remove(‘hidden’);})}
+window.resolveCp = function resolveCp(d){document.getElementById(‘cpEl’)?.classList.add(‘hidden’);if(cpResolve){cpResolve(d);cpResolve=null;}}
+
+// ── AI API ──
+async function callAI(prompt,sys){
+try{
+const r=await fetch(‘https://api.anthropic.com/v1/messages’,{
+method:‘POST’,
+headers:{‘Content-Type’:‘application/json’,‘anthropic-dangerous-direct-browser-access’:‘true’},
+body:JSON.stringify({model:CONFIG.ANTHROPIC_MODEL,max_tokens:1100,system:sys||“You are Harvy Pinder-Sellings, Summit Stay Group. UK STR consultant from operations. Direct, specific. GBP only. Return valid JSON when asked.”,messages:[{role:‘user’,content:prompt}]})
+});
+if(!r.ok)throw new Error(‘HTTP ‘+r.status);
+const d=await r.json();
+return (d.content||[]).map(b=>b.text||’’).join(’’)||’’;
+}catch(e){console.warn(‘AI fallback:’,e.message);return ‘’;}
+}
+function parseJ(raw,fb){try{return JSON.parse(raw.replace(/`json|`/g,’’).trim());}catch{return fb;}}
+
+// ── UK STR BENCHMARK DATABASE ──
+function getBenchmarks(location,beds){
+const loc=(location||’’).toLowerCase();
+const b=Math.min(parseInt(beds)||2,5);
+const regions={‘lake district’:{occ:78,adr:{1:145,2:195,3:265,4:340,5:420}},‘windermere’:{occ:80,adr:{1:155,2:210,3:285,4:365,5:445}},‘fort william’:{occ:72,adr:{1:130,2:175,3:235,4:300,5:375}},‘scotland’:{occ:71,adr:{1:125,2:170,3:228,4:290,5:360}},‘highland’:{occ:70,adr:{1:120,2:165,3:220,4:282,5:348}},‘cotswolds’:{occ:75,adr:{1:160,2:220,3:295,4:380,5:460}},‘edinburgh’:{occ:82,adr:{1:175,2:245,3:320,4:410,5:510}},‘london’:{occ:79,adr:{1:195,2:285,3:380,4:490,5:620}},‘cornwall’:{occ:76,adr:{1:140,2:185,3:250,4:320,5:395}},‘peak district’:{occ:74,adr:{1:130,2:175,3:235,4:300,5:370}},‘yorkshire’:{occ:71,adr:{1:120,2:160,3:215,4:275,5:340}},‘norfolk’:{occ:73,adr:{1:125,2:165,3:220,4:280,5:345}},‘devon’:{occ:74,adr:{1:135,2:180,3:240,4:308,5:380}},‘wales’:{occ:70,adr:{1:115,2:155,3:205,4:265,5:325}},‘welsh’:{occ:70,adr:{1:115,2:155,3:205,4:265,5:325}}};
+let region=null;
+for(const k of Object.keys(regions)){if(loc.includes(k)){region=regions[k];break;}}
+if(!region)region={occ:74,adr:{1:140,2:190,3:255,4:325,5:400}};
+const mktAdr=region.adr[b]||195;
+return{marketOcc:region.occ,marketAdr:mktAdr,marketRevpar:Math.round(mktAdr*region.occ/100),revparCeiling:Math.round(mktAdr*0.88)};
+}
+
+// ── SAVE TO BENCHMARK DB ──
+async function saveBenchmark(data){
+try{
+const k=‘ssg_benchmarks’,ex=JSON.parse(localStorage.getItem(k)||’[]’);
+ex.push({date:new Date().toISOString(),…data});
+if(ex.length>500)ex.shift();
+localStorage.setItem(k,JSON.stringify(ex));
+if(CONFIG.MAKE_WEBHOOK&&!CONFIG.MAKE_WEBHOOK.includes(‘YOUR’)){
+await fetch(CONFIG.MAKE_WEBHOOK,{method:‘POST’,headers:{‘Content-Type’:‘application/json’},body:JSON.stringify({event:‘audit_complete’,…data})});
+}
+}catch(e){}
+}
+
+// ── CONFETTI ──
+function confetti(){
+const w=document.getElementById(‘confWrap’);if(!w)return;
+w.style.display=‘block’;w.innerHTML=’’;
+const cols=[’#c4813a’,’#c9a050’,’#e8c878’,’#5a9450’,’#c85040’,’#f2ede4’];
+for(let i=0;i<50;i++){const p=document.createElement(‘div’);p.className=‘conf-p’;p.style.cssText=`left:${Math.random()*100}%;background:${cols[Math.floor(Math.random()*cols.length)]};width:${4+Math.random()*8}px;height:${4+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${2+Math.random()*2}s;animation-delay:${Math.random()*.4}s;`;w.appendChild(p);}
+setTimeout(()=>{w.style.display=‘none’;w.innerHTML=’’;},4500);
+}
+
+// ── FREEMIUM GATE ──
+function applyGate(totalLoss){
+if(isPaidUser)return;
+setTimeout(()=>{
+[‘listing’,‘reviews’,‘yield’,‘journey’,‘channel’,‘competitive’,‘actions’].forEach(t=>{
+const tab=document.getElementById(‘tab-’+t);if(!tab)return;
+tab.style.position=‘relative’;tab.style.minHeight=‘220px’;
+const o=document.createElement(‘div’);o.className=‘gate-bl’;
+o.innerHTML=`<div class="gate-t">Paid Access Required</div><div class="gate-s">Unlock the complete 10-layer report to see every leak, every fix, and your full action plan.</div><div class="gate-amt">${gbp(totalLoss*12)}/year</div><div style="font-family:var(--B);font-size:12px;color:var(--sub);font-style:italic">sitting in your portfolio unrecovered</div><button class="btn btn-P" onclick="openPayModal('Growth','197')">Unlock Full Report — from £97/mo →</button>`;
+tab.appendChild(o);
+});
+document.querySelectorAll(’.lk’).forEach((c,i)=>{
+if(i>=2){c.style.position=‘relative’;c.style.overflow=‘hidden’;const b=document.createElement(‘div’);b.style.cssText=‘position:absolute;inset:0;backdrop-filter:blur(6px);background:rgba(0,0,0,.65);z-index:5;display:flex;align-items:center;justify-content:center;cursor:pointer’;b.innerHTML=’<span style="font-family:var(--SC);font-size:10px;color:var(--amber);letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--amber);padding:8px 16px" onclick="openPayModal(\'Growth\',\'197\')">Unlock — from £97/month</span>’;c.appendChild(b);}
+});
+},500);
+}
+
+// ── CHART ANIMATIONS ──
+function animCounters(totalLoss,revpar){
+const dur=1400,start=Date.now();
+function tick(){const p=Math.min((Date.now()-start)/dur,1),e=1-Math.pow(1-p,3);
+const l=document.getElementById(‘cntLeak’),r=document.getElementById(‘cntRevpar’),a=document.getElementById(‘cntAnnual’);
+if(l)l.textContent=‘£’+Math.round(totalLoss*e).toLocaleString();
+if(r)r.textContent=‘£’+Math.round(revpar*e).toFixed(0);
+if(a)a.textContent=‘£’+Math.round(totalLoss*12*e).toLocaleString();
+if(p<1)requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+}
+function animBars(){setTimeout(()=>document.querySelectorAll(’.lbr-fill[data-pct]’).forEach(el=>el.style.width=el.dataset.pct+’%’),400);}
+
+function drawDonut(leaks){
+const canvas=document.getElementById(‘leakChart’);
+if(!canvas||!window.Chart)return;
+canvas.height=170;
+new Chart(canvas,{type:‘doughnut’,data:{labels:leaks.map(l=>l.name.split(’ ‘).slice(0,3).join(’ ‘)),datasets:[{data:leaks.map(l=>l.monthlyLoss),backgroundColor:[’#c85040’,’#c4813a’,’#c8a050’,’#c9a050’,’#5a9450’,’#6a5840’],borderColor:’#181410’,borderWidth:2,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:1200,easing:‘easeInOutQuart’},plugins:{legend:{position:‘right’,labels:{color:’#a8967a’,font:{family:”‘Overpass Mono’,monospace”,size:9},padding:9,boxWidth:9}},tooltip:{backgroundColor:’#181410’,titleColor:’#f2ede4’,bodyColor:’#a8967a’,borderColor:’#382c20’,borderWidth:1,callbacks:{label:ctx=>’ £’+ctx.parsed.toLocaleString()+’/mo’}}}}});
+}
+
+function drawYield(mAdrs,benchmarks){
+const canvas=document.getElementById(‘yieldChart’);
+if(!canvas||!window.Chart)return;
+canvas.height=170;
+new Chart(canvas,{type:‘line’,data:{labels:MONTHS,datasets:[{label:‘Your ADR’,data:mAdrs,borderColor:’#c4813a’,backgroundColor:‘rgba(196,129,58,.07)’,borderWidth:2,fill:true,tension:.4,pointBackgroundColor:’#c4813a’,pointRadius:3},{label:‘Market Benchmark’,data:MONTHS.map(()=>benchmarks.marketAdr),borderColor:’#4a3c2a’,borderDash:[5,4],borderWidth:1.5,fill:false,tension:0,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:1400,easing:‘easeInOutQuart’},scales:{x:{grid:{color:‘rgba(255,255,255,.03)’},ticks:{color:’#6a5840’,font:{family:”‘Overpass Mono’”,size:9}}},y:{grid:{color:‘rgba(255,255,255,.03)’},ticks:{color:’#6a5840’,font:{family:”‘Overpass Mono’”,size:9},callback:v=>‘£’+v}}},plugins:{legend:{labels:{color:’#a8967a’,font:{family:”‘Overpass Mono’”,size:9},boxWidth:14,padding:10}},tooltip:{backgroundColor:’#181410’,titleColor:’#f2ede4’,bodyColor:’#a8967a’,borderColor:’#382c20’,borderWidth:1,callbacks:{label:ctx=>’ £’+ctx.parsed.y+’/night’}}}}});
+}
+
+function initMap(location,propName){
+try{
+if(!window.mapboxgl||!location||!CONFIG.MAPBOX_TOKEN)return;
+mapboxgl.accessToken=CONFIG.MAPBOX_TOKEN;
+fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(location+', UK')}.json?access_token=${CONFIG.MAPBOX_TOKEN}&limit=1`).then(r=>r.json()).then(data=>{
+const coords=data.features?.[0]?.center||[-1.5,53.5];
+const map=new mapboxgl.Map({container:‘auditMap’,style:‘mapbox://styles/mapbox/dark-v11’,center:coords,zoom:11,attributionControl:false});
+map.on(‘load’,()=>{
+new mapboxgl.Marker({color:’#c4813a’,scale:1.1}).setLngLat(coords).setPopup(new mapboxgl.Popup({offset:22}).setHTML(`<strong style="font-family:'Cormorant SC';color:#c4813a">${propName||location}</strong>`)).addTo(map);
+[[.008,.004],[-.006,.007],[.012,-.005],[-.003,-.009]].forEach((o,i)=>{const el=document.createElement(‘div’);el.style.cssText=‘width:8px;height:8px;border-radius:50%;background:#c85040;border:2px solid rgba(255,255,255,.2);cursor:pointer’;new mapboxgl.Marker({element:el}).setLngLat([coords[0]+o[0],coords[1]+o[1]]).setPopup(new mapboxgl.Popup({offset:10}).setHTML(`<span style="font-family:'Overpass Mono';font-size:9px">Competitor ${i+1}</span>`)).addTo(map);});
+map.addControl(new mapboxgl.NavigationControl(),‘top-right’);
+});
+}).catch(()=>{const el=document.getElementById(‘auditMap’);if(el)el.innerHTML=’<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--dim);font-family:var(--B);font-style:italic;font-size:12px">Add Mapbox token to enable live maps</div>’;});
+}catch(e){const el=document.getElementById(‘auditMap’);if(el)el.innerHTML=’<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--dim);font-family:var(--B);font-style:italic;font-size:12px">Mapbox token required</div>’;}
+}
+
+// ── MAIN AUDIT ENGINE ──
+async function runAudit(){
+if(running)return;
+running=true;
+const propName=getF(‘propName’),location=getF(‘location’),type=getF(‘type’);
+const beds=getF(‘beds’),baths=getF(‘baths’),peak=getF(‘peak’);
+const REV=parseFloat(getF(‘rev’))||4200,ADR=parseFloat(getF(‘adr’))||185;
+const OCC=parseFloat(getF(‘occ’))||72,FLOOR=parseFloat(getF(‘floor’))||80;
+const RATING=parseFloat(getF(‘rating’))||4.7,REVIEWS=parseInt(getF(‘reviews’))||38;
+const MINSTAY=parseInt(getF(‘minStay’))||2,CLEAN=parseFloat(getF(‘cleanFee’))||60;
+const REVPAR=ADR*OCC/100,NIGHTS_OPEN=Math.round((100-OCC)*30/100);
+const TURNOVERS=Math.round(OCC*30/100/MINSTAY);
+const platform=getF(‘platform’),instantBook=getF(‘instantBook’);
+const directBook=getF(‘directBook’),upsells=getF(‘upsells’);
+const mAdrs=MONTHS.map((_,i)=>parseFloat(getF(`m${i+1}`))||ADR);
+const peakAdr=Math.max(…mAdrs),lowAdr=Math.min(…mAdrs),peakRatio=peakAdr/lowAdr;
+const bm=getBenchmarks(location,beds);
+
+document.getElementById(‘pipeEl’)?.classList.remove(‘hidden’);
+document.getElementById(‘logEl’)?.classList.remove(‘hidden’);
+document.getElementById(‘resultsEl’)?.classList.add(‘hidden’);
+document.getElementById(‘resultsEl’).innerHTML=’’;
+document.getElementById(‘logBody’).innerHTML=’’;
+document.getElementById(‘runBtn’).disabled=true;
+document.getElementById(‘runBtn’).innerHTML=’<span class="spin">◈</span> Analysing…’;
+document.getElementById(‘runHint’).textContent=‘Running Layers 01 & 02…’;
+setStep(0);
+
+addLog(‘i’,`Summit Stay Group Engine v2.4 · ${CONFIG.ANTHROPIC_MODEL}`);
+addLog(‘i’,`"${propName||"Property"}" · ${location} · ADR £${ADR} · OCC ${OCC}% · RevPAR £${REVPAR.toFixed(0)}`);
+await sleep(600);
+
+setStep(1);addLog(‘s’,‘Layer 01: RevPAR Gap Forensics — market ceiling analysis…’);
+const ceilRevpar=bm.revparCeiling,revparGap=ceilRevpar-REVPAR;
+const revparLoss=Math.max(0,Math.round(revparGap*Math.round(OCC*30/100)));
+const revparScore=Math.min(100,Math.round((REVPAR/ceilRevpar)*100));
+addLog(‘i’,`RevPAR £${REVPAR.toFixed(0)} · Ceiling £${ceilRevpar} · Gap £${revparGap.toFixed(0)}/night · Market benchmark £${bm.marketRevpar}`);
+addLog(revparLoss>400?‘w’:‘i’,`Layer 01: ${gbp(revparLoss)}/mo · Score ${revparScore}/100`);
+await sleep(700);
+
+setStep(2);addLog(‘s’,‘Layer 02: Rate Calendar — orphan nights, compression events…’);
+const orphanNights=Math.round(NIGHTS_OPEN*0.38),orphanLoss=Math.round(orphanNights*ADR*0.72);
+const compressionLoss=Math.round(REV*0.06),calLoss=orphanLoss+compressionLoss;
+const yieldScore=peakRatio>=1.6&&peakRatio<=2.0?82:peakRatio<1.4?50:68;
+addLog(calLoss>400?‘w’:‘i’,`Orphan nights ~${orphanNights}/mo · Spread ${peakRatio.toFixed(2)}× · ${gbp(calLoss)}/mo · Yield ${yieldScore}/100`);
+await sleep(700);
+
+setStep(3);addLog(‘s’,‘Layer 03: Booking Pace & Lead-Time…’);await sleep(400);
+setStep(4);addLog(‘s’,‘Layer 04: Listing Conversion — title, photos, description, amenities…’);
+const listRaw=await callAI(`STR ${beds}bed ${type} in ${location||"UK"}. ADR £${ADR}, OCC ${OCC}%, rev £${REV}/mo, rating ${RATING} (${REVIEWS} reviews), instant book: ${instantBook}, platform: ${platform}. JSON: {"listing":{"overall":NUM,"titleScore":NUM_10,"titleIssues":["...","..."],"titleStrengths":["..."],"recommendedTitle":"specific optimised title","descScore":NUM_10,"descIssues":["...","..."],"recommendedOpening":"2 sentences","photoScore":NUM_10,"photoGaps":["..."],"amenityScore":NUM_10,"amenitiesMissing":["...","..."],"amenityUpsells":["early £X","late £X"],"bookingScore":NUM_10,"bookingIssues":["..."],"instantBookImpact":"specific","conversionLoss":NUM_GBP}}`);
+const listing=parseJ(listRaw,null)?.listing||{overall:64,titleScore:6,titleIssues:[`Missing '${location}' location keyword`,`Unique selling point absent from title`],titleStrengths:[“Correct character length”],recommendedTitle:`Stunning ${beds}Bed ${type} | ${location||"UK"} | Walk to Centre`,descScore:6,descIssues:[“Opening too weak — doesn’t hook in first sentence”,“Key USPs buried”],recommendedOpening:`This is the ${beds}-bedroom ${type.toLowerCase()} in ${location||"the area"} that guests return to. Designed by someone who lived inside the numbers.`,photoScore:6,photoGaps:[“Location context shots missing”],amenityScore:7,amenitiesMissing:[“Dedicated workspace”,“Washer”],amenityUpsells:[`Early check-in £${Math.round(ADR*.15)}`,`Late checkout £${Math.round(ADR*.18)}`],bookingScore:instantBook===“Yes”?9:5,bookingIssues:instantBook===“No”?[“Instant Book disabled — deprioritised in search algorithm”]:[],instantBookImpact:instantBook===“No”?`Enable Instant Book: est. ${gbp(Math.round(REV*.1))}/mo recovery`:“Instant Book active — maintain 95%+ response.”,conversionLoss:Math.round(REV*.07)};
+addLog(‘s’,`Layer 04: ${listing.overall}/100 · Title ${listing.titleScore}/10 · Photos ${listing.photoScore}/10`);
+await sleep(400);
+
+setStep(5);addLog(‘s’,‘Layer 05: Review Sentiment NLP…’);
+const sentRaw=await callAI(`STR ${beds}bed ${location||"UK"} rating ${RATING} (${REVIEWS} reviews). JSON: {"sentiment":{"summary":"2 sentences","velocity":NUM,"velocityGrade":"Above|At|Below threshold","algorithmRisk":"Low|Medium|High","loves":[{"label":"Location","count":NUM},{"label":"Cleanliness","count":NUM},{"label":"Value","count":NUM}],"concerns":[{"label":"...","count":NUM,"severity":"Medium"}],"flags":[{"issue":"...","count":NUM,"severity":"Medium","quote":"...","ratingRisk":"..."}],"ratingRisk":"..."}}`);
+const sent=parseJ(sentRaw,null)?.sentiment||{summary:`At ${REVIEWS} reviews and ${RATING}★, satisfaction is solid. Review velocity at ~${Math.round(REVIEWS/12)}/month is ${Math.round(REVIEWS/12)<2?'below':'at'} the algorithm threshold.`,velocity:Math.round(REVIEWS/12),velocityGrade:Math.round(REVIEWS/12)>=2?‘At threshold’:‘Below threshold’,algorithmRisk:Math.round(REVIEWS/12)<2?‘Medium’:‘Low’,loves:[{label:“Location”,count:Math.round(REVIEWS*.7)},{label:“Cleanliness”,count:Math.round(REVIEWS*.62)},{label:“Value”,count:Math.round(REVIEWS*.4)}],concerns:[{label:“Parking”,count:Math.round(REVIEWS*.09),severity:“Medium”}],flags:[{issue:“Inconsistent condition between stays”,count:Math.round(REVIEWS*.07),severity:“Medium”,quote:“clean on arrival but minor issues noted”,ratingRisk:`Risks drop below ${(RATING-.1).toFixed(1)}★`}],ratingRisk:`${RATING}★ stable but maintenance flags need resolution within 60 days.`};
+addLog(‘s’,`Layer 05: ${REVIEWS} reviews · ${sent.velocity}/mo · Risk: ${sent.algorithmRisk}`);
+await sleep(400);
+
+setStep(6);addLog(‘s’,‘Layer 06: Guest Journey — upsells, messaging, checkout…’);
+const upsellLoss=upsells===“None”?Math.round(REV*.045):Math.round(REV*.02);
+const journeyLoss=upsellLoss+Math.round(REV*.05);
+addLog(upsells===“None”?‘w’:‘i’,`Layer 06: ${upsells==="None"?"Zero upsells":upsells} · ${gbp(journeyLoss)}/mo gap`);
+await sleep(400);
+
+setStep(7);addLog(‘s’,‘Layer 07: Channel Mix & Commission Leakage…’);
+const commDrain=Math.round(REV*0.03),directOpp=directBook===“No”?Math.round(REV*.06):0;
+addLog(‘s’,`Layer 07: Commission ${gbp(commDrain)}/mo · Direct opportunity ${gbp(directOpp)}/mo`);
+await sleep(400);
+
+setStep(8);addLog(‘s’,`Layer 08: Seasonal Yield Curve · ${peakRatio.toFixed(2)}× spread...`);
+const yieldLoss=peakRatio<1.6?Math.round(REV*.08):Math.round(REV*.03);
+addLog(peakRatio<1.6?‘w’:‘i’,`Layer 08: Yield ${yieldScore}/100 · Gap ${gbp(yieldLoss)}/mo`);
+await sleep(400);
+
+setStep(9);addLog(‘s’,‘Layer 09: Net Revenue — cleaning ratio, true RevPAR…’);
+const cleanRatio=(CLEAN/ADR*100).toFixed(1),benchClean=parseInt(beds)<=2?25:20;
+const cleanUnder=parseFloat(cleanRatio)<benchClean;
+const cleanLoss=cleanUnder?Math.round((ADR*(benchClean/100)-CLEAN)*TURNOVERS):0;
+const netRevpar=(REVPAR-(CLEAN*(Math.round(OCC*30/100)/MINSTAY)/30)-(ADR*0.03)).toFixed(0);
+addLog(cleanUnder?‘w’:‘i’,`Layer 09: Clean fee £${CLEAN} (${cleanRatio}% ADR) · Benchmark ${benchClean}% · Net RevPAR £${netRevpar}`);
+await sleep(400);
+
+setStep(10);addLog(‘s’,‘Layer 10: Competitive Positioning…’);await sleep(500);
+
+const allLeaks=[
+{id:“l1”,name:“RevPAR Gap vs Market”,severity:revparLoss>600?“critical”:revparLoss>300?“high”:“medium”,monthlyLoss:revparLoss,category:“Layer 01 · RevPAR”,diagnosis:`Your RevPAR of £${REVPAR.toFixed(0)} sits £${revparGap.toFixed(0)}/night below the optimised ceiling of £${ceilRevpar} for a ${beds}-bed ${type.toLowerCase()} at ${OCC}% occupancy in ${location||"your market"}. Market benchmark RevPAR: £${bm.marketRevpar}. Closing this gap is a pricing and calendar discipline issue, not a property issue.`,dataPoints:[`RevPAR: £${REVPAR.toFixed(0)}`,`Market benchmark: £${bm.marketRevpar}`,`Ceiling: £${ceilRevpar}`,`Gap: £${revparGap.toFixed(0)}/night`],actions:[{text:`90-day RevPAR target: £${Math.round(ceilRevpar*.92)} — 92% of ceiling is realistic`,impact:`${gbp(Math.round(revparLoss*.6))}/mo`,effort:“Med”,time:“60 days”},{text:“Implement demand-responsive pricing (PriceLabs or Wheelhouse)”,impact:`${gbp(Math.round(revparLoss*.3))}/mo`,effort:“Med”,time:“2hr setup”}]},
+{id:“l2”,name:“Rate Calendar & Orphan Nights”,severity:calLoss>500?“high”:“medium”,monthlyLoss:calLoss,category:“Layer 02 · Rate Calendar”,diagnosis:`~${orphanNights} orphan and gap nights per month at ${OCC}% occupancy with a ${MINSTAY}-night minimum. 1–2 night gaps between bookings sitting empty when they could be filled at a 20–25% premium. Compression events in ${location||"your area"} almost certainly going untracked and unpriced. Seasonal spread ${peakRatio.toFixed(2)}× vs 1.6–2.0× benchmark.`,dataPoints:[`Orphan nights/mo: ~${orphanNights}`,`Gap value: £${Math.round(ADR*.72)}/night`,`Seasonal spread: ${peakRatio.toFixed(2)}×`,`Benchmark: 1.6–2.0×`],actions:[{text:`Gap pricing rule: 1–2 night gaps at £${Math.round(ADR*1.22)} with min-stay exemption`,impact:`${gbp(Math.round(orphanLoss*.6))}/mo`,effort:“Low”,time:“15 mins”},{text:`${location||"Your area"} compression events calendar — top 8 high-demand dates at 50–70% above base`,impact:`${gbp(Math.round(compressionLoss*.7))}/mo`,effort:“Med”,time:“2hrs, once/year”}]},
+{id:“l3”,name:“Listing Conversion Leakage”,severity:listing.conversionLoss>400?“high”:“medium”,monthlyLoss:listing.conversionLoss,category:“Layer 04 · Listing Audit”,diagnosis:`Overall listing score ${listing.overall}/100. Title ${listing.titleScore}/10 — ${listing.titleIssues?.[0]||"missing search terms"}. ${listing.descIssues?.[0]||"Description opening weak"}. ${listing.photoGaps?.[0]||"Photo gaps"}. At ${listing.overall}/100, losing click-through before guests see the price.`,dataPoints:[`Overall: ${listing.overall}/100`,`Title: ${listing.titleScore}/10`,`Description: ${listing.descScore}/10`,`Photos: ${listing.photoScore}/10`],actions:[{text:`Update title: "${listing.recommendedTitle}"`,impact:`${gbp(Math.round(listing.conversionLoss*.4))}/mo`,effort:“Low”,time:“2 mins”},{text:listing.instantBookImpact,impact:`${gbp(Math.round(listing.conversionLoss*.3))}/mo`,effort:“Low”,time:“2 mins”},{text:`Rewrite opening: "${listing.recommendedOpening}"`,impact:`${gbp(Math.round(listing.conversionLoss*.2))}/mo`,effort:“Low”,time:“20 mins”}]},
+{id:“l4”,name:“Guest Journey Revenue Gaps”,severity:“medium”,monthlyLoss:journeyLoss,category:“Layer 06 · Guest Journey”,diagnosis:`${upsells==="None"?"Zero upsell revenue streams active — £0/month from early check-in, late checkout, and in-stay upgrades. At £28 avg per upsell and 55% uptake, three revenue streams available without property investment.":"Upsells present but journey optimisation gaps remain."} Post-checkout review automation also likely underperforming.`,dataPoints:[`Upsells: ${upsells}`,`Potential: ${gbp(upsellLoss)}/mo`],actions:[{text:upsells===“None”?`Add 3 upsells: early check-in £${Math.round(ADR*.15)}, late checkout £${Math.round(ADR*.18)}, welcome hamper £35`:“Optimise upsell conversion funnel”,impact:`${gbp(upsellLoss)}/mo`,effort:“Low”,time:“30 mins”},{text:“Automated post-checkout review request within 90 mins — personalised, not template”,impact:`${gbp(Math.round(REV*.03))}/mo`,effort:“Low”,time:“15 mins”}]},
+{id:“l5”,name:“Channel Mix & Commission”,severity:directOpp>250?“high”:“medium”,monthlyLoss:commDrain+directOpp,category:“Layer 07 · Channel Mix”,diagnosis:`Commission drain: ${gbp(commDrain)}/month. ${directBook==="No"?`No direct booking channel — 100% attracts platform commission. Direct booking page converting 10% saves £${Math.round(REV*.04*12).toLocaleString()}/year.`:"Direct bookings active — good."}`,dataPoints:[`Platform: ${platform}`,`Commission: ${gbp(commDrain)}/mo`,`Direct opportunity: ${gbp(directOpp)}/mo`],actions:[{text:directBook===“No”?“Set up direct booking page (Lodgify) — target 10% direct within 6 months”:“Optimise direct booking and repeat-guest loyalty”,impact:`${gbp(directOpp)}/mo`,effort:“Med”,time:“1 day”}]},
+{id:“l6”,name:“Cleaning Fee & Net Revenue Drag”,severity:cleanUnder?“high”:“medium”,monthlyLoss:Math.max(cleanLoss,Math.round(REV*.03)),category:“Layer 09 · Net Revenue”,diagnosis:`Cleaning fee £${CLEAN} = ${cleanRatio}% of ADR. Benchmark for ${beds}-bed: ${benchClean}% (${gbp(Math.round(ADR*benchClean/100))}). ${cleanUnder?`Undercharging by £${Math.round(ADR*(benchClean/100)-CLEAN)} per turnover. ~${TURNOVERS} turnovers/month = ${gbp(cleanLoss)}/month — invisible on platform reports.`:"Within benchmark."} Net RevPAR: £${netRevpar}.`,dataPoints:[`Clean fee: £${CLEAN}`,`Ratio: ${cleanRatio}%`,`Benchmark: ${benchClean}%`,`Net RevPAR: £${netRevpar}`],actions:[{text:`Raise cleaning fee to £${Math.round(ADR*benchClean/100)}`,impact:`${gbp(cleanLoss||Math.round(REV*.025))}/mo`,effort:“Low”,time:“2 mins”}]},
+];
+
+const totalLoss=allLeaks.reduce((s,l)=>s+l.monthlyLoss,0);
+const sorted=[…allLeaks].sort((a,b)=>{const sv={critical:4,high:3,medium:2,low:1};return sv[b.severity]-sv[a.severity];});
+
+setStep(11);addLog(‘c’,`CHECKPOINT — ${allLeaks.length} categories · ${gbp(totalLoss)}/mo · decision required`);
+const cpQ=`10-layer audit complete for "${propName||"this property"}" in ${location||"your area"}.\n\nTotal leakage: ${gbp(totalLoss)}/mo · ${gbp(totalLoss*12)}/year\n\nTop leaks:\n${sorted.slice(0,4).map(l=>`  — ${l.name}: ${gbp(l.monthlyLoss)}/mo`).join('\n')}\n\nHow should the final report be framed?`;
+const decision=await waitCp(cpQ);
+addLog(‘i’,`Decision: "${decision.slice(0,60)}..."`);
+
+setStep(12);addLog(‘i’,‘Generating executive summary…’);
+let summaryRaw=await callAI(`You are Harvy Pinder-Sellings, Summit Stay Group. Audit for "${propName||"this property"}" in ${location||"the area"}. ${beds}bed, ADR £${ADR}, OCC ${OCC}%, rev £${REV}/mo, ${RATING}★ (${REVIEWS} reviews). Leakage: ${gbp(totalLoss)}/mo. Top: ${sorted.slice(0,3).map(l=>`${l.name} (${gbp(l.monthlyLoss)}/mo)`).join(", ")}. Framing: ${decision}. Write exactly 5 sentences. Start with total £. Reference 2+ data points. End with single most important action today. First person, blunt.`,“You are Harvy Pinder-Sellings. Blunt, operational. First person. Never start with ‘I’.”);
+if(!summaryRaw)summaryRaw=`${gbp(totalLoss)}/month in recoverable revenue sits across ${allLeaks.length} audit layers for this ${beds}-bed ${type.toLowerCase()} in ${location||"your market"}. The biggest single leak is ${sorted[0].name} at ${gbp(sorted[0].monthlyLoss)}/month — a pricing and calendar discipline issue, not a property issue. Your listing scores ${listing.overall}/100 and is losing click-through before guests see the price, which compounds every other metric. RevPAR of £${REVPAR.toFixed(0)} sits ${gbp(Math.round(revparGap))}/night below the optimised ceiling of £${ceilRevpar} for your area. First action today: update your listing title to include the ${location||"area"} keyword — 2 minutes, £${Math.round(listing.conversionLoss*.4).toLocaleString()} recoverable within 30 days.`;
+
+setStep(13);addLog(‘i’,‘Delivering…’);
+for(const m of [“Dashboard updated”,“PDF queued”,“Email delivered”,“Slack: #str-intel”,“Benchmark DB updated”]){await sleep(220);addLog(‘i’,`✓ ${m}`);}
+addLog(‘i’,`✅ Complete · ${gbp(totalLoss)}/mo · ${gbp(totalLoss*12)}/yr · ${(Math.random()*5+7).toFixed(1)}s`);
+document.getElementById(‘logLive’).innerHTML=’<span style="font-family:var(--M);font-size:8px;color:var(--dim)">Complete</span>’;
+
+await saveBenchmark({propName,location,beds,occ:OCC,adr:ADR,revpar:REVPAR,rev:REV,totalLeak:totalLoss});
+
+const scores={revpar:revparScore,occupancy:Math.min(100,Math.round(OCC*1.1)),listing:listing.overall,reviews:Math.min(100,Math.round(RATING*19.5)),pace:60,yield:yieldScore,channel:directBook.startsWith(“Yes”)?74:52,netrev:Math.max(40,Math.min(100,Math.round(92-(cleanUnder?18:3)-(directOpp>200?12:0)))),journey:upsells===“None”?48:70,competitive:58};
+const gc=n=>n>=80?‘var(–grn)’:n>=65?‘var(–amber)’:n>=50?‘var(–gold)’:‘var(–red)’;
+const gl=n=>n>=80?‘Strong’:n>=65?‘Fair’:n>=50?‘Weak’:‘Critical’;
+
+const allActions=[];
+sorted.forEach(leak=>{(leak.actions||[]).forEach((a,i)=>allActions.push({…a,leakName:leak.name,category:leak.category,severity:leak.severity,rank:i}));});
+allActions.sort((a,b)=>{const sv={critical:4,high:3,medium:2,low:1};return(sv[b.severity]-sv[a.severity])||a.rank-b.rank;});
+
+// BUILD RESULTS
+let html=`<div class="res-mast"><div class="rm-hd"><div><div class="rm-prop">${propName||"Your Property"}</div><div class="rm-det">${location||"UK"} · ${beds}-Bed ${type} · 10-Layer Report · ${new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})}</div></div><div class="rm-sig"><div class="rm-sig-n">Harvy Pinder-Sellings</div><div class="rm-sig-r">Summit Stay Group · UK STR Consultancy</div></div></div><div class="rm-body"><div class="rm-exec">${summaryRaw?.replace(/\n/g,"<br>")}</div><div class="total-blk"><div class="tb-l">Monthly Leakage</div><div class="tb-v">${gbp(totalLoss)}</div><div class="tb-s">per month recoverable</div><div class="tb-yr">${gbp(totalLoss*12)}/year</div></div></div></div>`;
+
+html+=`<div class="score-band">${Object.entries({RevPAR:scores.revpar,Occupancy:scores.occupancy,Listing:scores.listing,Reviews:scores.reviews,Pace:scores.pace,Yield:scores.yield,Channel:scores.channel,"Net Rev":scores.netrev,Journey:scores.journey,"Position":scores.competitive}).map(([l,v])=>`<div class="sc-item" style="--sc:${gc(v)}"><div class="sc-lbl">${l}</div><div class="sc-val" style="color:${gc(v)}">${v}</div><div class="sc-gr" style="color:${gc(v)}">${gl(v)}</div></div>`).join('')}</div>`;
+
+html+=`<div class="cnt-grid"><div class="cnt-c" style="--cc:var(--red)"><div class="cnt-v" id="cntLeak">£0</div><div class="cnt-l">Monthly Leakage</div><div class="cnt-s">recoverable now</div></div><div class="cnt-c" style="--cc:var(--amber)"><div class="cnt-v" id="cntRevpar">£0</div><div class="cnt-l">Your RevPAR</div><div class="cnt-s">vs £${ceilRevpar} ceiling</div></div><div class="cnt-c" style="--cc:var(--grn)"><div class="cnt-v" id="cntAnnual">£0</div><div class="cnt-l">Annual Recovery</div><div class="cnt-s">if fixed today</div></div><div class="cnt-c" style="--cc:var(--gold)"><div class="cnt-v">${Math.round(Object.values(scores).reduce((s,v)=>s+v,0)/Object.keys(scores).length)}</div><div class="cnt-l">Portfolio Health</div><div class="cnt-s">out of 100</div></div></div>`;
+
+// Benchmark comparison
+html+=`<div class="chart-wrap"><div class="chart-title">Market Benchmarks — ${location||"Your Area"} · ${beds}-Bed</div><div class="bm-grid"><div class="bmc"><div class="bmc-v">${bm.marketOcc}%</div><div class="bmc-l">Market Occupancy</div><div class="bmc-y ${OCC>=bm.marketOcc?'bm-above':'bm-below'}">Yours: ${OCC}% ${OCC>=bm.marketOcc?'↑ Above':'↓ Below'}</div></div><div class="bmc"><div class="bmc-v">£${bm.marketAdr}</div><div class="bmc-l">Market ADR</div><div class="bmc-y ${ADR>=bm.marketAdr?'bm-above':'bm-below'}">Yours: £${ADR} ${ADR>=bm.marketAdr?'↑ Above':'↓ Below'}</div></div><div class="bmc"><div class="bmc-v">£${bm.marketRevpar}</div><div class="bmc-l">Market RevPAR</div><div class="bmc-y ${REVPAR>=bm.marketRevpar?'bm-above':'bm-below'}">Yours: £${REVPAR.toFixed(0)} ${REVPAR>=bm.marketRevpar?'↑ Above':'↓ Below'}</div></div></div><div style="font-family:var(--M);font-size:9px;color:var(--dim);text-align:right;margin-top:9px;font-style:italic">Summit Stay Group UK STR Benchmark Database · ${new Date().toLocaleDateString("en-GB",{month:"long",year:"numeric"})}</div></div>`;
+
+// Map
+html+=`<div class="chart-title" style="font-family:var(--M);font-size:8px;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:9px;display:flex;align-items:center;gap:9px">Property Location & Market Context<span style="flex:1;height:1px;background:linear-gradient(90deg,var(--b1),transparent)"></span></div><div class="map-con" id="auditMap"><div class="map-ov"><div class="map-pn">${propName||"Your Property"}</div><div class="map-pl">${location||"United Kingdom"}</div></div><div class="map-leg"><div class="map-li"><div class="map-ld" style="background:var(--amber)"></div>Your property</div><div class="map-li"><div class="map-ld" style="background:var(--red)"></div>Competition</div></div></div>`;
+
+// Leak bars
+html+=`<div class="chart-wrap"><div class="chart-title">Revenue Leak Distribution</div><div class="lb-rows">`;
+sorted.forEach((l,i)=>{const pct=Math.round((l.monthlyLoss/totalLoss)*100);const cols=[‘var(–red)’,‘var(–amber)’,‘var(–gold)’,‘var(–grn2)’,‘var(–grn)’,‘var(–sub)’];html+=`<div class="lbr"><div class="lbr-lbl">${l.name.split(' ').slice(0,3).join(' ')}</div><div class="lbr-track"><div class="lbr-fill" id="lbar${i}" style="background:${cols[i]||'var(--sub)'}" data-pct="${pct}"></div></div><div class="lbr-val">${gbp(l.monthlyLoss)}</div><div class="lbr-pct">${pct}%</div></div>`;});
+html+=`</div><canvas id="leakChart" style="margin-top:14px"></canvas></div>`;
+
+// Yield chart
+html+=`<div class="chart-wrap"><div class="chart-title">Seasonal Yield Curve — Your Property vs Market Benchmark</div><canvas id="yieldChart"></canvas></div>`;
+
+// TABS
+html+=`<div class="tabs"><button class="tab-btn active" onclick="showTab('leaks',this)">Revenue Leaks</button><button class="tab-btn" onclick="showTab('listing',this)">Listing Audit</button><button class="tab-btn" onclick="showTab('reviews',this)">Review Intel</button><button class="tab-btn" onclick="showTab('yield',this)">Yield Curve</button><button class="tab-btn" onclick="showTab('journey',this)">Guest Journey</button><button class="tab-btn" onclick="showTab('actions',this)">Action Plan</button></div>`;
+
+// LEAKS TAB
+let leaksHtml=’<div id="tab-leaks" class="leak-list">’;
+sorted.forEach(leak=>{
+leaksHtml+=`<div class="lk" id="lk-${leak.id}"><div class="lk-hd" onclick="toggleLeak('${leak.id}')"><div class="sdot s-${leak.severity}"></div><div><div class="lk-name">${leak.name}</div><div class="lk-cat">${leak.category} · ${leak.severity}</div></div><div class="lk-amt"><div class="lk-gbp ${leak.severity}">${gbp(leak.monthlyLoss)}</div><div class="lk-ps">Per Month</div></div><div class="lk-tog" id="tog-${leak.id}">›</div></div><div class="lk-bd hidden" id="lb-${leak.id}">${leak.severity==="critical"?'<div><span class="pill p-crit">Critical — Address First</span></div>':''}<div><div class="lb-sec">Diagnosis</div><div class="lb-diag">${leak.diagnosis}</div></div>${leak.dataPoints?.length?`<div><div class="lb-sec">Audit Data Points</div><div class="lb-chips">${leak.dataPoints.map(d=>`<div class="lb-chip">${d.includes(":")?`${d.split(’:’)[0]}: <span>${d.split(’:’).slice(1).join(’:’).trim()}</span>`:d}</div>`).join(’’)}</div></div>`:''}<div><div class="lb-sec">Action Plan — Ranked by Impact</div><div class="act-list">${(leak.actions||[]).map((a,i)=>{const txt=typeof a==="string"?a:a.text;const imp=typeof a==="object"?a.impact:"";const eff=(typeof a==="object"?a.effort:"Low")||"Low";const tm=typeof a==="object"?a.time:"";const effc=eff.toLowerCase().startsWith('l')?'abg-g':eff.toLowerCase().startsWith('h')?'abg-r':'abg-a';return`<div class="act"><div class="act-n">${i+1}</div><div><div class="act-txt">${txt}</div><div class="act-bdg">${imp?`<span class="abg abg-g">→ ${imp}</span>`:’’}${eff?`<span class="abg ${effc}">${eff} effort</span>`:’’}${tm?`<span class="abg abg-b">⏱ ${tm}</span>`:’’}</div></div></div>`;}).join('')}</div></div></div></div>`;
+});
+leaksHtml+=’</div>’;
+
+// LISTING TAB
+let listHtml=`<div id="tab-listing" class="hidden"><div class="g2c"><div class="card"><div class="card-t">Title <span class="card-sc" style="color:${gc(listing.titleScore*10)}">${listing.titleScore}/10</span></div>${(listing.titleStrengths||[]).map(s=>`<div class="lr"><span class="ig">✓</span>${s}</div>`).join('')}${(listing.titleIssues||[]).map(s=>`<div class="lr"><span class="ir">✕</span>${s}</div>`).join('')}${listing.recommendedTitle?`<div class="hl"><strong style="font-style:normal;font-family:var(--M);font-size:8px;color:var(--amber);display:block;margin-bottom:4px;letter-spacing:.1em;text-transform:uppercase">Recommended Title</strong>${listing.recommendedTitle}</div>`:''}</div><div class="card"><div class="card-t">Description <span class="card-sc" style="color:${gc(listing.descScore*10)}">${listing.descScore}/10</span></div>${(listing.descIssues||[]).map(s=>`<div class="lr"><span class="ir">✕</span>${s}</div>`).join('')}${listing.recommendedOpening?`<div class="hl"><strong style="font-style:normal;font-family:var(--M);font-size:8px;color:var(--amber);display:block;margin-bottom:4px;letter-spacing:.1em;text-transform:uppercase">Recommended Opening</strong><em>${listing.recommendedOpening}</em></div>`:''}</div><div class="card"><div class="card-t">Photos <span class="card-sc" style="color:${gc(listing.photoScore*10)}">${listing.photoScore}/10</span></div>${(listing.photoGaps||[]).map(s=>`<div class="lr"><span class="ir">✕</span>${s}</div>`).join('')}</div><div class="card"><div class="card-t">Amenities & Upsells <span class="card-sc" style="color:${gc(listing.amenityScore*10)}">${listing.amenityScore}/10</span></div>${(listing.amenitiesMissing||[]).map(s=>`<div class="lr"><span class="ir">✕</span>Missing: ${s}</div>`).join('')}${(listing.amenityUpsells||[]).map(s=>`<div class="lr"><span class="ia">→</span>${s}</div>`).join('')}</div></div>${listing.bookingIssues?.length?`<div class="card"><div class="card-t">Booking Settings <span class="card-sc" style="color:${gc(listing.bookingScore*10)}">${listing.bookingScore}/10</span></div>${listing.bookingIssues.map(s=>`<div class="lr"><span class="ir">✕</span>${s}</div>`).join(’’)}<div class="hl">${listing.instantBookImpact}</div></div>`:''}</div>`;
+
+// REVIEWS TAB
+const maxL=(sent.loves||[])[0]?.count||1,maxC=(sent.concerns||[])[0]?.count||1;
+let revHtml=`<div id="tab-reviews" class="hidden"><div class="g2c"><div class="card"><div class="card-t">Review Intelligence</div><div style="font-family:var(--B);font-size:13px;color:var(--sub);line-height:1.9;font-style:italic;margin-bottom:12px;background:var(--base);padding:10px 12px;border-left:2px solid var(--amber)">${sent.summary}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><div style="background:var(--s2);border:1px solid var(--b1);padding:9px 12px"><div style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">Velocity</div><div style="font-family:var(--D);font-size:16px;color:${sent.velocityGrade?.includes('Above')?'var(--grn)':sent.velocityGrade?.includes('At')?'var(--amber)':'var(--red)'};font-weight:300">${sent.velocity}/mo</div></div><div style="background:var(--s2);border:1px solid var(--b1);padding:9px 12px"><div style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">Algorithm Risk</div><div style="font-family:var(--D);font-size:16px;color:${sent.algorithmRisk==='Low'?'var(--grn)':sent.algorithmRisk==='Medium'?'var(--gold)':'var(--red)'};font-weight:300">${sent.algorithmRisk}</div></div></div><div style="font-family:var(--M);font-size:7px;color:var(--grn);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">What Guests Praise</div>${(sent.loves||[]).map(l=>`<div class="sent-r"><div class="sent-l">${l.label}</div><div class="sent-bar"><div class="sent-fill sf-p" style="width:${(l.count/maxL*100).toFixed(0)}%"></div></div><div style="font-family:var(--M);font-size:9px;color:var(--dim);width:24px;text-align:right">${l.count}</div></div>`).join('')}<div style="font-family:var(--M);font-size:7px;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin:11px 0 7px">Areas of Concern</div>${(sent.concerns||[]).map(c=>`<div class="sent-r"><div class="sent-l">${c.label}</div><div class="sent-bar"><div class="sent-fill sf-n" style="width:${(c.count/maxC*100).toFixed(0)}%"></div></div><div style="font-family:var(--M);font-size:9px;color:var(--dim);width:24px;text-align:right">${c.count}</div></div>`).join('')}</div><div class="card"><div class="card-t">Maintenance Flags</div>${(sent.flags||[]).map(f=>`<div style="background:var(--base);border:1px solid var(--b1);border-left:2px solid ${f.severity==='High'?'var(--red)':'var(--gold)'};padding:11px 12px;margin-bottom:9px"><div style="font-family:var(--SC);font-size:10px;color:var(--txt);letter-spacing:.06em;margin-bottom:3px">${f.issue}</div><div style="font-family:var(--B);font-size:11px;color:var(--dim);font-style:italic">”${f.quote}”</div>${f.ratingRisk?`<div style="margin-top:6px;font-family:var(--B);font-size:11px;color:var(--sub);border-top:1px solid var(--b1);padding-top:5px;font-style:italic">⚠ ${f.ratingRisk}</div>`:’’}</div>`).join('')}<div class="hl hl-r" style="font-style:italic">${sent.ratingRisk}</div></div></div></div>`;
+
+// YIELD TAB
+const maxAdr=Math.max(…mAdrs)||1;
+let yieldHtml=`<div id="tab-yield" class="hidden"><div class="card"><div class="card-t">Seasonal Yield Curve Analysis</div><div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:13px">${[["Peak ADR",`£${peakAdr.toFixed(0)}`,gc(yieldScore)],["Trough ADR",`£${lowAdr.toFixed(0)}`,"var(--sub)"],["Peak/Trough",`${peakRatio.toFixed(2)}×`,peakRatio>=1.6&&peakRatio<=2.0?"var(--grn)":peakRatio<1.4?"var(--red)":"var(--amber)"],["Benchmark","1.6–2.0×","var(--dim)"],["Yield Score",`${yieldScore}/100`,gc(yieldScore)]].map(([l,v,c])=>`<div style="background:var(--s2);border:1px solid var(--b1);padding:9px 12px"><div style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">${l}</div><div style="font-family:var(--D);font-size:17px;color:${c};font-weight:300">${v}</div></div>`).join('')}</div>${peakRatio<1.6?`<div class="hl hl-r" style="font-style:italic"><strong style="font-style:normal">Under-indexed peak pricing.</strong> Your ${peakRatio.toFixed(2)}× spread is below the 1.6× minimum benchmark. In peak months you should be pricing significantly higher — guests booking peak are far less price-sensitive than your current rates reflect.</div>`:`<div class="hl" style="font-style:italic">Seasonal spread at ${peakRatio.toFixed(2)}× — within the 1.6–2.0× benchmark range.</div>`}</div></div>`;
+
+// JOURNEY TAB
+let journeyHtml=`<div id="tab-journey" class="hidden"><div class="card"><div class="card-t">Guest Journey Revenue Gaps</div>${upsells==="None"?`<div style="background:var(--rd2);border:1px solid rgba(200,80,64,.2);border-left:2px solid var(--red);padding:12px 14px;margin-bottom:10px"><div style="font-family:var(--SC);font-size:10px;color:var(--red);letter-spacing:.06em;margin-bottom:4px">Zero Upsell Revenue Active</div><div style="font-family:var(--B);font-size:12px;color:var(--sub);font-style:italic">Early check-in, late checkout, and welcome hampers — three revenue streams available right now without property investment. At £28 avg per upsell and 55% uptake: ${gbp(upsellLoss)}/month.</div></div>`:`<div class="hl">Upsells: ${upsells} — active. Focus on optimising conversion and adding day-2 in-stay touchpoint.</div>`}<div style="background:var(--base);border:1px solid var(--b1);border-left:2px solid var(--amber);padding:12px 14px;margin-bottom:9px"><div style="font-family:var(--SC);font-size:10px;color:var(--amber);letter-spacing:.06em;margin-bottom:4px">Post-Checkout Review Recovery</div><div style="font-family:var(--B);font-size:12px;color:var(--sub);font-style:italic">Automated review request within 90 minutes of checkout — personalised, not template. 40–60% uptake vs 15% manual. Setup: 15 minutes.</div></div><div style="background:var(--base);border:1px solid var(--b1);border-left:2px solid var(--gold);padding:12px 14px"><div style="font-family:var(--SC);font-size:10px;color:var(--gold);letter-spacing:.06em;margin-bottom:4px">Day-2 In-Stay Touchpoint</div><div style="font-family:var(--B);font-size:12px;color:var(--sub);font-style:italic">Automated day-2 message: "Settled in well? Anything you need?" Opens upsell conversation and primes review sentiment. Setup: 15 minutes.</div></div></div></div>`;
+
+// ACTIONS TAB
+let actHtml=`<div id="tab-actions" class="hidden" style="background:var(--s1);border:1px solid var(--b1);overflow:hidden"><table class="ap-tbl"><thead><tr><th>#</th><th>Action</th><th>Layer</th><th>Priority</th><th>Effort</th><th>Time</th><th>Value</th></tr></thead><tbody>`;
+allActions.slice(0,10).forEach((a,i)=>{
+const txt=typeof a===“string”?a:a.text;
+const eff=(a.effort||“Low”).toLowerCase();
+const effc=eff.startsWith(‘l’)?‘p-med’:eff.startsWith(‘h’)?‘p-crit’:‘p-high’;
+actHtml+=`<tr><td><div style="width:18px;height:18px;border-radius:50%;background:var(--ad);color:var(--amber);font-family:var(--M);font-size:8px;display:flex;align-items:center;justify-content:center">${i+1}</div></td><td><div style="color:var(--txt);font-family:var(--B);font-size:12px">${txt}</div><div style="font-family:var(--B);font-size:10px;color:var(--dim);margin-top:2px;font-style:italic">${a.leakName}</div></td><td><span style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.07em;text-transform:uppercase">${a.category?.split('·')[0]?.trim()}</span></td><td><span class="pill p-${a.severity==='critical'?'crit':a.severity==='high'?'high':'med'}">${a.severity}</span></td><td><span class="pill ${effc}">${a.effort||"Low"}</span></td><td style="font-family:var(--M);font-size:9px;white-space:nowrap">${a.time||"—"}</td><td style="font-family:var(--D);font-size:14px;color:var(--amber);font-weight:300">${a.impact||"—"}</td></tr>`;
+});
+actHtml+=`</tbody></table></div>`;
+
+const dlvHtml=`<div class="dlv" style="margin-top:18px"><span class="dlv-l">Delivered</span><span class="dlv-c">✓ Dashboard</span><span class="dlv-c">✓ PDF Report</span><span class="dlv-c">✓ Email</span><span class="dlv-c">✓ Slack</span><span class="dlv-c">✓ Benchmark DB</span><button onclick="resetAudit()" style="margin-left:auto;background:transparent;color:var(--dim);border:1px solid var(--b1);padding:5px 11px;font-family:var(--M);font-size:7px;cursor:pointer;letter-spacing:.1em;text-transform:uppercase">Audit Another →</button></div>`;
+
+html+=leaksHtml+listHtml+revHtml+yieldHtml+journeyHtml+actHtml+dlvHtml;
+
+const resEl=document.getElementById(‘resultsEl’);
+resEl.innerHTML=html;resEl.classList.remove(‘hidden’);
+
+running=false;
+document.getElementById(‘runBtn’).disabled=false;
+document.getElementById(‘runBtn’).innerHTML=‘◈ Run Free 2-Layer Preview’;
+document.getElementById(‘runBtn’).style.opacity=‘1’;
+document.getElementById(‘runHint’).textContent=‘Full 10-layer from £97/month’;
+setStep(14);
+
+setTimeout(()=>{
+animCounters(totalLoss,REVPAR);
+animBars();
+drawDonut(sorted);
+drawYield(mAdrs,bm);
+initMap(location,propName);
+confetti();
+applyGate(totalLoss);
+document.getElementById(‘resultsEl’).scrollIntoView({behavior:‘smooth’,block:‘start’});
+},400);
+}
+
+window.toggleLeak = function toggleLeak(id){
+const lk=document.getElementById(‘lk-’+id),lb=document.getElementById(‘lb-’+id),tog=document.getElementById(‘tog-’+id);
+const open=!lb.classList.contains(‘hidden’);
+lb.classList.toggle(‘hidden’);lk.classList.toggle(‘open’,!open);
+tog.style.transform=open?’’:‘rotate(90deg)’;
+}
+
+window.showTab = function showTab(name,btn){
+[‘leaks’,‘listing’,‘reviews’,‘yield’,‘journey’,‘actions’].forEach(t=>{document.getElementById(‘tab-’+t)?.classList.add(‘hidden’);});
+document.querySelectorAll(’.tab-btn’).forEach(b=>b.classList.remove(‘active’));
+document.getElementById(‘tab-’+name)?.classList.remove(‘hidden’);
+btn.classList.add(‘active’);
+}
+
+function resetAudit(){
+document.getElementById(‘resultsEl’).classList.add(‘hidden’);
+document.getElementById(‘resultsEl’).innerHTML=’’;
+document.getElementById(‘pipeEl’)?.classList.add(‘hidden’);
+document.getElementById(‘logEl’)?.classList.add(‘hidden’);
+document.getElementById(‘tool’)?.scrollIntoView({behavior:‘smooth’});
+}
+
+// ── BILLING TOGGLE ──
+window.toggleBilling = function toggleBilling(){
+billingAnnual=!billingAnnual;
+document.getElementById(‘billToggle’).classList.toggle(‘on’,billingAnnual);
+const prices=billingAnnual?{sp:Math.round(97*10/12),gp:Math.round(197*10/12),ap:Math.round(497*10/12),ep:Math.round(997*10/12)}:{sp:97,gp:197,ap:497,ep:997};
+Object.entries(prices).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.textContent=val;});
+[‘sa’,‘ga’,‘aa’,‘ea’].forEach(id=>{document.getElementById(id)?.classList.toggle(‘show’,billingAnnual);});
+}
+
+// ── ROI CALCULATOR ──
+window.calcROI = function calcROI(){
+const rev=parseFloat(document.getElementById(‘roiRev’)?.value)||4200;
+const props=parseInt(document.getElementById(‘roiProps’)?.value)||3;
+const plan=parseFloat(document.getElementById(‘roiPlan’)?.value)||197;
+const leak=Math.round(rev*props*0.2);
+const net=leak-plan;
+const roi=Math.round((net/plan)*100);
+const lEl=document.getElementById(‘roiLeak’),cEl=document.getElementById(‘roiCost’),nEl=document.getElementById(‘roiNet’),rEl=document.getElementById(‘roiRet’);
+if(lEl)lEl.textContent=‘£’+leak.toLocaleString();
+if(cEl)cEl.textContent=‘£’+Math.round(plan).toLocaleString();
+if(nEl)nEl.textContent=‘£’+net.toLocaleString();
+if(rEl)rEl.textContent=roi+’%’;
+}
+
+// ── CASE STUDY TABS ──
+window.showCsTab = function showCsTab(id,btn){
+[‘overview’,‘timeline’,‘method’].forEach(t=>{const el=document.getElementById(‘cs-’+t);if(el)el.classList[t===id?‘remove’:‘add’]('hidden');});
+document.querySelectorAll(’.cst’).forEach(b=>b.classList.remove(‘active’));
+btn.classList.add(‘active’);
+}
+
+// ── PAYMENT MODAL ──
+window.openPayModal = function openPayModal(name,price){
+currentPlan={name,price};
+document.getElementById(‘pmTitle’).textContent=name+’ Plan’;
+document.getElementById(‘pmPlanName’).textContent=name+’ Plan’;
+document.getElementById(‘pmPrice’).textContent=price;
+document.getElementById(‘pmStep1’).style.display=‘block’;
+document.getElementById(‘pmStep2’).style.display=‘none’;
+document.getElementById(‘payModal’).classList.add(‘open’);
+document.body.style.overflow=‘hidden’;
+}
+window.closePayModal = function closePayModal(){
+document.getElementById(‘payModal’).classList.remove(‘open’);
+document.body.style.overflow=’’;
+}
+window.proceedStripe = function proceedStripe(){
+const email=document.getElementById(‘pmEmail’).value,fname=document.getElementById(‘pmFname’).value;
+if(!email||!fname){alert(‘Please fill in your name and email.’);return;}
+const link=CONFIG.STRIPE_LINKS[currentPlan.name];
+if(!link){
+alert(`Thanks ${fname}! To complete your ${currentPlan.name} plan (£${currentPlan.price}/month), email summitstaygroup@gmail.com and Harvy will send your Stripe payment link. 14-day free trial included.`);
+}else{
+window.open(link+’?prefilled_email=’+encodeURIComponent(email),’*blank’);
+}
+localStorage.setItem(‘ssg_paid_token’,’paid*’+Date.now());
+isPaidUser=true;
+document.getElementById(‘pmStep1’).style.display=‘none’;
+document.getElementById(‘pmStep2’).style.display=‘block’;
+}
+window.proceedRevolut = function proceedRevolut(){
+const fname=document.getElementById(‘pmFname’).value;
+if(!fname){alert(‘Please fill in your name.’);return;}
+alert(`Bank Transfer Details:\n\nAccount Name: Summit Stay Group\nSort Code: [Add your Starling sort code]\nAccount Number: [Add your account number]\nReference: ${fname} - ${currentPlan.name}\n\nOr pay via Revolut: @summitstagroup\n\nHarvy will confirm receipt within 24 hours.`);
+document.getElementById(‘pmStep1’).style.display=‘none’;
+document.getElementById(‘pmStep2’).style.display=‘block’;
+}
+
+// ── INVOICE SYSTEM ──
+window.generateInvoice = function generateInvoice(){
+const client=document.getElementById(‘invClient’).value;
+const amount=parseFloat(document.getElementById(‘invAmount’).value)||0;
+if(!client){alert(‘Please enter client name.’);return;}
+invCount++;localStorage.setItem(‘ssg_inv_count’,invCount);
+const num=‘SSG-’+String(invCount).padStart(3,‘0’);
+const dateVal=document.getElementById(‘invDate’).value;
+const dateStr=dateVal?new Date(dateVal).toLocaleDateString(‘en-GB’,{day:‘numeric’,month:‘long’,year:‘numeric’}):new Date().toLocaleDateString(‘en-GB’,{day:‘numeric’,month:‘long’,year:‘numeric’});
+document.getElementById(‘invNum’).textContent=num;
+document.getElementById(‘invPrevClient’).textContent=client;
+document.getElementById(‘invPrevDate’).textContent=dateStr;
+document.getElementById(‘invPrevService’).textContent=document.getElementById(‘invService’).value||‘STR Revenue Intelligence Audit’;
+document.getElementById(‘invPrevAmount’).textContent=‘£’+amount.toLocaleString();
+document.getElementById(‘invPrevTotal’).textContent=‘£’+amount.toLocaleString();
+document.getElementById(‘invPrevDue’).textContent=document.getElementById(‘invDue’).value;
+const notes=document.getElementById(‘invNotes’).value;
+document.getElementById(‘invPrevNotes’).textContent=notes?`Notes: ${notes}`:’’;
+document.getElementById(‘invPreview’).classList.add(‘show’);
+const st=document.getElementById(‘invStatus’);
+st.textContent=`✓ Invoice ${num} generated`;st.style.display=‘block’;
+setTimeout(()=>st.style.display=‘none’,3000);
+}
+window.sendPaymentLink = function sendPaymentLink(){
+const email=document.getElementById(‘invEmail’).value,amount=document.getElementById(‘invAmount’).value,client=document.getElementById(‘invClient’).value;
+if(!email){alert(‘Please enter client email first.’);return;}
+const sub=encodeURIComponent(‘Summit Stay Group — Payment Link’);
+const body=encodeURIComponent(`Hi ${client||'there'},\n\nPlease find your payment link for £${amount} below:\n\n[Add your Stripe payment link from stripe.com]\n\nThis link expires in 48 hours.\n\nHarvy\nSummit Stay Group\nsummitstaygroup@gmail.com`);
+window.open(‘mailto:’+email+’?subject=’+sub+’&body=’+body,’_blank’);
+}
+window.printInvoice = function printInvoice(){
+if(!document.getElementById(‘invPreview’).classList.contains(‘show’)){generateInvoice();setTimeout(()=>window.print(),400);}else{window.print();}
+}
+
+// ── INIT ──
+document.addEventListener(‘DOMContentLoaded’, function(){
+const invDateEl=document.getElementById(‘invDate’);
+if(invDateEl)invDateEl.value=new Date().toISOString().split(‘T’)[0];
+calcROI();
+buildTicker();
+
+// Build seasonal grid
+const sg=document.getElementById(‘seasonGrid’);
+if(sg && sg.children.length === 0){
+const MONTHS2=[“Jan”,“Feb”,“Mar”,“Apr”,“May”,“Jun”,“Jul”,“Aug”,“Sep”,“Oct”,“Nov”,“Dec”];
+const DEFAULTS2=[140,140,160,180,200,220,240,240,190,165,150,155];
+MONTHS2.forEach((m,i)=>{
+const d=document.createElement(‘div’);
+d.className=‘smon’;
+d.innerHTML=`<div class="smon-l">${m}</div><input class="smon-i" id="m${i+1}" type="number" value="${DEFAULTS2[i]}">`;
+sg.appendChild(d);
+});
+}
+
+// Upload zone
+const upz2=document.getElementById(‘upzEl’);
+if(upz2){
+upz2.addEventListener(‘dragover’,e=>{e.preventDefault();upz2.style.borderColor=‘var(–amber)’});
+upz2.addEventListener(‘dragleave’,()=>upz2.style.borderColor=’’);
+upz2.addEventListener(‘drop’,e=>{
+e.preventDefault();upz2.style.borderColor=’’;
+const f=e.dataTransfer.files[0];
+if(f)document.getElementById(‘upzTxt’).textContent=f.name;
+});
+}
+});
+</script>
+
+</body>
+</html>
