@@ -59,20 +59,20 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 .logo-p{font-family:var(–SC);font-size:13px;font-weight:500;letter-spacing:.18em;color:var(–txt);text-transform:uppercase;line-height:1.1}
 .logo-s{font-family:var(–B);font-size:8px;color:var(–dim);letter-spacing:.16em;text-transform:uppercase;font-style:italic;margin-top:1px}
 .nav-links{display:flex;align-items:center;flex:1}
-.nl{font-family:var(–SC);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(–dim);padding:0 14px;height:60px;display:flex;align-items:center;cursor:pointer;transition:all .2s;border:none;background:transparent;position:relative;white-space:nowrap}
+.nl{font-family:var(–SC);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(–dim);padding:0 14px;height:60px;display:flex;align-items:center;cursor:pointer;transition:all .2s;border:none;background:transparent;position:relative;white-space:nowrap;text-decoration:none}
 .nl:hover{color:var(–gold)}
 .nl.active{color:var(–amber)}
 .nl.active::after{content:’’;position:absolute;bottom:0;left:14px;right:14px;height:2px;background:linear-gradient(90deg,transparent,var(–amber),transparent)}
 .nav-right{margin-left:auto;display:flex;gap:8px;align-items:center}
 .nav-api{display:flex;align-items:center;gap:6px;font-family:var(–M);font-size:9px;color:var(–dim);letter-spacing:.08em;padding:0 12px;border-right:1px solid var(–b1);margin-right:4px}
 .api-dot{width:5px;height:5px;border-radius:50%;background:var(–grn);animation:PL 2s infinite}
-.nbtn{font-family:var(–SC);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:8px 15px;border-radius:1px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.nbtn{font-family:var(–SC);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:8px 15px;border-radius:1px;cursor:pointer;transition:all .2s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
 .nb-g{background:transparent;color:var(–dim);border:1px solid var(–b2)}.nb-g:hover{color:var(–gold);border-color:var(–amber)}
 .nb-a{background:var(–amber);color:var(–void);border:none}.nb-a:hover{background:var(–amber2);transform:translateY(-1px)}
 .ham{display:none;background:transparent;border:none;color:var(–txt);font-size:18px;cursor:pointer;padding:8px;margin-left:6px}
 .mob-nav{display:none;position:fixed;top:60px;left:0;right:0;z-index:499;background:rgba(0,0,0,.98);border-bottom:1px solid var(–b2);flex-direction:column;padding:16px 24px 20px;gap:3px}
 .mob-nav.open{display:flex}
-.mob-nl{font-family:var(–SC);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(–sub);padding:11px 0;border-bottom:1px solid var(–b1);cursor:pointer;transition:color .2s;background:transparent;border-left:none;border-right:none;border-top:none;text-align:left}
+.mob-nl{font-family:var(–SC);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(–sub);padding:11px 0;border-bottom:1px solid var(–b1);cursor:pointer;transition:color .2s;background:transparent;border-left:none;border-right:none;border-top:none;text-align:left;text-decoration:none;display:block}
 .mob-nl:last-of-type{border-bottom:none}
 .mob-nl:hover{color:var(–amber)}
 .mob-cta{margin-top:12px;width:100%;padding:13px;background:var(–amber);color:var(–void);font-family:var(–SC);font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;border-radius:1px}
@@ -84,7 +84,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 .ti em{color:var(–amber);font-style:normal}
 
 /* PAGE SYSTEM */
-.page{display:none;padding-top:90px;min-height:100vh;animation:FI .25s ease}
+.page{display:block;padding-top:0;min-height:auto}
 .page.active{display:block}
 
 /* COMMON */
@@ -595,40 +595,40 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 
 <nav class="nav" id="mainNav">
   <div class="nav-inner">
-    <div class="logo" onclick="showPage('home')">
+    <div class="logo" onclick="document.getElementById('home').scrollIntoView({behavior:'smooth'})">
       <div class="logo-p">Summit Stay Group</div>
       <div class="logo-s">STR Revenue Intelligence</div>
     </div>
     <div class="nav-links">
-      <button class="nl active" onclick="showPage('home')" id="nl-home">Platform</button>
-      <button class="nl" onclick="showPage('audit')" id="nl-audit">Free Audit</button>
-      <button class="nl" onclick="showPage('casestudy')" id="nl-casestudy">Case Study</button>
-      <button class="nl" onclick="showPage('pricing')" id="nl-pricing">Pricing</button>
-      <button class="nl" onclick="showPage('api')" id="nl-api">API & Docs</button>
-      <button class="nl" onclick="showPage('invoice')" id="nl-invoice">Billing</button>
+      <a class="nl active" href="#home">Platform</a>
+      <a class="nl" href="#audit">Free Audit</a>
+      <a class="nl" href="#casestudy">Case Study</a>
+      <a class="nl" href="#pricing">Pricing</a>
+      <a class="nl" href="#api">API & Docs</a>
+      <a class="nl" href="#invoice">Billing</a>
     </div>
     <div class="nav-api"><div class="api-dot"></div><span>Platform Operational</span></div>
     <div class="nav-right">
-      <button class="nbtn nb-g" onclick="showPage('audit')">Free Preview</button>
-      <button class="nbtn nb-a" onclick="openPayModal('Growth','197')">Get Started</button>
+      <a class="nbtn nb-g" href="#audit">Free Preview</a>
+      <a class="nbtn nb-a" href="#pricing">Get Started</a>
     </div>
     <button class="ham" onclick="toggleMob()" id="hamBtn">☰</button>
   </div>
 </nav>
 <div class="mob-nav" id="mobNav">
-  <button class="mob-nl" onclick="showPage('home');toggleMob()">Platform</button>
-  <button class="mob-nl" onclick="showPage('audit');toggleMob()">Free Audit</button>
-  <button class="mob-nl" onclick="showPage('casestudy');toggleMob()">Case Study</button>
-  <button class="mob-nl" onclick="showPage('pricing');toggleMob()">Pricing</button>
-  <button class="mob-nl" onclick="showPage('api');toggleMob()">API & Docs</button>
-  <button class="mob-nl" onclick="showPage('invoice');toggleMob()">Billing</button>
-  <button class="mob-cta" onclick="showPage('audit');toggleMob()">Run Free Preview →</button>
+  <a class="mob-nl" href="#home">Platform</a>
+  <a class="mob-nl" href="#audit">Free Audit</a>
+  <a class="mob-nl" href="#casestudy">Case Study</a>
+  <a class="mob-nl" href="#pricing">Pricing</a>
+  <a class="mob-nl" href="#api">API & Docs</a>
+  <a class="mob-nl" href="#invoice">Billing</a>
+  <a class="mob-cta" href="#audit">Run Free Preview →</a>
 </div>
 <div class="ticker"><div class="t-inner"><div id="tc1" style="display:flex"></div><div id="tc2" style="display:flex"></div></div></div>
 
 <!-- ═══ HOME ═══ -->
 
-<div class="page active" id="page-home">
+<div class="page active" id="home" style="padding-top:90px">
   <div class="hero">
     <div class="hbg"><div class="hbg-g"></div><div class="hbg-grid"></div></div>
     <div class="hero-inner">
@@ -637,8 +637,8 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
         <h1 class="h-h1">Most STR Portfolios<br>Aren't Failing.<span class="h-italic">They're leaking.</span><span class="h-sub">We find exactly where.</span></h1>
         <p class="h-desc"><strong>£500–£2,400/month</strong> sits hidden in the gaps between your occupancy rate and your revenue ceiling. Not listing tips — a <strong>10-layer forensic audit</strong> powered by proprietary AI, running against Harvy's real UK operator benchmarks. The methodology that grew a portfolio from <strong>£104K → £190K+ annualised in 9 months</strong> without dropping below 4.97★.</p>
         <div class="h-ctas">
-          <button class="btn btn-P btn-lg" onclick="showPage('audit')">Run Free 2-Layer Preview →</button>
-          <button class="btn btn-S btn-lg" onclick="showPage('casestudy')">See the Case Study</button>
+          <button class="btn btn-P btn-lg" href="#audit">Run Free 2-Layer Preview →</button>
+          <button class="btn btn-S btn-lg" onclick="document.getElementById('casestudy').scrollIntoView({behavior:'smooth'})">See the Case Study</button>
         </div>
         <div class="h-stats">
           <div class="hs"><div class="hs-v">£1,380</div><div class="hs-l">Avg Monthly Recovery</div><div class="hs-s">across all audits</div></div>
@@ -735,7 +735,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
       <div style="font-family:var(--M);font-size:9px;color:var(--amber);letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:12px"><span style="width:24px;height:1px;background:var(--amber);opacity:.6;display:inline-block"></span>What Makes This Different</div>
       <div style="font-family:var(--SC);font-size:clamp(18px,2.2vw,28px);font-weight:300;color:var(--txt);letter-spacing:.06em;margin-bottom:16px;line-height:1.1">Every other tool audits<br><span style="font-family:var(--D);font-style:italic;color:var(--gold)">your listing.</span></div>
       <div style="font-family:var(--B);font-size:15px;color:var(--sub);line-height:1.9;margin-bottom:20px">Summit Stay Group audits your entire revenue architecture. The gap between what you earn and what you should earn isn't usually in your photos or your title. It's in your pricing logic, your calendar gaps, your channel mix, your cleaning fee ratio, your review velocity.<br><br><strong style="color:var(--txt);font-weight:400">Most operators never look at these things together. We built a system that does — automatically — because Harvy looked at them every single day for 9 months and grew a portfolio by 38%.</strong></div>
-      <button class="btn btn-P" onclick="showPage('audit')">Run Your Free Preview →</button>
+      <button class="btn btn-P" href="#audit">Run Your Free Preview →</button>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px">
       <div style="background:var(--base);border:1px solid var(--b1);border-left:2px solid var(--red);padding:16px 18px">
@@ -759,15 +759,15 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
     <h2 class="H2" style="max-width:580px;margin:0 auto 10px">Your first two leaks. <em>Free. In 20 seconds.</em></h2>
     <p class="body" style="max-width:460px;margin:0 auto 32px">Enter your numbers. The engine runs Layers 01 and 02 against Harvy's UK benchmarks and shows you exactly where your money is going.</p>
     <div style="display:flex;gap:11px;justify-content:center;flex-wrap:wrap">
-      <button class="btn btn-P btn-lg" onclick="showPage('audit')">Run Free Preview →</button>
-      <button class="btn btn-S btn-lg" onclick="showPage('pricing')">View Pricing</button>
+      <button class="btn btn-P btn-lg" href="#audit">Run Free Preview →</button>
+      <button class="btn btn-S btn-lg" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">View Pricing</button>
     </div>
   </div>
 </div>
 
 <!-- ═══ CASE STUDY ═══ -->
 
-<div class="page" id="page-casestudy">
+<div class="page" id="casestudy" style="padding-top:90px">
   <div class="section">
     <div class="eyebrow">Case Study · Scotland · 5 Units · 2024</div>
     <h1 class="H1">£104K to <em>£190K+</em></h1>
@@ -843,8 +843,8 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
     <div style="margin-top:44px;text-align:center">
       <p class="body" style="margin-bottom:22px">Want this methodology running on your portfolio?</p>
       <div style="display:flex;gap:11px;justify-content:center;flex-wrap:wrap">
-        <button class="btn btn-P btn-lg" onclick="showPage('audit')">Run Free Preview →</button>
-        <button class="btn btn-S btn-lg" onclick="showPage('pricing')">View Growth Plan</button>
+        <button class="btn btn-P btn-lg" href="#audit">Run Free Preview →</button>
+        <button class="btn btn-S btn-lg" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">View Growth Plan</button>
       </div>
     </div>
   </div>
@@ -852,7 +852,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 
 <!-- ═══ AUDIT ═══ -->
 
-<div class="page" id="page-audit">
+<div class="page" id="audit" style="padding-top:90px">
   <div class="audit-wrap">
     <div class="a-sidebar">
       <div class="asb">
@@ -972,7 +972,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 
 <!-- ═══ PRICING ═══ -->
 
-<div class="page" id="page-pricing">
+<div class="page" id="pricing" style="padding-top:90px">
   <div class="section">
     <div class="eyebrow">Pricing</div>
     <h1 class="H1">Simple pricing for <em>STR operators.</em></h1>
@@ -992,7 +992,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
         <div class="pc-ann" id="sa">£970/year · save £194</div>
         <div class="pc-desc">For independent operators running 1–3 units who want to stop guessing.</div>
         <ul class="pc-feats"><li class="pc-feat">Full 10-layer audit per property</li><li class="pc-feat">Monthly portfolio scan</li><li class="pc-feat">Email report delivery 6am</li><li class="pc-feat">UK STR benchmark comparison</li><li class="pc-feat">Checkpoint decision system</li><li class="pc-feat">14-day free trial</li></ul>
-        <button class="pc-cta" onclick="openPayModal('Starter','97')">Start Free Trial →</button>
+        <button class="pc-cta" href='#pricing'>Start Free Trial →</button>
       </div>
       <div class="pc feat">
         <div class="pc-pop">Most Popular</div>
@@ -1002,7 +1002,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
         <div class="pc-ann" id="ga">£1,970/year · save £394</div>
         <div class="pc-desc">For serious operators who need nightly intelligence, not monthly snapshots.</div>
         <ul class="pc-feats"><li class="pc-feat">Everything in Starter</li><li class="pc-feat">Nightly automated scans</li><li class="pc-feat">Slack + email delivery</li><li class="pc-feat">Anomaly detection alerts</li><li class="pc-feat">Mapbox competitor mapping</li><li class="pc-feat">Make.com webhook delivery</li><li class="pc-feat">Priority support from Harvy</li></ul>
-        <button class="pc-cta" onclick="openPayModal('Growth','197')">Start Free Trial →</button>
+        <button class="pc-cta" href='#pricing'>Start Free Trial →</button>
       </div>
       <div class="pc">
         <div class="pc-tier">Agency</div>
@@ -1011,7 +1011,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
         <div class="pc-ann" id="aa">£4,970/year · save £994</div>
         <div class="pc-desc">For property management companies needing white-label reporting for clients.</div>
         <ul class="pc-feats"><li class="pc-feat">Everything in Growth</li><li class="pc-feat">White-label client reports</li><li class="pc-feat">Multi-client dashboards</li><li class="pc-feat">API access (REST)</li><li class="pc-feat">Custom branding</li><li class="pc-feat">Dedicated onboarding call</li></ul>
-        <button class="pc-cta" onclick="openPayModal('Agency','497')">Start Free Trial →</button>
+        <button class="pc-cta" href='#pricing'>Start Free Trial →</button>
       </div>
       <div class="pc">
         <div class="pc-tier">Enterprise</div>
@@ -1020,7 +1020,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
         <div class="pc-ann" id="ea">£9,970/year · save £1,994</div>
         <div class="pc-desc">Direct Harvy involvement for operators and funds serious about asset performance at scale.</div>
         <ul class="pc-feats"><li class="pc-feat">Everything in Agency</li><li class="pc-feat">Monthly 1:1 with Harvy</li><li class="pc-feat">Bespoke audit methodology</li><li class="pc-feat">Portfolio strategy sessions</li><li class="pc-feat">Staff training programme</li></ul>
-        <button class="pc-cta" onclick="openPayModal('Enterprise','997')">Book Strategy Call →</button>
+        <button class="pc-cta" href='#pricing'>Book Strategy Call →</button>
       </div>
     </div>
     <div class="price-note">All plans · 14-day free trial · No credit card to start · Cancel anytime · Annual saves 2 months</div>
@@ -1043,7 +1043,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 
 <!-- ═══ API PAGE ═══ -->
 
-<div class="page" id="page-api">
+<div class="page" id="api" style="padding-top:90px">
   <div class="section">
     <div class="eyebrow">API & Technical Documentation</div>
     <h1 class="H1">Built for operators <em>and developers.</em></h1>
@@ -1118,8 +1118,8 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 }</div>
 </div>
 <div style="margin-top:28px;display:flex;gap:11px;flex-wrap:wrap">
-<button class="btn btn-P" onclick="openPayModal('Agency','497')">Get API Access →</button>
-<button class="btn btn-S" onclick="openPayModal('Enterprise','997')">Enterprise — Book Call</button>
+<button class="btn btn-P" href='#pricing'>Get API Access →</button>
+<button class="btn btn-S" href='#pricing'>Enterprise — Book Call</button>
 </div>
 
   </div>
@@ -1127,7 +1127,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 
 <!-- ═══ INVOICE ═══ -->
 
-<div class="page" id="page-invoice">
+<div class="page" id="invoice" style="padding-top:90px">
   <div class="section">
     <div class="eyebrow">Billing & Invoice Generator</div>
     <h1 class="H1">Summit Stay Group <em>Billing.</em></h1>
@@ -1189,8 +1189,8 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 <footer class="footer">
   <div class="footer-in">
     <div><div class="ft-brand">Summit Stay Group</div><div class="ft-brand-s">STR Revenue Intelligence</div><div class="ft-desc">The only STR revenue intelligence platform built by someone who ran the portfolio. Not a developer. Not a consultant. An operator who grew revenue 38% in 9 months and automated the methodology that did it.</div></div>
-    <div><div class="ft-col-t">Platform</div><button class="ft-lnk" onclick="showPage('home')">How It Works</button><button class="ft-lnk" onclick="showPage('audit')">Free Audit Preview</button><button class="ft-lnk" onclick="showPage('api')">API Documentation</button></div>
-    <div><div class="ft-col-t">Company</div><button class="ft-lnk" onclick="showPage('casestudy')">Case Study</button><button class="ft-lnk" onclick="showPage('pricing')">Pricing</button><button class="ft-lnk" onclick="openPayModal('Growth','197')">Get Started</button></div>
+    <div><div class="ft-col-t">Platform</div><button class="ft-lnk" onclick="document.getElementById('home').scrollIntoView({behavior:'smooth'})">How It Works</button><button class="ft-lnk" href="#audit">Free Audit Preview</button><button class="ft-lnk" onclick="document.getElementById('api').scrollIntoView({behavior:'smooth'})">API Documentation</button></div>
+    <div><div class="ft-col-t">Company</div><button class="ft-lnk" onclick="document.getElementById('casestudy').scrollIntoView({behavior:'smooth'})">Case Study</button><button class="ft-lnk" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Pricing</button><button class="ft-lnk" href='#pricing'>Get Started</button></div>
     <div><div class="ft-col-t">Contact</div><button class="ft-lnk">summitstaygroup@gmail.com</button><button class="ft-lnk">summitstaygroup.co.uk</button><button class="ft-lnk">LinkedIn · Harvy Pinder-Sellings</button><div style="margin-top:11px;font-family:var(--B);font-size:12px;color:var(--dim);font-style:italic;line-height:1.9">UK-based · Operator-led<br>Response within 24 hours</div></div>
   </div>
   <div class="footer-bot">
@@ -1378,7 +1378,7 @@ setTimeout(()=>{
 const tab=document.getElementById(‘tab-’+t);if(!tab)return;
 tab.style.position=‘relative’;tab.style.minHeight=‘220px’;
 const o=document.createElement(‘div’);o.className=‘gate-bl’;
-o.innerHTML=`<div class="gate-t">Paid Access Required</div><div class="gate-s">Unlock the complete 10-layer report to see every leak, every fix, and your full action plan.</div><div class="gate-amt">${£(totalLoss*12)}/year</div><div style="font-family:var(--B);font-size:12px;color:var(--sub);font-style:italic">sitting in your portfolio unrecovered</div><button class="btn btn-P" onclick="openPayModal('Growth','197')">Unlock Full Report — from £97/mo →</button>`;
+o.innerHTML=`<div class="gate-t">Paid Access Required</div><div class="gate-s">Unlock the complete 10-layer report to see every leak, every fix, and your full action plan.</div><div class="gate-amt">${£(totalLoss*12)}/year</div><div style="font-family:var(--B);font-size:12px;color:var(--sub);font-style:italic">sitting in your portfolio unrecovered</div><button class="btn btn-P" href='#pricing'>Unlock Full Report — from £97/mo →</button>`;
 tab.appendChild(o);
 });
 document.querySelectorAll(’.lk’).forEach((c,i)=>{
