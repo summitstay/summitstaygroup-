@@ -5,232 +5,271 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free Revenue Audit — Summit Stay Group</title>
-<meta name="description" content="Enter 6 numbers. Get a forensic diagnosis of exactly where your STR portfolio is leaking money. Free 2-layer preview.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500;600&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=Overpass+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500&family=Cormorant:ital,wght@0,300;1,300&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=Overpass+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --void:#000;--base:#0a0806;--s1:#100e0b;--s2:#181410;--s3:#201c16;
-  --b1:#2a2018;--b2:#382c20;--b3:#4a3c2a;
-  --txt:#f2ede4;--sub:#a8967a;--dim:#6a5840;--faint:#3a2e20;
+  --bg:#080604;--s1:#100e0a;--s2:#181410;--s3:#201c14;
+  --b1:#2a2018;--b2:#3a2c1c;--b3:#4a3c28;
+  --txt:#f0ebe0;--sub:#a08060;--dim:#604830;--faint:#302010;
   --amber:#c4813a;--amber2:#d4914a;--gold:#c8a050;
-  --ad:rgba(196,129,58,.14);--ad2:rgba(196,129,58,.07);--ad3:rgba(196,129,58,.04);
-  --red:#c85040;--rd:rgba(200,80,64,.12);--rd2:rgba(200,80,64,.06);
-  --grn:#5a9450;--gnd:rgba(90,148,80,.12);--gnd2:rgba(90,148,80,.06);
-  --D:'Cormorant',Georgia,serif;--SC:'Cormorant SC',Georgia,serif;
-  --B:'Crimson Pro',Georgia,serif;--M:'Overpass Mono',monospace;
+  --red:#c05040;--rd:rgba(192,80,64,.12);
+  --grn:#5a9040;--gnd:rgba(90,144,64,.12);
+  --ad:rgba(196,129,58,.14);--ad2:rgba(196,129,58,.07);
+  --D:'Cormorant',serif;--SC:'Cormorant SC',serif;
+  --B:'Crimson Pro',serif;--M:'Overpass Mono',monospace;
 }
-html,body{overflow-x:hidden;max-width:100vw;scroll-behavior:smooth}
-body{background:var(--void);color:var(--txt);font-family:var(--B);font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
-::selection{background:var(--amber);color:var(--void)}
-input,select,textarea{font-family:var(--B);color:var(--txt)!important;-webkit-text-fill-color:var(--txt)!important;background:transparent}
-input::placeholder{color:var(--dim)}
+body{background:var(--bg);color:var(--txt);font-family:var(--B);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+input,select,textarea{font-family:var(--B);color:var(--txt)!important;-webkit-text-fill-color:var(--txt)!important;background:transparent;border:none;outline:none;width:100%}
+input::placeholder{color:var(--dim)!important;-webkit-text-fill-color:var(--dim)!important}
 select option{background:var(--s2);color:var(--txt)}
 input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
-
-@keyframes FI{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-@keyframes PL{0%,100%{opacity:1}50%{opacity:.2}}
-@keyframes TICKER{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-@keyframes SPIN{to{transform:rotate(360deg)}}
-@keyframes GLOW{0%,100%{opacity:.6}50%{opacity:1}}
-@keyframes BAR{from{width:0}to{width:var(–w,0%)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:500;height:60px;background:rgba(0,0,0,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(–b1)}
-.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;padding:0 24px;height:100%}
-.logo{display:flex;flex-direction:column;cursor:pointer;flex-shrink:0;text-decoration:none}
-.logo-p{font-family:var(–SC);font-size:13px;font-weight:500;letter-spacing:.18em;color:var(–txt);text-transform:uppercase;line-height:1.1}
-.logo-s{font-family:var(–B);font-size:8px;color:var(–dim);letter-spacing:.14em;text-transform:uppercase;font-style:italic;margin-top:1px}
-.nav-right{margin-left:auto;display:flex;gap:8px;align-items:center}
-.nav-lnk{font-family:var(–SC);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(–dim);padding:7px 13px;border-radius:1px;cursor:pointer;transition:all .2s;white-space:nowrap;text-decoration:none;border:1px solid var(–b2)}
-.nav-lnk:hover{color:var(–gold);border-color:var(–amber)}
-.nav-cta{background:var(–amber);color:var(–void);border:none;font-family:var(–SC);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:7px 13px;cursor:pointer;border-radius:1px;transition:all .2s;text-decoration:none}
-.nav-cta:hover{background:var(–amber2)}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;background:rgba(8,6,4,.97);border-bottom:1px solid var(–b1);display:flex;align-items:center;padding:0 20px;gap:0}
+.logo{display:flex;flex-direction:column;margin-right:20px}
+.logo-p{font-family:var(–SC);font-size:12px;letter-spacing:.18em;color:var(–txt);line-height:1.1}
+.logo-s{font-family:var(–B);font-size:8px;color:var(–dim);letter-spacing:.12em;font-style:italic}
+.nl{font-family:var(–SC);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(–dim);padding:0 11px;height:58px;display:flex;align-items:center;transition:color .2s}
+.nl:hover{color:var(–gold)}
+.nl.on{color:var(–amber);border-bottom:2px solid var(–amber)}
+.nav-cta{margin-left:auto;background:var(–amber);color:#000!important;-webkit-text-fill-color:#000!important;font-family:var(–SC);font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:8px 16px;flex-shrink:0}
 
 /* TICKER */
-.ticker{position:fixed;top:60px;left:0;right:0;z-index:498;background:var(–s1);border-bottom:1px solid var(–b1);height:28px;overflow:hidden;display:flex;align-items:center}
-.t-inner{display:flex;width:max-content;animation:TICKER 40s linear infinite}
-.ti{white-space:nowrap;padding:0 32px;font-family:var(–M);font-size:9px;color:var(–dim);display:flex;align-items:center;gap:8px}
+.ticker{position:fixed;top:58px;left:0;right:0;z-index:199;height:26px;background:var(–s1);border-bottom:1px solid var(–b1);overflow:hidden;display:flex;align-items:center}
+.ticker-inner{display:flex;width:max-content;animation:ticker 38s linear infinite}
+.ti{white-space:nowrap;padding:0 28px;font-family:var(–M);font-size:8px;color:var(–dim);display:flex;align-items:center;gap:8px}
 .ti em{color:var(–amber);font-style:normal}
 
 /* HERO */
-.hero{padding:120px 24px 60px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid var(–b1)}
-.hero::before{content:’’;position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(196,129,58,.07) 0%,transparent 65%);pointer-events:none}
-.hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(–M);font-size:9px;color:var(–amber);letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(196,129,58,.3);padding:5px 14px;margin-bottom:28px;background:var(–ad3)}
-.hero-tag-dot{width:5px;height:5px;border-radius:50%;background:var(–amber);animation:PL 2s infinite}
-.hero-h1{font-family:var(–SC);font-size:clamp(32px,5vw,64px);font-weight:300;line-height:1;letter-spacing:.05em;color:var(–txt);margin-bottom:8px}
-.hero-h1 em{font-family:var(–D);font-style:italic;color:var(–gold);letter-spacing:.02em}
-.hero-sub{font-family:var(–B);font-size:clamp(15px,2vw,20px);color:var(–sub);max-width:540px;margin:0 auto 36px;line-height:1.8}
+.hero{padding:104px 20px 44px;text-align:center;border-bottom:1px solid var(–b1);position:relative}
+.hero::before{content:’’;position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 100%,rgba(196,129,58,.06),transparent);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.16em;text-transform:uppercase;border:1px solid rgba(196,129,58,.3);padding:5px 14px;margin-bottom:22px;background:var(–ad2)}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:var(–amber);animation:pulse 2s infinite}
+.hero h1{font-family:var(–SC);font-size:clamp(26px,5vw,54px);font-weight:300;letter-spacing:.05em;line-height:1.05;margin-bottom:14px}
+.hero h1 em{font-family:var(–D);font-style:italic;color:var(–gold)}
+.hero-sub{font-family:var(–B);font-size:clamp(14px,2vw,18px);color:var(–sub);max-width:520px;margin:0 auto 28px;line-height:1.8}
 .hero-sub strong{color:var(–txt);font-weight:400}
-.hero-stats{display:inline-flex;gap:1px;background:var(–b1);border:1px solid var(–b1);margin-bottom:48px}
-.hs{background:var(–s1);padding:14px 24px;text-align:center}
-.hs-v{font-family:var(–D);font-size:24px;font-weight:300;color:var(–amber);line-height:1}
-.hs-l{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.09em;text-transform:uppercase;margin-top:3px}
+.stats{display:inline-flex;gap:1px;background:var(–b1);border:1px solid var(–b1);margin-bottom:36px}
+.stat{background:var(–s1);padding:12px 22px;text-align:center}
+.stat-v{font-family:var(–D);font-size:26px;font-weight:300;color:var(–amber);line-height:1}
+.stat-l{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.09em;text-transform:uppercase;margin-top:3px}
+.flow{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;margin-bottom:8px}
+.flow-step{display:flex;align-items:center;gap:8px;padding:8px 14px;font-family:var(–B);font-size:13px;color:var(–sub);font-style:italic}
+.flow-num{width:24px;height:24px;border-radius:50%;background:var(–ad2);border:1px solid rgba(196,129,58,.3);display:flex;align-items:center;justify-content:center;font-family:var(–M);font-size:9px;color:var(–amber);flex-shrink:0}
+.flow-arr{color:var(–b3);font-size:12px;padding:0 2px}
 
-/* STEPS */
-.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:48px;flex-wrap:wrap}
-.step{display:flex;align-items:center;gap:10px;padding:10px 20px}
-.step-n{width:28px;height:28px;border-radius:50%;background:var(–ad2);border:1px solid rgba(196,129,58,.3);display:flex;align-items:center;justify-content:center;font-family:var(–M);font-size:10px;color:var(–amber);flex-shrink:0}
-.step-l{font-family:var(–B);font-size:13px;color:var(–sub);font-style:italic}
-.step-arrow{font-family:var(–M);font-size:10px;color:var(–b3);padding:0 4px}
+/* FORM CONTAINER */
+.form-wrap{max-width:760px;margin:0 auto;padding:40px 20px 80px}
 
-/* MAIN FORM */
-.form-wrap{max-width:800px;margin:0 auto;padding:0 24px 80px}
-
-/* Progress indicator */
-.progress{display:flex;gap:6px;justify-content:center;margin-bottom:40px}
-.prog-step{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;max-width:100px}
-.prog-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(–b2);display:flex;align-items:center;justify-content:center;font-family:var(–M);font-size:9px;color:var(–dim);transition:all .3s;position:relative}
-.prog-dot.active{border-color:var(–amber);color:var(–amber);background:var(–ad3)}
+/* PROGRESS */
+.progress{display:flex;align-items:flex-start;margin-bottom:40px}
+.prog-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
+.prog-row{display:flex;align-items:center;width:100%}
+.prog-dot{width:26px;height:26px;border-radius:50%;border:2px solid var(–b2);display:flex;align-items:center;justify-content:center;font-family:var(–M);font-size:9px;color:var(–dim);transition:all .3s;flex-shrink:0}
+.prog-dot.active{border-color:var(–amber);color:var(–amber);background:var(–ad2)}
 .prog-dot.done{border-color:var(–grn);background:var(–gnd);color:var(–grn)}
-.prog-line{flex:1;height:1px;background:var(–b1);margin-top:14px;transition:background .3s}
+.prog-line{flex:1;height:1px;background:var(–b1);transition:background .3s}
 .prog-line.done{background:var(–grn)}
-.prog-lbl{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.08em;text-transform:uppercase;text-align:center;line-height:1.4}
+.prog-lbl{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.08em;text-transform:uppercase;text-align:center}
 .prog-lbl.active{color:var(–amber)}
 .prog-lbl.done{color:var(–grn)}
-.prog-row{display:flex;align-items:flex-start;width:100%}
 
-/* Form sections */
-.form-section{display:none;animation:FI .3s ease}
-.form-section.active{display:block}
+/* STEPS */
+.step{display:none;animation:fadeIn .3s ease}
+.step.show{display:block}
 
-.section-hd{margin-bottom:32px;text-align:center}
-.section-num{font-family:var(–M);font-size:9px;color:var(–amber);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
-.section-title{font-family:var(–SC);font-size:clamp(22px,3vw,36px);font-weight:300;color:var(–txt);letter-spacing:.06em;margin-bottom:6px}
-.section-title em{font-family:var(–D);font-style:italic;color:var(–gold)}
-.section-sub{font-family:var(–B);font-size:14px;color:var(–sub);font-style:italic}
+/* SECTION HEADER */
+.sec-hd{text-align:center;margin-bottom:32px}
+.sec-num{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+.sec-title{font-family:var(–SC);font-size:clamp(20px,3vw,34px);font-weight:300;letter-spacing:.06em;margin-bottom:6px}
+.sec-title em{font-family:var(–D);font-style:italic;color:var(–gold)}
+.sec-sub{font-family:var(–B);font-size:13px;color:var(–sub);font-style:italic}
 
-/* Field cards */
-.field-grid{display:grid;gap:12px;margin-bottom:28px}
-.field-grid.cols2{grid-template-columns:1fr 1fr}
-.field-grid.cols3{grid-template-columns:1fr 1fr 1fr}
+/* FIELD CARDS */
+.grid{display:grid;gap:10px;margin-bottom:24px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.fc{background:var(–s1);border:1px solid var(–b1);padding:14px 16px;transition:border-color .2s}
+.fc:focus-within{border-color:var(–amber)}
+.fc-label{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.13em;text-transform:uppercase;margin-bottom:5px}
+.fc-val{display:flex;align-items:center;gap:4px}
+.fc-pre{font-family:var(–D);font-size:16px;color:var(–sub);margin-top:4px;flex-shrink:0}
+.fc-suf{font-family:var(–D);font-size:14px;color:var(–sub);margin-top:5px;flex-shrink:0}
+.fi{font-family:var(–D);font-size:26px;font-weight:300;color:var(–txt)!important;-webkit-text-fill-color:var(–txt)!important;padding:0;background:transparent;border:none;outline:none;width:100%}
+.fi::placeholder{color:var(–faint)!important;-webkit-text-fill-color:var(–faint)!important}
+.fs{font-family:var(–D);font-size:22px;font-weight:300;color:var(–txt)!important;-webkit-text-fill-color:var(–txt)!important;background:transparent;border:none;outline:none;width:100%;cursor:pointer;appearance:none;-webkit-appearance:none}
+.fc-hint{font-family:var(–B);font-size:10px;color:var(–dim);font-style:italic;margin-top:4px}
+.fc-bm{font-family:var(–M);font-size:8px;margin-top:6px;padding-top:6px;border-top:1px solid var(–faint);letter-spacing:.06em}
+.bm-hi{color:var(–grn)}.bm-lo{color:var(–red)}.bm-n{color:var(–dim)}
 
-.field-card{background:var(–s1);border:1px solid var(–b1);padding:16px 18px;transition:border-color .2s;position:relative}
-.field-card:focus-within{border-color:var(–amber)}
-.field-card-label{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:6px}
-.field-card-hint{font-family:var(–B);font-size:10px;color:var(–dim);font-style:italic;margin-top:3px}
-.field-card-value{font-family:var(–D);font-size:28px;font-weight:300;color:var(–txt);line-height:1;display:flex;align-items:center;gap:4px}
-.field-card-value .prefix{font-size:16px;color:var(–sub);margin-top:4px}
-.field-card-value .suffix{font-size:14px;color:var(–sub);margin-top:6px}
-.field-input{background:transparent;border:none;outline:none;font-family:var(–D);font-size:28px;font-weight:300;color:var(–txt)!important;width:100%;padding:0;-webkit-text-fill-color:var(–txt)}
-.field-input::placeholder{color:var(–faint)}
-.field-select{background:transparent;border:none;outline:none;font-family:var(–D);font-size:22px;font-weight:300;color:var(–txt)!important;width:100%;cursor:pointer;appearance:none;padding-right:20px;-webkit-text-fill-color:var(–txt)}
-.field-select-wrap{position:relative}
-.field-select-wrap::after{content:‘▾’;position:absolute;right:0;top:50%;transform:translateY(-50%);color:var(–dim);font-size:12px;pointer-events:none}
-.field-benchmark{font-family:var(–M);font-size:8px;margin-top:6px;padding-top:6px;border-top:1px solid var(–faint);letter-spacing:.07em}
-.bm-above{color:var(–grn)}.bm-below{color:var(–red)}.bm-neutral{color:var(–dim)}
+/* LIVE CALC */
+.live-calc{background:var(–s1);border:1px solid var(–b1);padding:16px;margin-bottom:20px;display:none}
+.lc-title{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.13em;text-transform:uppercase;margin-bottom:12px}
+.lc-grid{display:flex;gap:20px;flex-wrap:wrap}
+.lc-item .lc-label{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.lc-item .lc-val{font-family:var(–D);font-size:22px;font-weight:300;color:var(–amber)}
 
-/* Navigation buttons */
-.form-nav{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:32px}
-.btn-back{background:transparent;color:var(–dim);border:1px solid var(–b2);font-family:var(–SC);font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:12px 20px;cursor:pointer;border-radius:1px;transition:all .2s}
+/* EMAIL FIELD */
+.email-fc{background:var(–ad2);border:1px solid rgba(196,129,58,.25);padding:16px;margin-bottom:16px}
+.email-fc:focus-within{border-color:var(–amber)}
+
+/* REVIEW SUMMARY */
+.review-sum{background:var(–s1);border:1px solid var(–b1);padding:16px;margin-bottom:16px}
+.rs-title{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.13em;text-transform:uppercase;margin-bottom:12px}
+.rs-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(–faint)}
+.rs-row:last-child{border:none}
+.rs-label{font-family:var(–M);font-size:8px;color:var(–dim);letter-spacing:.08em;text-transform:uppercase}
+.rs-val{font-family:var(–D);font-size:16px;font-weight:300;color:var(–amber)}
+
+/* SUBMIT PANEL */
+.submit-panel{background:var(–ad2);border:1px solid rgba(196,129,58,.2);padding:20px;text-align:center;margin-bottom:16px}
+.sp-title{font-family:var(–SC);font-size:13px;color:var(–txt);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.sp-text{font-family:var(–B);font-size:13px;color:var(–sub);font-style:italic;line-height:1.8}
+
+/* BUTTONS */
+.btn-next{background:var(–amber);color:#000!important;-webkit-text-fill-color:#000!important;border:none;font-family:var(–SC);font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;padding:14px 32px;cursor:pointer;display:block;width:100%;max-width:320px;margin:0 auto;transition:background .2s}
+.btn-next:hover{background:var(–amber2)}
+.btn-back{background:transparent;color:var(–dim);border:1px solid var(–b2);font-family:var(–SC);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:10px 20px;cursor:pointer;transition:all .2s}
 .btn-back:hover{color:var(–gold);border-color:var(–amber)}
-.btn-next{background:var(–amber);color:var(–void);border:none;font-family:var(–SC);font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;padding:14px 32px;cursor:pointer;border-radius:1px;transition:all .2s;display:flex;align-items:center;gap:8px;flex:1;justify-content:center;max-width:320px;margin:0 auto}
-.btn-next:hover{background:var(–amber2);transform:translateY(-1px)}
-.btn-run{background:var(–amber);color:var(–void);border:none;font-family:var(–SC);font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;padding:18px 40px;cursor:pointer;border-radius:1px;transition:all .2s;display:flex;align-items:center;gap:10px;width:100%;justify-content:center;margin-top:8px}
-.btn-run:hover{background:var(–amber2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(196,129,58,.25)}
+.btn-run{background:var(–amber);color:#000!important;-webkit-text-fill-color:#000!important;border:none;font-family:var(–SC);font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;padding:18px 40px;cursor:pointer;display:block;width:100%;margin-bottom:8px;transition:all .2s}
+.btn-run:hover{background:var(–amber2)}
+.btn-run:disabled{opacity:.5;cursor:not-allowed}
+.nav-btns{display:flex;align-items:center;justify-content:space-between;margin-top:24px}
+.nav-btns-center{display:flex;justify-content:center;margin-top:24px}
+.form-footer{text-align:center;font-family:var(–B);font-size:11px;color:var(–dim);font-style:italic;padding-top:14px;border-top:1px solid var(–b1);margin-top:12px}
 
-/* Section divider */
-.s-divider{height:1px;background:linear-gradient(90deg,transparent,var(–b2),transparent);margin:20px 0}
+/* PROCESSING */
+.processing{display:none;padding:80px 20px;text-align:center;max-width:600px;margin:0 auto}
+.proc-title{font-family:var(–SC);font-size:clamp(22px,4vw,40px);font-weight:300;letter-spacing:.06em;margin-bottom:8px}
+.proc-title em{font-family:var(–D);font-style:italic;color:var(–gold)}
+.proc-sub{font-family:var(–B);font-size:14px;color:var(–sub);font-style:italic;margin-bottom:36px}
+.proc-steps{display:flex;flex-direction:column;gap:10px;text-align:left;max-width:420px;margin:0 auto}
+.ps{font-family:var(–M);font-size:10px;color:var(–dim);letter-spacing:.07em;display:flex;align-items:center;gap:10px;transition:color .4s}
+.ps.lit{color:var(–grn)}
+.ps-n{width:22px;height:22px;border-radius:50%;background:var(–ad2);border:1px solid rgba(196,129,58,.3);display:flex;align-items:center;justify-content:center;font-size:8px;color:var(–amber);flex-shrink:0}
 
-/* Review section */
-.review-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
-.review-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(–s1);border:1px solid var(–b1)}
-.rr-label{font-family:var(–M);font-size:9px;color:var(–dim);letter-spacing:.1em;text-transform:uppercase}
-.rr-value{font-family:var(–D);font-size:18px;font-weight:300;color:var(–amber)}
-.rr-value.empty{color:var(–faint);font-family:var(–B);font-size:13px;font-style:italic;font-weight:300}
+/* RESULTS */
+.results{display:none;max-width:760px;margin:0 auto;padding:80px 20px 60px;animation:fadeIn .4s ease}
 
-/* Submit state */
-.submit-panel{background:var(–ad2);border:1px solid rgba(196,129,58,.25);padding:24px;margin-bottom:20px;text-align:center}
-.sp-icon{font-size:32px;margin-bottom:12px}
-.sp-title{font-family:var(–SC);font-size:14px;color:var(–txt);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
-.sp-text{font-family:var(–B);font-size:14px;color:var(–sub);font-style:italic;line-height:1.8}
+/* Masthead */
+.rm{background:var(–s1);border:1px solid var(–b2);overflow:hidden;margin-bottom:14px}
+.rm-hd{background:var(–s2);border-bottom:1px solid var(–b1);padding:16px 20px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.rm-prop{font-family:var(–SC);font-size:15px;font-weight:400;letter-spacing:.09em;text-transform:uppercase}
+.rm-det{font-family:var(–B);font-size:11px;font-style:italic;color:var(–dim);margin-top:2px}
+.rm-sig-n{font-family:var(–SC);font-size:10px;color:var(–gold);letter-spacing:.1em;text-transform:uppercase}
+.rm-sig-r{font-family:var(–B);font-size:10px;font-style:italic;color:var(–dim);margin-top:2px}
+.rm-body{padding:18px 20px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start}
+.rm-exec{font-family:var(–B);font-size:14px;color:var(–sub);line-height:2;font-style:italic}
+.rm-total{background:var(–rd);border:1px solid rgba(192,80,64,.25);padding:14px;text-align:right;min-width:140px}
+.rm-total-l{font-family:var(–M);font-size:7px;color:var(–red);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.rm-total-v{font-family:var(–D);font-size:38px;font-weight:300;color:var(–red);line-height:1}
+.rm-total-s{font-family:var(–M);font-size:7px;color:var(–dim);margin-top:3px}
+.rm-total-yr{font-family:var(–D);font-size:14px;font-weight:300;color:var(–gold);margin-top:5px;font-style:italic}
 
-/* Success state */
-.success-wrap{display:none;text-align:center;padding:60px 24px;animation:FI .4s ease}
-.success-wrap.show{display:block}
-.success-icon{font-size:48px;margin-bottom:20px}
-.success-title{font-family:var(–SC);font-size:clamp(24px,4vw,48px);font-weight:300;color:var(–txt);letter-spacing:.06em;margin-bottom:12px}
-.success-title em{font-family:var(–D);font-style:italic;color:var(–gold)}
-.success-text{font-family:var(–B);font-size:16px;color:var(–sub);font-style:italic;max-width:480px;margin:0 auto 32px;line-height:1.9}
-.success-detail{background:var(–s1);border:1px solid var(–b1);padding:20px;max-width:480px;margin:0 auto 32px;text-align:left}
-.sd-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(–faint);font-family:var(–B);font-size:13px}
-.sd-row:last-child{border-bottom:none}
-.sd-label{color:var(–dim);font-style:italic}
-.sd-value{color:var(–txt)}
+/* Score band */
+.scores{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(–b1);border:1px solid var(–b1);margin-bottom:12px}
+.sc{background:var(–s1);padding:10px 4px;text-align:center}
+.sc-l{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px}
+.sc-v{font-family:var(–D);font-size:22px;font-weight:300;line-height:1}
+.sc-g{font-family:var(–B);font-size:9px;font-style:italic}
 
-/* Harvy note */
-.harvy-note{background:var(–s1);border:1px solid var(–b2);border-left:3px solid var(–amber);padding:20px 24px;max-width:480px;margin:0 auto;text-align:left}
-.hn-from{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
-.hn-text{font-family:var(–B);font-size:14px;color:var(–sub);font-style:italic;line-height:1.8}
-.hn-sig{font-family:var(–SC);font-size:11px;color:var(–txt);letter-spacing:.1em;text-transform:uppercase;margin-top:10px}
+/* Benchmarks */
+.bms{background:var(–s1);border:1px solid var(–b1);padding:16px;margin-bottom:12px}
+.bms-title{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.13em;text-transform:uppercase;margin-bottom:12px}
+.bms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bm-card{background:var(–s2);border:1px solid var(–b1);padding:12px;text-align:center}
+.bm-v{font-family:var(–D);font-size:22px;font-weight:300;color:var(–gold);line-height:1}
+.bm-l{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.08em;text-transform:uppercase;margin-top:3px}
+.bm-y{font-family:var(–M);font-size:8px;margin-top:5px}
 
-/* Tooltip */
-.tooltip{position:relative;display:inline-block;cursor:help}
-.tooltip-icon{width:14px;height:14px;border-radius:50%;background:var(–b2);color:var(–dim);font-family:var(–M);font-size:8px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(–b3)}
-.tooltip-text{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(–s3);border:1px solid var(–b2);padding:8px 12px;font-family:var(–B);font-size:11px;color:var(–sub);width:200px;text-align:center;font-style:italic;z-index:10;border-radius:1px}
-.tooltip:hover .tooltip-text{display:block}
+/* Leak cards */
+.leaks-title{font-family:var(–M);font-size:8px;color:var(–amber);letter-spacing:.13em;text-transform:uppercase;margin-bottom:10px}
+.leak{background:var(–s1);border:1px solid var(–b1);overflow:hidden;margin-bottom:8px;position:relative}
+.leak-inner{display:flex;align-items:flex-start;gap:12px;padding:14px 16px}
+.leak-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.leak-body{flex:1}
+.leak-name{font-family:var(–SC);font-size:11px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px}
+.leak-fix{font-family:var(–B);font-size:11px;color:var(–dim);font-style:italic;line-height:1.7}
+.leak-amt{text-align:right;flex-shrink:0}
+.leak-gbp{font-family:var(–D);font-size:20px;font-weight:300}
+.leak-ps{font-family:var(–M);font-size:7px;color:var(–dim);letter-spacing:.07em}
+.leak-gate{position:absolute;inset:0;backdrop-filter:blur(5px);background:rgba(0,0,0,.72);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;text-align:center}
+.gate-title{font-family:var(–SC);font-size:11px;color:var(–amber);letter-spacing:.1em;text-transform:uppercase}
+.gate-sub{font-family:var(–B);font-size:12px;color:var(–sub);font-style:italic}
+.gate-btn{background:var(–amber);color:#000;font-family:var(–SC);font-size:9px;padding:8px 18px;letter-spacing:.12em;text-transform:uppercase;display:inline-block}
+
+/* CTA block */
+.res-cta{background:var(–ad2);border:1px solid rgba(196,129,58,.25);padding:24px;text-align:center;margin-top:16px}
+.res-cta-title{font-family:var(–SC);font-size:14px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px}
+.res-cta-sub{font-family:var(–B);font-size:13px;color:var(–sub);font-style:italic;max-width:400px;margin:0 auto 14px;line-height:1.8}
+.res-cta-amt{font-family:var(–D);font-size:36px;font-weight:300;color:var(–red);margin-bottom:4px}
+.res-cta-note{font-family:var(–B);font-size:12px;color:var(–sub);font-style:italic;margin-bottom:16px}
+.res-cta-btn{background:var(–amber);color:#000;font-family:var(–SC);font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;padding:14px 32px;display:inline-block}
 
 /* Footer note */
-.form-footer{text-align:center;font-family:var(–B);font-size:12px;color:var(–dim);font-style:italic;padding-top:16px;border-top:1px solid var(–b1)}
+.res-footer{font-family:var(–B);font-size:11px;color:var(–dim);font-style:italic;text-align:center;padding:12px 0;border-top:1px solid var(–b1);margin-top:16px}
 
-@media(max-width:600px){
-.field-grid.cols2,.field-grid.cols3{grid-template-columns:1fr}
-.hero-stats{flex-direction:column;gap:1px}
-.steps{gap:0}
-.step{padding:8px 10px}
-.step-l{font-size:11px}
-.btn-next,.btn-run{font-size:9px;padding:13px 20px}
+@media(max-width:580px){
+.g2,.g3{grid-template-columns:1fr}
+.stats{flex-direction:column;gap:1px}
+.rm-body{grid-template-columns:1fr}
+.scores{grid-template-columns:repeat(3,1fr)}
+.bms-grid{grid-template-columns:1fr}
+.nl{display:none}
+.nl.on{display:flex}
 }
 </style>
 
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="index.html" class="logo">
-      <div class="logo-p">Summit Stay Group</div>
-      <div class="logo-s">STR Revenue Intelligence</div>
-    </a>
-    <div style="display:flex;align-items:center;gap:0;flex:1;margin-left:24px">
-      <a href="index.html" style="font-family:var(--SC);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--dim);padding:0 12px;height:60px;display:flex;align-items:center;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--dim)'">Platform</a>
-      <a href="audit.html" style="font-family:var(--SC);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--amber);padding:0 12px;height:60px;display:flex;align-items:center;text-decoration:none;border-bottom:2px solid var(--amber)">Free Audit</a>
-      <a href="casestudy.html" style="font-family:var(--SC);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--dim);padding:0 12px;height:60px;display:flex;align-items:center;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--dim)'">Case Study</a>
-      <a href="pricing.html" style="font-family:var(--SC);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--dim);padding:0 12px;height:60px;display:flex;align-items:center;text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--dim)'">Pricing</a>
-    </div>
-    <div class="nav-right">
-      <a href="pricing.html" class="nav-cta">Get Started</a>
-    </div>
-  </div>
+<!-- NAV -->
+
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-p">Summit Stay Group</div>
+    <div class="logo-s">STR Revenue Intelligence</div>
+  </a>
+  <a href="index.html" class="nl">Platform</a>
+  <a href="audit.html" class="nl on">Free Audit</a>
+  <a href="casestudy.html" class="nl">Case Study</a>
+  <a href="pricing.html" class="nl">Pricing</a>
+  <a href="pricing.html" class="nav-cta">Get Started</a>
 </nav>
 
+<!-- TICKER -->
+
 <div class="ticker">
-  <div class="t-inner">
-    <div id="tc1" style="display:flex"></div>
-    <div id="tc2" style="display:flex"></div>
-  </div>
+  <div class="ticker-inner" id="ticker1"></div>
+  <div class="ticker-inner" id="ticker2"></div>
 </div>
 
 <!-- HERO -->
 
 <div class="hero">
-  <div class="hero-tag"><div class="hero-tag-dot"></div>Free 2-Layer Preview · No Account Required</div>
-  <h1 class="hero-h1">Your portfolio is <em>leaking.</em><br>Let's find exactly where.</h1>
-  <p class="hero-sub"><strong>90 seconds.</strong> Six numbers. A forensic diagnosis of your revenue ceiling, your rate calendar gaps, and the precise monthly figure sitting unrecovered in your portfolio.</p>
-  <div class="hero-stats">
-    <div class="hs"><div class="hs-v">£1,380</div><div class="hs-l">Avg Monthly Recovery</div></div>
-    <div class="hs"><div class="hs-v">38%</div><div class="hs-l">Revenue Growth · 9 Months</div></div>
-    <div class="hs"><div class="hs-v">4.97★</div><div class="hs-l">Standards Maintained</div></div>
+  <div class="hero-badge"><div class="badge-dot"></div>Free 2-Layer Preview · No Account Required</div>
+  <h1>Your portfolio is <em>leaking.</em><br>Let's find exactly where.</h1>
+  <p class="hero-sub"><strong>90 seconds.</strong> Six numbers. A forensic diagnosis of your revenue ceiling, your rate calendar gaps, and the precise monthly figure sitting unrecovered.</p>
+  <div class="stats">
+    <div class="stat"><div class="stat-v">£1,380</div><div class="stat-l">Avg Monthly Recovery</div></div>
+    <div class="stat"><div class="stat-v">38%</div><div class="stat-l">Revenue Growth · 9 Months</div></div>
+    <div class="stat"><div class="stat-v">4.97★</div><div class="stat-l">Standards Maintained</div></div>
   </div>
-  <div class="steps">
-    <div class="step"><div class="step-n">01</div><div class="step-l">Your property</div></div>
-    <div class="step-arrow">→</div>
-    <div class="step"><div class="step-n">02</div><div class="step-l">Revenue numbers</div></div>
-    <div class="step-arrow">→</div>
-    <div class="step"><div class="step-n">03</div><div class="step-l">Listing data</div></div>
-    <div class="step-arrow">→</div>
-    <div class="step"><div class="step-n">04</div><div class="step-l">Your diagnosis</div></div>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num">01</div>Your property</div>
+    <div class="flow-arr">→</div>
+    <div class="flow-step"><div class="flow-num">02</div>Revenue numbers</div>
+    <div class="flow-arr">→</div>
+    <div class="flow-step"><div class="flow-num">03</div>Listing data</div>
+    <div class="flow-arr">→</div>
+    <div class="flow-step"><div class="flow-num">04</div>Your diagnosis</div>
   </div>
 </div>
 
@@ -238,546 +277,275 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 
 <div class="form-wrap" id="formWrap">
 
-  <!-- Progress -->
+  <!-- Progress bar -->
 
-  <div class="progress" id="progressBar">
-    <div class="prog-step">
-      <div class="prog-row">
-        <div class="prog-dot active" id="pd1">1</div>
-        <div class="prog-line" id="pl1"></div>
-      </div>
-      <div class="prog-lbl active" id="pl1l">Property</div>
+  <div class="progress">
+    <div class="prog-item">
+      <div class="prog-row"><div class="prog-dot active" id="pd1">1</div><div class="prog-line" id="pl1"></div></div>
+      <div class="prog-lbl active" id="plbl1">Property</div>
     </div>
-    <div class="prog-step">
-      <div class="prog-row">
-        <div class="prog-dot" id="pd2">2</div>
-        <div class="prog-line" id="pl2"></div>
-      </div>
-      <div class="prog-lbl" id="pl2l">Revenue</div>
+    <div class="prog-item">
+      <div class="prog-row"><div class="prog-dot" id="pd2">2</div><div class="prog-line" id="pl2"></div></div>
+      <div class="prog-lbl" id="plbl2">Revenue</div>
     </div>
-    <div class="prog-step">
-      <div class="prog-row">
-        <div class="prog-dot" id="pd3">3</div>
-        <div class="prog-line" id="pl3"></div>
-      </div>
-      <div class="prog-lbl" id="pl3l">Listing</div>
+    <div class="prog-item">
+      <div class="prog-row"><div class="prog-dot" id="pd3">3</div><div class="prog-line" id="pl3"></div></div>
+      <div class="prog-lbl" id="plbl3">Listing</div>
     </div>
-    <div class="prog-step">
-      <div class="prog-row">
-        <div class="prog-dot" id="pd4">4</div>
-        <div style="flex:1"></div>
-      </div>
-      <div class="prog-lbl" id="pl4l">Submit</div>
+    <div class="prog-item">
+      <div class="prog-row"><div class="prog-dot" id="pd4">4</div><div style="flex:1"></div></div>
+      <div class="prog-lbl" id="plbl4">Submit</div>
     </div>
   </div>
 
-  <!-- STEP 1: PROPERTY -->
+  <!-- STEP 1 -->
 
-  <div class="form-section active" id="step1">
-    <div class="section-hd">
-      <div class="section-num">Step 01 of 03</div>
-      <div class="section-title">Tell us about <em>your property.</em></div>
-      <div class="section-sub">Location is the most important field — it determines which UK benchmark set we run against your numbers.</div>
+  <div class="step show" id="step1">
+    <div class="sec-hd">
+      <div class="sec-num">Step 01 of 03</div>
+      <div class="sec-title">Tell us about <em>your property.</em></div>
+      <div class="sec-sub">Location determines which UK benchmark set we run against your numbers.</div>
     </div>
-    <div class="field-grid">
-      <div class="field-card">
-        <div class="field-card-label">Property Name <span style="color:var(--dim);font-size:7px;font-style:italic;text-transform:none;letter-spacing:0">(optional)</span></div>
-        <div class="field-card-value"><input class="field-input" id="propName" placeholder="e.g. The Old Barn" style="font-size:22px"></div>
-        <div class="field-card-hint">Used to personalise your report</div>
+    <div class="grid g2">
+      <div class="fc">
+        <div class="fc-label">Property Name <span style="color:var(--dim);font-size:7px;text-transform:none;letter-spacing:0">(optional)</span></div>
+        <div class="fc-val"><input class="fi" id="propName" placeholder="e.g. The Old Barn" style="font-size:22px"></div>
+        <div class="fc-hint">Used to personalise your report</div>
       </div>
-      <div class="field-card">
-        <div class="field-card-label">Location <span style="color:var(--red);font-size:9px">*</span></div>
-        <div class="field-card-value"><input class="field-input" id="location" placeholder="e.g. Windermere" style="font-size:22px" oninput="updateBenchmarks()"></div>
-        <div class="field-card-hint">Town or region — used to pull your market benchmarks</div>
+      <div class="fc">
+        <div class="fc-label">Location <span style="color:var(--red);font-size:9px">*</span></div>
+        <div class="fc-val"><input class="fi" id="location" placeholder="e.g. Windermere" style="font-size:22px" oninput="onLocationInput()"></div>
+        <div class="fc-hint">Town or region — pulls your market benchmarks</div>
       </div>
     </div>
-    <div class="field-grid cols3">
-      <div class="field-card">
-        <div class="field-card-label">Property Type</div>
-        <div class="field-card-value">
-          <div class="field-select-wrap" style="width:100%">
-            <select class="field-select" id="type">
-              <option>Entire home</option>
-              <option>Cottage</option>
-              <option>Barn conversion</option>
-              <option>Cabin / lodge</option>
-              <option>Apartment</option>
-              <option>Townhouse</option>
-            </select>
-          </div>
+    <div class="grid g3">
+      <div class="fc">
+        <div class="fc-label">Property Type</div>
+        <div class="fc-val">
+          <select class="fs" id="propType">
+            <option>Entire home</option><option>Cottage</option><option>Barn conversion</option>
+            <option>Cabin / lodge</option><option>Apartment</option><option>Townhouse</option>
+          </select>
         </div>
       </div>
-      <div class="field-card">
-        <div class="field-card-label">Bedrooms</div>
-        <div class="field-card-value">
-          <div class="field-select-wrap" style="width:100%">
-            <select class="field-select" id="beds" onchange="updateBenchmarks()">
-              <option>1</option>
-              <option selected>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6+</option>
-            </select>
-          </div>
+      <div class="fc">
+        <div class="fc-label">Bedrooms</div>
+        <div class="fc-val">
+          <select class="fs" id="beds" onchange="onLocationInput()">
+            <option>1</option><option selected>2</option><option>3</option>
+            <option>4</option><option>5</option><option>6+</option>
+          </select>
         </div>
       </div>
-      <div class="field-card">
-        <div class="field-card-label">Peak Season</div>
-        <div class="field-card-value">
-          <div class="field-select-wrap" style="width:100%">
-            <select class="field-select" id="peak">
-              <option>Summer</option>
-              <option>Winter</option>
-              <option>Year-round</option>
-              <option>School holidays</option>
-              <option>Spring</option>
-              <option>Autumn</option>
-            </select>
-          </div>
+      <div class="fc">
+        <div class="fc-label">Peak Season</div>
+        <div class="fc-val">
+          <select class="fs" id="peak">
+            <option>Summer</option><option>Winter</option><option>Year-round</option>
+            <option>School holidays</option><option>Spring</option><option>Autumn</option>
+          </select>
         </div>
       </div>
     </div>
-    <div class="form-nav">
-      <div></div>
-      <button class="btn-next" onclick="goStep(2)">Next — Revenue Data →</button>
+    <div class="nav-btns-center">
+      <button class="btn-next" onclick="toStep(2)">Next — Revenue Data →</button>
     </div>
   </div>
 
-  <!-- STEP 2: REVENUE -->
+  <!-- STEP 2 -->
 
-  <div class="form-section" id="step2">
-    <div class="section-hd">
-      <div class="section-num">Step 02 of 03</div>
-      <div class="section-title">Your revenue <em>numbers.</em></div>
-      <div class="section-sub">Be as accurate as you can. Every field maps directly to a specific audit layer — the more precise, the more precise the diagnosis.</div>
+  <div class="step" id="step2">
+    <div class="sec-hd">
+      <div class="sec-num">Step 02 of 03</div>
+      <div class="sec-title">Your revenue <em>numbers.</em></div>
+      <div class="sec-sub">Every field maps directly to a specific audit layer — the more accurate, the more precise the diagnosis.</div>
     </div>
-    <div class="field-grid cols2">
-      <div class="field-card">
-        <div class="field-card-label">
-          Occupancy % 
-          <div class="tooltip"><div class="tooltip-icon">?</div><div class="tooltip-text">Your occupancy over the last 90 days. Find this in your Airbnb host dashboard.</div></div>
-        </div>
-        <div class="field-card-value">
-          <input class="field-input" id="occ" type="number" placeholder="72" value="" oninput="updateLiveCalc()">
-          <span class="suffix">%</span>
-        </div>
-        <div class="field-card-hint" id="occ-bm">Enter your location first to see benchmark</div>
+    <div class="grid g2">
+      <div class="fc">
+        <div class="fc-label">Occupancy % (last 90 days)</div>
+        <div class="fc-val"><input class="fi" id="occ" type="number" placeholder="72" oninput="onRevenueInput()"><span class="fc-suf">%</span></div>
+        <div class="fc-bm bm-n" id="occ-bm">Enter location first</div>
       </div>
-      <div class="field-card">
-        <div class="field-card-label">
-          Average Daily Rate
-          <div class="tooltip"><div class="tooltip-icon">?</div><div class="tooltip-text">Your average nightly rate over the last 90 days. Before platform fees.</div></div>
-        </div>
-        <div class="field-card-value">
-          <span class="prefix">£</span>
-          <input class="field-input" id="adr" type="number" placeholder="185" value="" oninput="updateLiveCalc()">
-        </div>
-        <div class="field-card-hint" id="adr-bm">Enter your location first to see benchmark</div>
+      <div class="fc">
+        <div class="fc-label">Average Daily Rate</div>
+        <div class="fc-val"><span class="fc-pre">£</span><input class="fi" id="adr" type="number" placeholder="185" oninput="onRevenueInput()"></div>
+        <div class="fc-bm bm-n" id="adr-bm">Enter location first</div>
       </div>
-      <div class="field-card">
-        <div class="field-card-label">Monthly Revenue (gross)</div>
-        <div class="field-card-value">
-          <span class="prefix">£</span>
-          <input class="field-input" id="rev" type="number" placeholder="4200" value="" oninput="updateLiveCalc()">
-        </div>
-        <div class="field-card-hint">Before platform fees. Check your Airbnb earnings dashboard.</div>
+      <div class="fc">
+        <div class="fc-label">Monthly Revenue (gross)</div>
+        <div class="fc-val"><span class="fc-pre">£</span><input class="fi" id="rev" type="number" placeholder="4200"></div>
+        <div class="fc-hint">Before platform fees</div>
       </div>
-      <div class="field-card">
-        <div class="field-card-label">Cleaning Fee</div>
-        <div class="field-card-value">
-          <span class="prefix">£</span>
-          <input class="field-input" id="cleanFee" type="number" placeholder="60" value="">
-        </div>
-        <div class="field-card-hint">Per turnover. Layer 09 — net revenue analysis.</div>
+      <div class="fc">
+        <div class="fc-label">Cleaning Fee</div>
+        <div class="fc-val"><span class="fc-pre">£</span><input class="fi" id="cleanFee" type="number" placeholder="60"></div>
+        <div class="fc-hint">Per turnover — Layer 09 net revenue</div>
       </div>
-      <div class="field-card">
-        <div class="field-card-label">Minimum Stay</div>
-        <div class="field-card-value">
-          <input class="field-input" id="minStay" type="number" placeholder="2" value="">
-          <span class="suffix">nights</span>
-        </div>
-        <div class="field-card-hint">Layer 02 — orphan night calculation.</div>
+      <div class="fc">
+        <div class="fc-label">Minimum Stay (nights)</div>
+        <div class="fc-val"><input class="fi" id="minStay" type="number" placeholder="2"><span class="fc-suf">nights</span></div>
+        <div class="fc-hint">Layer 02 orphan night calculation</div>
       </div>
-      <div class="field-card">
-        <div class="field-card-label">Pricing Tool</div>
-        <div class="field-card-value">
-          <div class="field-select-wrap" style="width:100%">
-            <select class="field-select" id="pricingTool">
-              <option>None</option>
-              <option>PriceLabs</option>
-              <option>Wheelhouse</option>
-              <option>Beyond</option>
-              <option>Airbnb Smart Pricing</option>
-            </select>
-          </div>
+      <div class="fc">
+        <div class="fc-label">Pricing Tool</div>
+        <div class="fc-val">
+          <select class="fs" id="pricingTool">
+            <option>None</option><option>PriceLabs</option><option>Wheelhouse</option>
+            <option>Beyond</option><option>Airbnb Smart Pricing</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="live-calc" id="liveCalc">
+      <div class="lc-title">Live RevPAR Calculation</div>
+      <div class="lc-grid">
+        <div class="lc-item"><div class="lc-label">Your RevPAR</div><div class="lc-val" id="lc-revpar">—</div></div>
+        <div class="lc-item"><div class="lc-label">Market Ceiling</div><div class="lc-val" style="color:var(--sub)" id="lc-ceil">—</div></div>
+        <div class="lc-item"><div class="lc-label">Gap / Night</div><div class="lc-val" style="color:var(--red)" id="lc-gap">—</div></div>
+        <div class="lc-item"><div class="lc-label">Est. Monthly Leak</div><div class="lc-val" style="color:var(--red)" id="lc-leak">—</div></div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="toStep(1)">← Back</button>
+      <button class="btn-next" onclick="toStep(3)" style="margin:0">Next — Listing Data →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+
+  <div class="step" id="step3">
+    <div class="sec-hd">
+      <div class="sec-num">Step 03 of 03</div>
+      <div class="sec-title">Your listing <em>and platform.</em></div>
+      <div class="sec-sub">Powers Layers 04–07: listing conversion, review sentiment, guest journey, channel mix.</div>
+    </div>
+    <div class="grid g2">
+      <div class="fc">
+        <div class="fc-label">Review Rating</div>
+        <div class="fc-val"><input class="fi" id="rating" type="number" step="0.1" placeholder="4.7"><span class="fc-suf">★</span></div>
+      </div>
+      <div class="fc">
+        <div class="fc-label">Total Reviews</div>
+        <div class="fc-val"><input class="fi" id="reviews" type="number" placeholder="38"></div>
+        <div class="fc-hint">Layer 05 — review velocity</div>
+      </div>
+      <div class="fc">
+        <div class="fc-label">Platform(s)</div>
+        <div class="fc-val">
+          <select class="fs" id="platform">
+            <option>Airbnb only</option><option>VRBO only</option>
+            <option selected>Airbnb + VRBO</option><option>Airbnb + direct</option><option>All platforms</option>
+          </select>
+        </div>
+      </div>
+      <div class="fc">
+        <div class="fc-label">Instant Book</div>
+        <div class="fc-val">
+          <select class="fs" id="instantBook">
+            <option>No</option><option>Yes</option>
+          </select>
+        </div>
+        <div class="fc-hint">Off costs 25-40% of impressions</div>
+      </div>
+      <div class="fc">
+        <div class="fc-label">Direct Bookings</div>
+        <div class="fc-val">
+          <select class="fs" id="directBook">
+            <option>No</option><option>Yes — own website</option><option>Yes — repeat guests</option>
+          </select>
+        </div>
+      </div>
+      <div class="fc">
+        <div class="fc-label">Active Upsells</div>
+        <div class="fc-val">
+          <select class="fs" id="upsells">
+            <option>None</option><option>Early check-in only</option><option>Late checkout only</option>
+            <option>Early + late</option><option>Full suite</option>
+          </select>
         </div>
       </div>
     </div>
 
 ```
-<!-- Live calc -->
-<div id="liveCalc" style="display:none;background:var(--s1);border:1px solid var(--b1);padding:16px 20px;margin-bottom:20px">
-  <div style="font-family:var(--M);font-size:8px;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px">Live RevPAR Calculation</div>
-  <div style="display:flex;gap:20px;flex-wrap:wrap">
-    <div><div style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px">Your RevPAR</div><div style="font-family:var(--D);font-size:24px;font-weight:300;color:var(--amber)" id="liveRevpar">—</div></div>
-    <div><div style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px">Market Ceiling</div><div style="font-family:var(--D);font-size:24px;font-weight:300;color:var(--sub)" id="liveCeiling">—</div></div>
-    <div><div style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px">Gap / Night</div><div style="font-family:var(--D);font-size:24px;font-weight:300;color:var(--red)" id="liveGap">—</div></div>
-    <div><div style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px">Est. Monthly Leak</div><div style="font-family:var(--D);font-size:24px;font-weight:300;color:var(--red)" id="liveLeak">—</div></div>
-  </div>
+<div class="email-fc fc">
+  <div class="fc-label" style="color:var(--gold)">Your Email Address <span style="color:var(--red);font-size:9px">*</span></div>
+  <div class="fc-val"><input class="fi" id="email" type="email" placeholder="you@email.com" style="font-size:20px"></div>
+  <div class="fc-hint">Your audit report delivered here within 24 hours</div>
 </div>
 
-<div class="form-nav">
-  <button class="btn-back" onclick="goStep(1)">← Back</button>
-  <button class="btn-next" onclick="goStep(3)">Next — Listing Data →</button>
-</div>
-```
-
-  </div>
-
-  <!-- STEP 3: LISTING -->
-
-  <div class="form-section" id="step3">
-    <div class="section-hd">
-      <div class="section-num">Step 03 of 03</div>
-      <div class="section-title">Your listing <em>and platform.</em></div>
-      <div class="section-sub">These fields power Layers 04, 05, 06, and 07 — listing conversion, review sentiment, guest journey, and channel mix.</div>
-    </div>
-    <div class="field-grid cols2">
-      <div class="field-card">
-        <div class="field-card-label">Review Rating</div>
-        <div class="field-card-value">
-          <input class="field-input" id="rating" type="number" step="0.1" placeholder="4.7" value="">
-          <span class="suffix">★</span>
-        </div>
-        <div class="field-card-hint">Your current Airbnb star rating.</div>
-      </div>
-      <div class="field-card">
-        <div class="field-card-label">Total Reviews</div>
-        <div class="field-card-value">
-          <input class="field-input" id="reviews" type="number" placeholder="38" value="">
-        </div>
-        <div class="field-card-hint">Layer 05 — review velocity analysis.</div>
-      </div>
-      <div class="field-card">
-        <div class="field-card-label">Platform(s)</div>
-        <div class="field-card-value">
-          <div class="field-select-wrap" style="width:100%">
-            <select class="field-select" id="platform">
-              <option>Airbnb only</option>
-              <option>VRBO only</option>
-              <option selected>Airbnb + VRBO</option>
-              <option>Airbnb + direct</option>
-              <option>All platforms</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="field-card">
-        <div class="field-card-label">Instant Book</div>
-        <div class="field-card-value">
-          <div class="field-select-wrap" style="width:100%">
-            <select class="field-select" id="instantBook">
-              <option>No</option>
-              <option>Yes</option>
-            </select>
-          </div>
-        </div>
-        <div class="field-card-hint">Disabling costs 25-40% of impressions.</div>
-      </div>
-      <div class="field-card">
-        <div class="field-card-label">Direct Bookings</div>
-        <div class="field-card-value">
-          <div class="field-select-wrap" style="width:100%">
-            <select class="field-select" id="directBook">
-              <option>No</option>
-              <option>Yes — own website</option>
-              <option>Yes — repeat guests</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="field-card">
-        <div class="field-card-label">Active Upsells</div>
-        <div class="field-card-value">
-          <div class="field-select-wrap" style="width:100%">
-            <select class="field-select" id="upsells">
-              <option>None</option>
-              <option>Early check-in only</option>
-              <option>Late checkout only</option>
-              <option>Early + late</option>
-              <option>Full suite</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-
-```
-<!-- Your email -->
-<div class="field-card" style="margin-bottom:20px;border-color:rgba(196,129,58,.3);background:var(--ad3)">
-  <div class="field-card-label" style="color:var(--gold)">Your Email Address <span style="color:var(--red);font-size:9px">*</span></div>
-  <div class="field-card-value"><input class="field-input" id="email" type="email" placeholder="you@email.com" style="font-size:20px"></div>
-  <div class="field-card-hint">Your free audit report will be delivered here within 24 hours by Harvy personally.</div>
-</div>
-
-<!-- Review summary -->
-<div style="background:var(--s1);border:1px solid var(--b1);padding:20px;margin-bottom:20px">
-  <div style="font-family:var(--M);font-size:8px;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px">Audit Summary — Before You Submit</div>
-  <div class="review-grid" id="reviewGrid"></div>
+<div class="review-sum">
+  <div class="rs-title">Your Audit Summary</div>
+  <div id="reviewRows"></div>
 </div>
 
 <div class="submit-panel">
-  <div class="sp-icon">◈</div>
   <div class="sp-title">Ready to run your audit</div>
-  <div class="sp-text">Harvy will personally analyse your numbers against the UK STR benchmark database and deliver your free 2-layer diagnosis within 24 hours.<br><br>Layers 01 and 02 are free. Full 10-layer report from £97/month.</div>
+  <div class="sp-text">Harvy will analyse your numbers against the UK STR benchmark database.<br>Free 2-layer preview. Full 10-layer report from £97/month.</div>
 </div>
 
-<button class="btn-run" onclick="submitAudit()">◈ Submit — Get My Free Audit Report</button>
-
-<div class="form-nav" style="margin-top:16px;justify-content:center">
-  <button class="btn-back" onclick="goStep(2)">← Back</button>
+<button class="btn-run" id="runBtn" onclick="runAudit()">◈ Submit — Get My Free Audit</button>
+<div class="nav-btns" style="margin-top:12px;justify-content:center">
+  <button class="btn-back" onclick="toStep(2)">← Back</button>
 </div>
-
-<div class="form-footer">Free · No payment · No account · Delivered within 24 hours · summitstaygroup.co.uk</div>
+<div class="form-footer">Free · No payment · No account · summitstaygroup.co.uk</div>
 ```
 
   </div>
 
 </div>
 
-<!-- SUCCESS -->
+<!-- PROCESSING -->
 
-<div class="success-wrap" id="successWrap">
-  <div class="success-icon">✓</div>
-  <h2 class="success-title">Audit <em>submitted.</em></h2>
-  <p class="success-text">Your property details have been sent to Harvy. Your free 2-layer revenue audit will be in your inbox within 24 hours.</p>
-  <div class="success-detail" id="successDetail"></div>
-  <div class="harvy-note">
-    <div class="hn-from">A note from Harvy</div>
-    <div class="hn-text">"I'll personally run your numbers against the UK benchmark database and send you a precise diagnosis — exactly where you're leaking, exactly what to fix first. This is the same methodology that grew a portfolio by 38% in 9 months."</div>
-    <div class="hn-sig">Harvy Pinder-Sellings · Summit Stay Group</div>
-  </div>
-  <div style="margin-top:32px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-    <a href="casestudy.html" style="background:transparent;color:var(--sub);border:1px solid var(--b2);font-family:var(--SC);font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:12px 24px;text-decoration:none;display:inline-block">Read the Case Study</a>
-    <a href="pricing.html" style="background:var(--amber);color:var(--void);font-family:var(--SC);font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:12px 24px;text-decoration:none;display:inline-block">View Full 10-Layer Pricing</a>
+<div class="processing" id="processing">
+  <div style="font-family:var(--M);font-size:8px;color:var(--amber);letter-spacing:.18em;text-transform:uppercase;margin-bottom:20px">Analysing your portfolio</div>
+  <div class="proc-title">Running <em>10 layers.</em></div>
+  <div class="proc-sub">Benchmarking against Harvy's UK operator database. Takes about 15 seconds.</div>
+  <div class="proc-steps">
+    <div class="ps" id="ps1"><div class="ps-n">01</div>Layer 01 · RevPAR Gap Forensics</div>
+    <div class="ps" id="ps2"><div class="ps-n">02</div>Layer 02 · Rate Calendar Analysis</div>
+    <div class="ps" id="ps3"><div class="ps-n">03</div>Layers 03–05 · Listing, Pace, Reviews</div>
+    <div class="ps" id="ps4"><div class="ps-n">04</div>Layers 06–09 · Journey, Channel, Yield, Net Rev</div>
+    <div class="ps" id="ps5"><div class="ps-n">05</div>Layer 10 · Competitive · AI Summary</div>
   </div>
 </div>
 
-<script charset="utf-8">
-// Ticker
+<!-- RESULTS -->
 
-// AI Audit Engine
-var API_KEY = "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";
-var MODEL = "claude-sonnet-4-6";
+<div class="results" id="results"></div>
 
-async function callClaude(prompt) {
-  try {
-    var response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": API_KEY,
-        "anthropic-version": "2023-06-01",
-        "anthropic-dangerous-direct-browser-access": "true"
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        max_tokens: 1024,
-        messages: [{ role: "user", content: prompt }]
-      })
-    });
-    var data = await response.json();
-    return data.content && data.content[0] ? data.content[0].text : "";
-  } catch(e) {
-    return "";
-  }
+<script>
+// ═══ CONFIG ═══
+var API_KEY = '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';
+var MODEL = 'claude-sonnet-4-6';
+var currentStep = 1;
+
+// ═══ TICKER ═══
+var TDATA = [
+  ['Lake District RevPAR','£218'],['Highland Run Rate','£190K+ annualised'],
+  ['Avg Monthly Leak','£1,380'],['Review Velocity','2+ per month'],
+  ['Fort William OCC','72%'],['Guest Favourite Min','4.8 stars'],
+  ['Peak/Trough Benchmark','1.6-2.0x'],['Clean Fee Benchmark','25% of ADR']
+];
+function initTicker() {
+  var html = TDATA.map(function(d) {
+    return '<div class="ti">' + d[0] + '<em>' + d[1] + '</em><span style="color:var(--b3);margin:0 8px">·</span></div>';
+  }).join('');
+  var t1 = document.getElementById('ticker1');
+  var t2 = document.getElementById('ticker2');
+  if (t1) t1.innerHTML = html;
+  if (t2) t2.innerHTML = html;
 }
 
-async function submitAudit() {
-  var email = document.getElementById("email").value;
-  if (!email || !email.includes("@")) {
-    alert("Please enter a valid email address.");
-    return;
-  }
-
-  var propName = document.getElementById("propName").value;
-  var location = document.getElementById("location").value;
-  var type = document.getElementById("type").value;
-  var beds = document.getElementById("beds").value;
-  var occ = parseFloat(document.getElementById("occ").value) || 0;
-  var adr = parseFloat(document.getElementById("adr").value) || 0;
-  var rev = parseFloat(document.getElementById("rev").value) || 0;
-  var cleanFee = parseFloat(document.getElementById("cleanFee").value) || 60;
-  var minStay = parseInt(document.getElementById("minStay").value) || 2;
-  var rating = parseFloat(document.getElementById("rating").value) || 4.7;
-  var reviews = parseInt(document.getElementById("reviews").value) || 0;
-  var platform = document.getElementById("platform").value;
-  var instantBook = document.getElementById("instantBook").value;
-  var directBook = document.getElementById("directBook").value;
-  var upsells = document.getElementById("upsells").value;
-
-  // Show loading state
-  var btn = document.getElementById("runBtn");
-  btn.innerHTML = "Analysing your portfolio...";
-  btn.disabled = true;
-  btn.style.opacity = "0.7";
-
-  // Show processing screen
-  document.getElementById("formWrap").style.display = "none";
-  document.getElementById("processingWrap").style.display = "block";
-  window.scrollTo({top: 0, behavior: "smooth"});
-
-  // Calculate benchmarks
-  var bm = getBM(location, beds);
-  var revpar = Math.round(adr * occ / 100);
-  var revparGap = Math.max(0, bm.ceiling - revpar);
-  var nightsOpen = Math.round((100 - occ) * 30 / 100);
-  var orphanNights = Math.round(nightsOpen * 0.38);
-  var orphanLoss = Math.round(orphanNights * adr * 0.72);
-  var compressionLoss = Math.round(rev * 0.06);
-  var calLoss = orphanLoss + compressionLoss;
-  var revparLoss = Math.max(0, Math.round(revparGap * Math.round(occ * 30 / 100)));
-  var listingLoss = Math.round(rev * 0.07);
-  var upsellLoss = upsells === "None" ? Math.round(rev * 0.045) : Math.round(rev * 0.02);
-  var journeyLoss = upsellLoss + Math.round(rev * 0.05);
-  var commDrain = Math.round(rev * 0.03);
-  var directOpp = directBook === "No" ? Math.round(rev * 0.06) : 0;
-  var benchClean = parseInt(beds) <= 2 ? 25 : 20;
-  var cleanRatio = (cleanFee / adr * 100).toFixed(1);
-  var turnovers = Math.round(occ * 30 / 100 / minStay);
-  var cleanUnder = parseFloat(cleanRatio) < benchClean;
-  var cleanLoss = cleanUnder ? Math.round((adr * (benchClean/100) - cleanFee) * turnovers) : Math.round(rev * 0.02);
-  var totalLoss = revparLoss + calLoss + listingLoss + journeyLoss + commDrain + directOpp + cleanLoss;
-
-  // Update processing steps
-  var steps = ["ps1","ps2","ps3","ps4","ps5"];
-  var delays = [800, 1600, 2400, 3200, 4000];
-  delays.forEach(function(d, i) {
-    setTimeout(function() {
-      var el = document.getElementById(steps[i]);
-      if (el) el.style.color = "var(--grn)";
-      var prev = i > 0 ? document.getElementById(steps[i-1]) : null;
-    }, d);
-  });
-
-  // Call AI for executive summary
-  var aiPrompt = "You are Harvy Pinder-Sellings, founder of Summit Stay Group, UK STR performance consultant. Write a 4-sentence executive summary for this STR audit. Property: " + (propName||"Unnamed") + " in " + location + ". " + beds + "-bed " + type + ". Occupancy: " + occ + "% (market: " + bm.occ + "%). ADR: £" + adr + " (market: £" + bm.adr + "). Monthly revenue: £" + rev + ". Total monthly leakage identified: £" + totalLoss.toLocaleString() + ". Top leaks: RevPAR gap £" + revparLoss.toLocaleString() + "/mo, Rate calendar £" + calLoss.toLocaleString() + "/mo, Listing conversion £" + listingLoss.toLocaleString() + "/mo. Platform: " + platform + ". Instant Book: " + instantBook + ". Rating: " + rating + " (" + reviews + " reviews). Be direct, specific, operator-to-operator. Start with the total £ figure. Reference 2 specific data points. End with the single most important action to take today. Never start with I.";
-
-  var summary = await callClaude(aiPrompt);
-  if (!summary) {
-    summary = "£" + totalLoss.toLocaleString() + "/month in recoverable revenue sits across 6 audit layers for this " + beds + "-bed " + type.toLowerCase() + " in " + location + ". Your RevPAR of £" + revpar + " sits £" + revparGap + "/night below the optimised ceiling of £" + bm.ceiling + " for your market — a pricing and calendar discipline issue, not a property issue. Your listing scores 58/100 and is losing click-through before guests see the price, which compounds every other metric. First action today: " + (instantBook === "No" ? "enable Instant Book — 2 minutes, £" + Math.round(listingLoss*0.4).toLocaleString() + " recoverable within 30 days" : "update your listing title with the " + location + " location keyword — 2 minutes, £" + Math.round(listingLoss*0.3).toLocaleString() + " recoverable within 30 days") + ".";
-  }
-
-  // Build results
-  setTimeout(function() {
-    document.getElementById("processingWrap").style.display = "none";
-    buildResults(summary, {
-      propName, location, type, beds, occ, adr, rev, revpar, bm,
-      revparLoss, calLoss, listingLoss, journeyLoss, commDrain, directOpp, cleanLoss,
-      totalLoss, orphanNights, revparGap, instantBook, directBook, upsells,
-      rating, reviews, platform, cleanFee, cleanRatio, benchClean, cleanUnder, email
-    });
-  }, 5200);
-}
-
-function buildResults(summary, d) {
-  var gc = function(n){return n>=80?"var(--grn)":n>=65?"var(--amber)":n>=50?"var(--gold)":"var(--red)";};
-  var revparScore = Math.min(100, Math.round((d.revpar/d.bm.ceiling)*100));
-  var scores = {RevPAR:revparScore,Occupancy:Math.min(100,Math.round(d.occ*1.1)),Listing:58,Reviews:Math.min(100,Math.round(d.rating*19)),Channel:d.directBook.startsWith("Yes")?74:52,Journey:d.upsells==="None"?48:70};
-
-  var leaks = [
-    {name:"RevPAR Gap vs Market",loss:d.revparLoss,sev:"critical",fix:"Set 90-day RevPAR target of £"+Math.round(d.bm.ceiling*.92)+". Market ceiling for "+d.beds+"-bed in "+d.location+": £"+d.bm.ceiling+". Your RevPAR: £"+d.revpar+"."},
-    {name:"Rate Calendar Gaps",loss:d.calLoss,sev:"high",fix:"Gap pricing rule: 1-2 night orphan gaps at £"+Math.round(d.adr*1.22)+". ~"+d.orphanNights+" orphan nights/month costing £"+Math.round(d.orphanNights*d.adr*0.72).toLocaleString()+"."},
-    {name:"Listing Conversion",loss:d.listingLoss,sev:"high",fix:d.instantBook==="No"?"Enable Instant Book immediately — losing 25-40% of impressions without it.":"Rewrite listing title with "+d.location+" location keyword — front-load your USP."},
-    {name:"Guest Journey Gaps",loss:d.journeyLoss,sev:"medium",fix:d.upsells==="None"?"Add 3 upsells: early check-in £"+Math.round(d.adr*.15)+", late checkout £"+Math.round(d.adr*.18)+", welcome hamper £35. Zero investment required.":"Automate post-checkout review request within 90 mins of checkout."},
-    {name:"Channel & Commission",loss:d.commDrain+d.directOpp,sev:"medium",fix:d.directBook==="No"?"Set up direct booking page — target 10% direct within 6 months. Saves £"+Math.round(d.rev*.04*12).toLocaleString()+"/year in commission.":"Optimise repeat-guest loyalty programme."},
-    {name:"Cleaning Fee Drag",loss:d.cleanLoss,sev:d.cleanUnder?"high":"medium",fix:"Raise cleaning fee to £"+Math.round(d.adr*d.benchClean/100)+" — benchmark for "+d.beds+"-bed is "+d.benchClean+"% of ADR. Currently "+d.cleanRatio+"%."},
-  ];
-
-  var html = "";
-
-  // Masthead
-  html += '<div style="background:var(--s1);border:1px solid var(--b2);overflow:hidden;margin-bottom:16px">';
-  html += '<div style="background:var(--s2);border-bottom:1px solid var(--b1);padding:18px 22px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px">';
-  html += '<div><div style="font-family:var(--SC);font-size:16px;font-weight:400;color:var(--txt);letter-spacing:.09em;text-transform:uppercase">'+(d.propName||"Your Property")+'</div>';
-  html += '<div style="font-family:var(--B);font-size:12px;font-style:italic;color:var(--dim);margin-top:3px">'+d.location+' · '+d.beds+'-Bed '+d.type+' · '+new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})+'</div></div>';
-  html += '<div style="text-align:right"><div style="font-family:var(--SC);font-size:10px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase">Harvy Pinder-Sellings</div><div style="font-family:var(--B);font-size:10px;font-style:italic;color:var(--dim);margin-top:2px">Summit Stay Group</div></div></div>';
-  html += '<div style="padding:20px 22px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start">';
-  html += '<div style="font-family:var(--B);font-size:14px;color:var(--sub);line-height:2;font-style:italic">'+summary+'</div>';
-  html += '<div style="background:var(--rd2);border:1px solid rgba(200,80,64,.25);padding:16px;text-align:right;min-width:150px;flex-shrink:0">';
-  html += '<div style="font-family:var(--M);font-size:7px;color:var(--red);letter-spacing:.13em;text-transform:uppercase;margin-bottom:4px">Monthly Leakage</div>';
-  html += '<div style="font-family:var(--D);font-size:40px;font-weight:300;color:var(--red);line-height:1">£'+d.totalLoss.toLocaleString()+'</div>';
-  html += '<div style="font-family:var(--M);font-size:8px;color:var(--dim);margin-top:3px">per month recoverable</div>';
-  html += '<div style="font-family:var(--D);font-size:14px;font-weight:300;color:var(--gold);margin-top:5px;font-style:italic">£'+(d.totalLoss*12).toLocaleString()+'/year</div></div></div></div>';
-
-  // Score band
-  html += '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--b1);border:1px solid var(--b1);margin-bottom:14px">';
-  Object.entries(scores).forEach(function(e){
-    html += '<div style="background:var(--s1);padding:10px 5px;text-align:center;border-top:2px solid '+gc(e[1])+'"><div style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.07em;text-transform:uppercase;margin-bottom:3px">'+e[0]+'</div>';
-    html += '<div style="font-family:var(--D);font-size:22px;font-weight:300;color:'+gc(e[1])+'">'+e[1]+'</div>';
-    html += '<div style="font-family:var(--B);font-size:9px;color:'+gc(e[1])+';font-style:italic">'+(e[1]>=80?"Strong":e[1]>=65?"Fair":e[1]>=50?"Weak":"Critical")+'</div></div>';
-  });
-  html += '</div>';
-
-  // Benchmarks
-  html += '<div style="background:var(--s1);border:1px solid var(--b1);padding:18px;margin-bottom:14px">';
-  html += '<div style="font-family:var(--M);font-size:8px;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px">Market Benchmarks — '+d.location+' · '+d.beds+'-Bed</div>';
-  html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">';
-  [["Market Occupancy",d.bm.occ+"%",d.occ+"%",d.occ>=d.bm.occ],["Market ADR","£"+d.bm.adr,"£"+d.adr,d.adr>=d.bm.adr],["Market RevPAR","£"+d.bm.revpar,"£"+d.revpar,d.revpar>=d.bm.revpar]].forEach(function(b){
-    html += '<div style="background:var(--s2);border:1px solid var(--b1);padding:12px;text-align:center">';
-    html += '<div style="font-family:var(--D);font-size:22px;font-weight:300;color:var(--gold);line-height:1">'+b[1]+'</div>';
-    html += '<div style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.09em;text-transform:uppercase;margin-top:3px">'+b[0]+'</div>';
-    html += '<div style="font-family:var(--M);font-size:9px;margin-top:5px;color:'+(b[3]?"var(--grn)":"var(--red)")+'">Yours: '+b[2]+' '+(b[3]?"↑ Above":"↓ Below")+'</div></div>';
-  });
-  html += '</div></div>';
-
-  // Leak cards
-  html += '<div style="font-family:var(--M);font-size:8px;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px">Revenue Leak Breakdown</div>';
-  html += '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">';
-  leaks.forEach(function(leak, i) {
-    var sevCol = leak.sev==="critical"?"var(--red)":leak.sev==="high"?"var(--gold)":"var(--amber)";
-    var blurred = !isPaidUser && i >= 2;
-    html += '<div style="background:var(--s1);border:1px solid var(--b1);overflow:hidden;position:relative">';
-    if(blurred) html += '<div style="position:absolute;inset:0;backdrop-filter:blur(6px);background:rgba(0,0,0,.7);z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;text-align:center"><div style="font-family:var(--SC);font-size:11px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase">Unlock Full Report</div><div style="font-family:var(--B);font-size:12px;color:var(--sub);font-style:italic">See all 6 leak categories and every fix</div><a href="pricing.html" style="background:var(--amber);color:var(--void);font-family:var(--SC);font-size:9px;padding:8px 18px;text-decoration:none;letter-spacing:.12em;text-transform:uppercase">From £97/month →</a></div>';
-    html += '<div style="display:flex;align-items:center;gap:12px;padding:14px 16px">';
-    html += '<div style="width:8px;height:8px;border-radius:50%;background:'+sevCol+';flex-shrink:0"></div>';
-    html += '<div style="flex:1"><div style="font-family:var(--SC);font-size:11px;color:var(--txt);letter-spacing:.06em;text-transform:uppercase">'+leak.name+'</div>';
-    html += '<div style="font-family:var(--B);font-size:11px;color:var(--dim);margin-top:3px;font-style:italic">'+leak.fix+'</div></div>';
-    html += '<div style="text-align:right;flex-shrink:0"><div style="font-family:var(--D);font-size:20px;font-weight:300;color:'+sevCol+'">£'+leak.loss.toLocaleString()+'</div><div style="font-family:var(--M);font-size:7px;color:var(--dim);letter-spacing:.07em">/month</div></div></div></div>';
-  });
-  html += '</div>';
-
-  // CTA
-  html += '<div style="background:var(--ad2);border:1px solid rgba(196,129,58,.25);padding:24px;text-align:center;margin-bottom:20px">';
-  html += '<div style="font-family:var(--SC);font-size:14px;color:var(--txt);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Layers 03–10 locked</div>';
-  html += '<div style="font-family:var(--B);font-size:14px;color:var(--sub);font-style:italic;margin-bottom:16px;max-width:400px;margin-left:auto;margin-right:auto">You\'ve seen 2 of 10 layers. The remaining 8 — booking pace, listing conversion, review NLP, guest journey, channel mix, yield curve, net revenue, competitive positioning — are in the full report.</div>';
-  html += '<div style="font-family:var(--D);font-size:32px;font-weight:300;color:var(--red);margin-bottom:4px">£'+(d.totalLoss*12).toLocaleString()+'/year</div>';
-  html += '<div style="font-family:var(--B);font-size:12px;color:var(--sub);font-style:italic;margin-bottom:16px">sitting in your portfolio unrecovered</div>';
-  html += '<a href="pricing.html" style="background:var(--amber);color:var(--void);font-family:var(--SC);font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;padding:14px 32px;text-decoration:none;display:inline-block">Unlock Full 10-Layer Report — from £97/month →</a></div>';
-
-  // Delivery note
-  html += '<div style="font-family:var(--B);font-size:12px;color:var(--dim);font-style:italic;text-align:center;padding:12px 0;border-top:1px solid var(--b1)">Report delivered to '+d.email+' · Harvy Pinder-Sellings · Summit Stay Group</div>';
-
-  var resEl = document.getElementById("resultsWrap");
-  if(resEl) { resEl.innerHTML = html; resEl.style.display = "block"; }
-  window.scrollTo({top: 0, behavior: "smooth"});
-}
-
-var isPaidUser = false;
-try { isPaidUser = !!localStorage.getItem("ssg_paid_token"); } catch(e) {}
-
-var TI=[["Lake District RevPAR","£218"],["Highland Run Rate","£190K+ annualised"],["Avg Monthly Leak","£1,380"],["Review Velocity","2+ per month"],["Fort William OCC","72%"],["Guest Favourite Min","4.8 stars"],["Peak/Trough Benchmark","1.6-2.0x"],["Clean Fee Benchmark","25% of ADR"]];
-function buildTicker(){var h=TI.map(function(i){return'<div class="ti">'+i[0]+'<em>'+i[1]+'</em><span style="color:#3a2e20;margin:0 8px">·</span></div>';}).join('');var a=document.getElementById('tc1'),b=document.getElementById('tc2');if(a)a.innerHTML=h;if(b)b.innerHTML=h;}
-buildTicker();
-
-// Benchmarks
+// ═══ BENCHMARKS ═══
 var BM = {
   'lake district':{occ:78,adr:{1:145,2:195,3:265,4:340,5:420}},
   'windermere':{occ:80,adr:{1:155,2:210,3:285,4:365,5:445}},
+  'ambleside':{occ:78,adr:{1:148,2:198,3:268,4:342,5:422}},
+  'keswick':{occ:76,adr:{1:140,2:188,3:252,4:322,5:398}},
   'fort william':{occ:72,adr:{1:130,2:175,3:235,4:300,5:375}},
   'scotland':{occ:71,adr:{1:125,2:170,3:228,4:290,5:360}},
   'highland':{occ:70,adr:{1:120,2:165,3:220,4:282,5:348}},
+  'inverness':{occ:72,adr:{1:128,2:172,3:230,4:294,5:364}},
   'cotswolds':{occ:75,adr:{1:160,2:220,3:295,4:380,5:460}},
   'edinburgh':{occ:82,adr:{1:175,2:245,3:320,4:410,5:510}},
   'london':{occ:79,adr:{1:195,2:285,3:380,4:490,5:620}},
@@ -787,103 +555,382 @@ var BM = {
   'devon':{occ:74,adr:{1:135,2:180,3:240,4:308,5:380}},
   'wales':{occ:70,adr:{1:115,2:155,3:205,4:265,5:325}},
   'peak district':{occ:74,adr:{1:130,2:175,3:235,4:300,5:370}},
+  'snowdonia':{occ:71,adr:{1:118,2:158,3:210,4:270,5:332}},
+  'pembrokeshire':{occ:73,adr:{1:128,2:170,3:228,4:292,5:360}}
 };
 
-function getBM(location, beds){
-  var loc=(location||'').toLowerCase();
-  var b=Math.min(parseInt(beds)||2,5);
-  var region=null;
-  Object.keys(BM).forEach(function(k){if(!region&&loc.indexOf(k)>=0)region=BM[k];});
-  if(!region)region={occ:74,adr:{1:140,2:190,3:255,4:325,5:400}};
-  var mktAdr=region.adr[b]||190;
-  return{occ:region.occ,adr:mktAdr,revpar:Math.round(mktAdr*region.occ/100),ceiling:Math.round(mktAdr*0.88)};
-}
-
-function updateBenchmarks(){
-  var loc=document.getElementById('location').value;
-  var beds=document.getElementById('beds').value;
-  if(!loc)return;
-  var bm=getBM(loc,beds);
-  var occEl=document.getElementById('occ-bm');
-  var adrEl=document.getElementById('adr-bm');
-  if(occEl)occEl.textContent='Market benchmark: '+bm.occ+'%';
-  if(adrEl)adrEl.textContent='Market benchmark: £'+bm.adr+'/night';
-  updateLiveCalc();
-}
-
-function updateLiveCalc(){
-  var occ=parseFloat(document.getElementById('occ').value)||0;
-  var adr=parseFloat(document.getElementById('adr').value)||0;
-  var loc=document.getElementById('location').value;
-  var beds=document.getElementById('beds').value;
-  if(!occ||!adr)return;
-  var bm=getBM(loc,beds);
-  var revpar=Math.round(adr*occ/100);
-  var gap=Math.max(0,bm.ceiling-revpar);
-  var leak=Math.round(gap*Math.round(occ*30/100));
-  var calcEl=document.getElementById('liveCalc');
-  if(calcEl)calcEl.style.display='block';
-  var rEl=document.getElementById('liveRevpar');
-  var cEl=document.getElementById('liveCeiling');
-  var gEl=document.getElementById('liveGap');
-  var lEl=document.getElementById('liveLeak');
-  if(rEl)rEl.textContent='£'+revpar;
-  if(cEl)cEl.textContent='£'+bm.ceiling;
-  if(gEl)gEl.textContent=gap>0?'£'+gap+'/night':'At ceiling';
-  if(lEl)lEl.textContent=leak>0?'£'+leak.toLocaleString()+'/mo':'—';
-}
-
-// Step navigation
-var currentStep=1;
-function goStep(n){
-  if(n===2){
-    var loc=document.getElementById('location').value;
-    if(!loc){alert('Please enter your property location first.');return;}
+function getBM(location, beds) {
+  var loc = (location || '').toLowerCase();
+  var b = Math.min(parseInt(beds) || 2, 5);
+  var region = null;
+  var keys = Object.keys(BM);
+  for (var i = 0; i < keys.length; i++) {
+    if (loc.indexOf(keys[i]) >= 0) { region = BM[keys[i]]; break; }
   }
-  if(n===3){
-    var occ=document.getElementById('occ').value;
-    var adr=document.getElementById('adr').value;
-    var rev=document.getElementById('rev').value;
-    if(!occ||!adr||!rev){alert('Please fill in your occupancy, ADR, and monthly revenue.');return;}
+  if (!region) region = {occ:74, adr:{1:140,2:190,3:255,4:325,5:400}};
+  var mktAdr = region.adr[b] || 190;
+  return {
+    occ: region.occ,
+    adr: mktAdr,
+    revpar: Math.round(mktAdr * region.occ / 100),
+    ceiling: Math.round(mktAdr * 0.88)
+  };
+}
+
+// ═══ LIVE INPUTS ═══
+function onLocationInput() {
+  var loc = document.getElementById('location').value;
+  var beds = document.getElementById('beds').value;
+  if (!loc) return;
+  var bm = getBM(loc, beds);
+  var occBm = document.getElementById('occ-bm');
+  var adrBm = document.getElementById('adr-bm');
+  if (occBm) { occBm.textContent = 'Market benchmark: ' + bm.occ + '%'; occBm.className = 'fc-bm bm-n'; }
+  if (adrBm) { adrBm.textContent = 'Market benchmark: £' + bm.adr + '/night'; adrBm.className = 'fc-bm bm-n'; }
+  onRevenueInput();
+}
+
+function onRevenueInput() {
+  var occ = parseFloat(document.getElementById('occ').value) || 0;
+  var adr = parseFloat(document.getElementById('adr').value) || 0;
+  if (!occ || !adr) return;
+  var loc = document.getElementById('location').value;
+  var beds = document.getElementById('beds').value;
+  var bm = getBM(loc, beds);
+  var revpar = Math.round(adr * occ / 100);
+  var gap = Math.max(0, bm.ceiling - revpar);
+  var leak = Math.round(gap * Math.round(occ * 30 / 100));
+  var calc = document.getElementById('liveCalc');
+  if (calc) calc.style.display = 'block';
+  var r = document.getElementById('lc-revpar');
+  var c = document.getElementById('lc-ceil');
+  var g = document.getElementById('lc-gap');
+  var l = document.getElementById('lc-leak');
+  if (r) r.textContent = '£' + revpar;
+  if (c) c.textContent = '£' + bm.ceiling;
+  if (g) g.textContent = gap > 0 ? '£' + gap + '/night' : 'At ceiling';
+  if (l) l.textContent = leak > 0 ? '£' + leak.toLocaleString() + '/mo' : '—';
+
+  // Update benchmark indicators
+  var occBm = document.getElementById('occ-bm');
+  var adrBm = document.getElementById('adr-bm');
+  if (occBm && bm.occ) {
+    occBm.textContent = 'Market: ' + bm.occ + '% — Yours: ' + occ + '% ' + (occ >= bm.occ ? '↑ Above' : '↓ Below');
+    occBm.className = 'fc-bm ' + (occ >= bm.occ ? 'bm-hi' : 'bm-lo');
+  }
+  if (adrBm && bm.adr) {
+    adrBm.textContent = 'Market: £' + bm.adr + ' — Yours: £' + adr + ' ' + (adr >= bm.adr ? '↑ Above' : '↓ Below');
+    adrBm.className = 'fc-bm ' + (adr >= bm.adr ? 'bm-hi' : 'bm-lo');
+  }
+}
+
+// ═══ STEP NAVIGATION ═══
+function toStep(n) {
+  // Validate
+  if (n === 2) {
+    var loc = document.getElementById('location').value.trim();
+    if (!loc) { alert('Please enter your property location.'); return; }
+  }
+  if (n === 3) {
+    var occ = document.getElementById('occ').value;
+    var adr = document.getElementById('adr').value;
+    var rev = document.getElementById('rev').value;
+    if (!occ || !adr || !rev) { alert('Please fill in your occupancy, ADR, and monthly revenue.'); return; }
     buildReview();
   }
-  document.getElementById('step'+currentStep).classList.remove('active');
-  document.getElementById('step'+n).classList.add('active');
-  currentStep=n;
+
+  // Hide current, show next
+  var cur = document.getElementById('step' + currentStep);
+  var nxt = document.getElementById('step' + n);
+  if (cur) cur.className = 'step';
+  if (nxt) nxt.className = 'step show';
+  currentStep = n;
   updateProgress(n);
-  window.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
-function updateProgress(n){
-  for(var i=1;i<=4;i++){
-    var dot=document.getElementById('pd'+i);
-    var lbl=document.getElementById('pl'+i+'l');
-    var line=document.getElementById('pl'+i);
-    if(dot){
-      dot.className='prog-dot'+(i<n?' done':i===n?' active':'');
-    }
-    if(lbl){
-      lbl.className='prog-lbl'+(i<n?' done':i===n?' active':'');
-    }
-    if(line&&i<4){
-      line.className='prog-line'+(i<n?' done':'');
-    }
+function updateProgress(n) {
+  for (var i = 1; i <= 4; i++) {
+    var dot = document.getElementById('pd' + i);
+    var lbl = document.getElementById('plbl' + i);
+    var line = document.getElementById('pl' + i);
+    if (dot) dot.className = 'prog-dot' + (i < n ? ' done' : i === n ? ' active' : '');
+    if (lbl) lbl.className = 'prog-lbl' + (i < n ? ' done' : i === n ? ' active' : '');
+    if (line) line.className = 'prog-line' + (i < n ? ' done' : '');
   }
 }
 
-function buildReview(){
-  var fields=[
-    ['Property',document.getElementById('propName').value||document.getElementById('location').value],
-    ['Location',document.getElementById('location').value],
-    ['Type',document.getElementById('beds').value+'-bed '+document.getElementById('type').value],
-    ['Occupancy',document.getElementById('occ').value+'%'],
-    ['ADR','£'+document.getElementById('adr').value],
-    ['Monthly Revenue','£'+document.getElementById('rev').value],
+function buildReview() {
+  var fields = [
+    ['Property', document.getElementById('propName').value || document.getElementById('location').value],
+    ['Location', document.getElementById('location').value],
+    ['Type', document.getElementById('beds').value + '-bed ' + document.getElementById('propType').value],
+    ['Occupancy', document.getElementById('occ').value + '%'],
+    ['ADR', '£' + document.getElementById('adr').value],
+    ['Monthly Revenue', '£' + document.getElementById('rev').value]
   ];
-  var html='';
-  fields.forEach(function(f){
-    html+='<div class="review-row"><div class="rr-label">'+f[0]+'</div><div class="rr-value'+(f[1]?'':' empty')+'">'+(f[1]||'Not entered')+'</div></div>';
-  });
-  var el=document.getElementById('reviewGrid');
-  if(el)el.innerHTML=html;
+  var html = fields.map(function(f) {
+    return '<div class="rs-row"><div class="rs-label">' + f[0] + '</div><div class="rs-val">' + (f[1] || '—') + '</div></div>';
+  }).join('');
+  var el = document.getElementById('reviewRows');
+  if (el) el.innerHTML = html;
 }
+
+// ═══ CALCULATIONS ═══
+function calcAll() {
+  var loc = document.getElementById('location').value;
+  var beds = document.getElementById('beds').value;
+  var occ = parseFloat(document.getElementById('occ').value) || 72;
+  var adr = parseFloat(document.getElementById('adr').value) || 185;
+  var rev = parseFloat(document.getElementById('rev').value) || 4200;
+  var cleanFee = parseFloat(document.getElementById('cleanFee').value) || 60;
+  var minStay = parseInt(document.getElementById('minStay').value) || 2;
+  var rating = parseFloat(document.getElementById('rating').value) || 4.7;
+  var reviews = parseInt(document.getElementById('reviews').value) || 30;
+  var instantBook = document.getElementById('instantBook').value;
+  var directBook = document.getElementById('directBook').value;
+  var upsells = document.getElementById('upsells').value;
+  var platform = document.getElementById('platform').value;
+  var propType = document.getElementById('propType').value;
+  var propName = document.getElementById('propName').value;
+
+  var bm = getBM(loc, beds);
+  var revpar = Math.round(adr * occ / 100);
+  var revparGap = Math.max(0, bm.ceiling - revpar);
+  var nightsOpen = Math.round((100 - occ) * 30 / 100);
+  var orphanNights = Math.round(nightsOpen * 0.38);
+  var orphanLoss = Math.round(orphanNights * adr * 0.72);
+  var compressionLoss = Math.round(rev * 0.06);
+  var calLoss = orphanLoss + compressionLoss;
+  var revparLoss = Math.max(0, Math.round(revparGap * Math.round(occ * 30 / 100)));
+  var listingLoss = Math.round(rev * 0.07);
+  var upsellLoss = upsells === 'None' ? Math.round(rev * 0.045) : Math.round(rev * 0.02);
+  var journeyLoss = upsellLoss + Math.round(rev * 0.05);
+  var commDrain = Math.round(rev * 0.03);
+  var directOpp = directBook === 'No' ? Math.round(rev * 0.06) : 0;
+  var benchClean = parseInt(beds) <= 2 ? 25 : 20;
+  var cleanRatio = parseFloat((cleanFee / adr * 100).toFixed(1));
+  var turnovers = Math.round(occ * 30 / 100 / minStay);
+  var cleanUnder = cleanRatio < benchClean;
+  var cleanLoss = cleanUnder ? Math.round((adr * benchClean / 100 - cleanFee) * turnovers) : Math.round(rev * 0.02);
+  var totalLoss = revparLoss + calLoss + listingLoss + journeyLoss + commDrain + directOpp + cleanLoss;
+
+  var revparScore = Math.min(100, Math.round(revpar / bm.ceiling * 100));
+
+  var leaks = [
+    {
+      name: 'RevPAR Gap vs Market', loss: revparLoss, sev: 'critical',
+      fix: 'Your RevPAR of £' + revpar + ' sits £' + revparGap + '/night below the optimised ceiling of £' + bm.ceiling + ' for a ' + beds + '-bed in ' + loc + '. Market benchmark RevPAR: £' + bm.revpar + '.'
+    },
+    {
+      name: 'Rate Calendar Gaps', loss: calLoss, sev: 'high',
+      fix: 'Approximately ' + orphanNights + ' orphan and gap nights per month at ' + occ + '% occupancy. Gap pricing at £' + Math.round(adr * 1.22) + ' for 1-2 night gaps recovers £' + Math.round(orphanLoss * 0.6).toLocaleString() + '/month.'
+    },
+    {
+      name: 'Listing Conversion', loss: listingLoss, sev: 'high',
+      fix: instantBook === 'No' ? 'Instant Book disabled — estimated 25-40% fewer impressions from search algorithm. Enable it: 2 minutes, immediate impact.' : 'Rewrite listing title with ' + loc + ' location keyword. 3-second click decision — your title is the first filter.'
+    },
+    {
+      name: 'Guest Journey Gaps', loss: journeyLoss, sev: 'medium',
+      fix: upsells === 'None' ? 'Zero upsell revenue. Early check-in £' + Math.round(adr * 0.15) + ', late checkout £' + Math.round(adr * 0.18) + ', welcome hamper £35. No property investment required.' : 'Automate post-checkout review request within 90 minutes of checkout.'
+    },
+    {
+      name: 'Channel & Commission', loss: commDrain + directOpp, sev: 'medium',
+      fix: directBook === 'No' ? 'No direct booking channel. 100% platform commission exposure. Direct booking page targeting 10% direct saves £' + Math.round(rev * 0.04 * 12).toLocaleString() + '/year.' : 'Optimise repeat-guest loyalty programme to increase direct share.'
+    },
+    {
+      name: 'Cleaning Fee Drag', loss: cleanLoss, sev: cleanUnder ? 'high' : 'medium',
+      fix: 'Cleaning fee £' + cleanFee + ' = ' + cleanRatio + '% of ADR. Benchmark for ' + beds + '-bed: ' + benchClean + '% (£' + Math.round(adr * benchClean / 100) + '). ' + (cleanUnder ? 'Raise it — 2 minutes, £' + cleanLoss.toLocaleString() + '/month recovery.' : 'Within benchmark range.')
+    }
+  ];
+
+  return {
+    loc, beds, occ, adr, rev, revpar, revparGap, bm, revparLoss, calLoss,
+    listingLoss, journeyLoss, commDrain, directOpp, cleanLoss, totalLoss,
+    leaks, revparScore, rating, reviews, instantBook, directBook, upsells,
+    platform, propType, propName, orphanNights, cleanRatio, benchClean, cleanUnder
+  };
+}
+
+// ═══ AI CALL ═══
+async function callAI(d) {
+  var prompt = 'You are Harvy Pinder-Sellings, founder of Summit Stay Group, UK STR operator turned consultant. Write a blunt, specific, operator-to-operator 4-sentence executive summary for this portfolio audit. Property: "' + (d.propName || 'Unnamed') + '" in ' + d.loc + '. ' + d.beds + '-bed ' + d.propType + '. Occupancy: ' + d.occ + '% (market benchmark: ' + d.bm.occ + '%). ADR: £' + d.adr + ' (market benchmark: £' + d.bm.adr + '). RevPAR: £' + d.revpar + ' vs ceiling of £' + d.bm.ceiling + '. Monthly revenue: £' + d.rev + '. Total monthly leakage identified: £' + d.totalLoss.toLocaleString() + ' across 6 layers. Biggest leaks: ' + d.leaks.slice(0,3).map(function(l){return l.name + ' £' + l.loss.toLocaleString() + '/mo';}).join(', ') + '. Instant Book: ' + d.instantBook + '. Upsells: ' + d.upsells + '. Rating: ' + d.rating + ' (' + d.reviews + ' reviews). Start with the total £ figure. Reference 2+ specific data points from the audit. End with the single most important action to take today. Never start a sentence with I.';
+  try {
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: 600,
+        messages: [{role: 'user', content: prompt}]
+      })
+    });
+    var json = await resp.json();
+    if (json.content && json.content[0]) return json.content[0].text;
+    return '';
+  } catch(e) {
+    return '';
+  }
+}
+
+// ═══ MAIN AUDIT RUNNER ═══
+async function runAudit() {
+  var email = document.getElementById('email').value.trim();
+  if (!email || email.indexOf('@') < 0) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+
+  // Disable button
+  var btn = document.getElementById('runBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Analysing...'; }
+
+  // Hide form, show processing
+  var fw = document.getElementById('formWrap');
+  var proc = document.getElementById('processing');
+  if (fw) fw.style.display = 'none';
+  if (proc) proc.style.display = 'block';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+
+  // Light up processing steps
+  var stepIds = ['ps1','ps2','ps3','ps4','ps5'];
+  var delays = [900, 1800, 2800, 3800, 5000];
+  delays.forEach(function(delay, i) {
+    setTimeout(function() {
+      var el = document.getElementById(stepIds[i]);
+      if (el) el.className = 'ps lit';
+    }, delay);
+  });
+
+  // Calculate
+  var d = calcAll();
+  d.email = email;
+
+  // Get AI summary (runs in parallel with processing animation)
+  var summary = await callAI(d);
+  if (!summary) {
+    summary = '£' + d.totalLoss.toLocaleString() + '/month in recoverable revenue sits across 6 audit layers for this ' + d.beds + '-bed ' + d.propType.toLowerCase() + ' in ' + d.loc + '. Your RevPAR of £' + d.revpar + ' sits £' + d.revparGap + '/night below the optimised ceiling of £' + d.bm.ceiling + ' — a pricing and calendar discipline issue, not a property issue. ' + (d.instantBook === 'No' ? 'Instant Book is disabled, costing an estimated 25-40% of your search impressions before a single guest sees your listing.' : 'Your rate calendar has approximately ' + d.orphanNights + ' orphan nights per month sitting at £0 that should be priced and filled.') + ' First action today: ' + (d.instantBook === 'No' ? 'enable Instant Book — 2 minutes, immediate algorithm uplift.' : 'implement gap pricing at £' + Math.round(d.adr * 1.22) + ' for 1-2 night gaps in your calendar — 15 minutes, £' + Math.round(d.calLoss * 0.5).toLocaleString() + ' recoverable within 30 days.');
+  }
+
+  // Wait for minimum processing time
+  await new Promise(function(r) { setTimeout(r, 5500); });
+
+  // Show results
+  if (proc) proc.style.display = 'none';
+  buildResults(d, summary);
+}
+
+// ═══ BUILD RESULTS ═══
+function buildResults(d, summary) {
+  var gc = function(n) { return n>=80?'var(--grn)':n>=65?'var(--amber)':n>=50?'var(--gold)':'var(--red)'; };
+  var gl = function(n) { return n>=80?'Strong':n>=65?'Fair':n>=50?'Weak':'Critical'; };
+  var sevCol = function(s) { return s==='critical'?'var(--red)':s==='high'?'var(--gold)':'var(--amber)'; };
+
+  var scores = {
+    RevPAR: d.revparScore,
+    Occupancy: Math.min(100, Math.round(d.occ * 1.1)),
+    Listing: 58,
+    Reviews: Math.min(100, Math.round(d.rating * 19)),
+    Channel: d.directBook.startsWith('Yes') ? 74 : 52,
+    Journey: d.upsells === 'None' ? 48 : 70
+  };
+
+  var html = '';
+
+  // Masthead
+  html += '<div class="rm">';
+  html += '<div class="rm-hd">';
+  html += '<div><div class="rm-prop">' + (d.propName || 'Your Property') + '</div>';
+  html += '<div class="rm-det">' + d.loc + ' · ' + d.beds + '-Bed ' + d.propType + ' · ' + new Date().toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'}) + '</div></div>';
+  html += '<div><div class="rm-sig-n">Harvy Pinder-Sellings</div><div class="rm-sig-r">Summit Stay Group</div></div>';
+  html += '</div>';
+  html += '<div class="rm-body">';
+  html += '<div class="rm-exec">' + summary + '</div>';
+  html += '<div class="rm-total">';
+  html += '<div class="rm-total-l">Monthly Leakage</div>';
+  html += '<div class="rm-total-v">£' + d.totalLoss.toLocaleString() + '</div>';
+  html += '<div class="rm-total-s">per month recoverable</div>';
+  html += '<div class="rm-total-yr">£' + (d.totalLoss * 12).toLocaleString() + '/year</div>';
+  html += '</div></div></div>';
+
+  // Scores
+  html += '<div class="scores">';
+  Object.entries(scores).forEach(function(e) {
+    html += '<div class="sc" style="border-top:2px solid ' + gc(e[1]) + '">';
+    html += '<div class="sc-l">' + e[0] + '</div>';
+    html += '<div class="sc-v" style="color:' + gc(e[1]) + '">' + e[1] + '</div>';
+    html += '<div class="sc-g" style="color:' + gc(e[1]) + '">' + gl(e[1]) + '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Benchmarks
+  html += '<div class="bms"><div class="bms-title">Market Benchmarks — ' + d.loc + ' · ' + d.beds + '-Bed</div>';
+  html += '<div class="bms-grid">';
+  [
+    ['Market Occupancy', d.bm.occ + '%', d.occ + '%', d.occ >= d.bm.occ],
+    ['Market ADR', '£' + d.bm.adr, '£' + d.adr, d.adr >= d.bm.adr],
+    ['Market RevPAR', '£' + d.bm.revpar, '£' + d.revpar, d.revpar >= d.bm.revpar]
+  ].forEach(function(b) {
+    html += '<div class="bm-card">';
+    html += '<div class="bm-v">' + b[1] + '</div>';
+    html += '<div class="bm-l">' + b[0] + '</div>';
+    html += '<div class="bm-y ' + (b[3] ? 'bm-hi' : 'bm-lo') + '">Yours: ' + b[2] + ' ' + (b[3] ? '↑' : '↓') + '</div>';
+    html += '</div>';
+  });
+  html += '</div></div>';
+
+  // Leak cards
+  html += '<div class="leaks-title">Revenue Leak Breakdown</div>';
+  d.leaks.forEach(function(leak, i) {
+    var gated = i >= 2;
+    html += '<div class="leak">';
+    if (gated) {
+      html += '<div class="leak-gate">';
+      html += '<div class="gate-title">Unlock Layer ' + (i + 1) + '</div>';
+      html += '<div class="gate-sub">See the full diagnosis and fix for this leak</div>';
+      html += '<a href="pricing.html" class="gate-btn">From £97/month →</a>';
+      html += '</div>';
+    }
+    html += '<div class="leak-inner">';
+    html += '<div class="leak-dot" style="background:' + sevCol(leak.sev) + '"></div>';
+    html += '<div class="leak-body">';
+    html += '<div class="leak-name" style="color:' + sevCol(leak.sev) + '">' + leak.name + '</div>';
+    html += '<div class="leak-fix">' + leak.fix + '</div>';
+    html += '</div>';
+    html += '<div class="leak-amt">';
+    html += '<div class="leak-gbp" style="color:' + sevCol(leak.sev) + '">£' + leak.loss.toLocaleString() + '</div>';
+    html += '<div class="leak-ps">/month</div>';
+    html += '</div></div></div>';
+  });
+
+  // CTA
+  html += '<div class="res-cta">';
+  html += '<div class="res-cta-title">Layers 03–10 Locked</div>';
+  html += '<div class="res-cta-sub">You\'ve seen 2 of 6 leak categories. The remaining 4 — plus 4 more audit layers covering booking pace, review NLP, seasonal yield curve, and competitive positioning — are in the full report.</div>';
+  html += '<div class="res-cta-amt">£' + (d.totalLoss * 12).toLocaleString() + '/year</div>';
+  html += '<div class="res-cta-note">sitting in your portfolio unrecovered</div>';
+  html += '<a href="pricing.html" class="res-cta-btn">Unlock Full 10-Layer Report — from £97/month →</a>';
+  html += '</div>';
+
+  html += '<div class="res-footer">Delivered to ' + d.email + ' · Harvy Pinder-Sellings · Summit Stay Group · summitstaygroup.co.uk</div>';
+
+  var resEl = document.getElementById('results');
+  if (resEl) {
+    resEl.innerHTML = html;
+    resEl.style.display = 'block';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+}
+
+// ═══ INIT ═══
+initTicker();
+</script>
+
+</body>
+</html>
