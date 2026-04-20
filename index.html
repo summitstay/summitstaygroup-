@@ -569,8 +569,16 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       const item=document.getElementById('lk'+n),fill=document.getElementById('lkf'+n);
       item.classList.add('show');
       setTimeout(()=>fill.style.width=leakW[n-1],50);
+      // Use a target sum up to this leak's index, not a shared accumulator
+      const targetSum=leakV.slice(0,n).reduce((a,b)=>a+b,0);
+      const startSum=leakV.slice(0,n-1).reduce((a,b)=>a+b,0);
       const v=leakV[n-1];let s=0;
-      const ci=setInterval(()=>{s++;total+=v/28;document.getElementById('totalAmt').textContent='£'+Math.round(total).toLocaleString();if(s>=28)clearInterval(ci);},750/28);
+      const ci=setInterval(()=>{
+        s++;
+        const current=Math.round(startSum+(v/28)*s);
+        document.getElementById('totalAmt').textContent='£'+Math.min(current,targetSum).toLocaleString();
+        if(s>=28){document.getElementById('totalAmt').textContent='£'+targetSum.toLocaleString();clearInterval(ci);}
+      },750/28);
     },t);
   }
 
