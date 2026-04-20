@@ -1,6 +1,3 @@
-
-
-
 var https=require('https');
 exports.handler=function(e,c,cb){
 var b=JSON.parse(e.body);
