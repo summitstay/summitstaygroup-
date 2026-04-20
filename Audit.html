@@ -647,6 +647,29 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     const name  = document.getElementById('f-name').value||'Your Portfolio';
     const loc   = document.getElementById('f-location').value||'UK';
 
+    // Save full data to sessionStorage for full report page
+    const auditData = {
+      name:           document.getElementById('f-name').value,
+      location:       loc,
+      propertyType:   document.querySelector('#chips-type .chip.selected')?.dataset.val||'Entire home',
+      bedrooms:       document.querySelector('#chips-beds .chip.selected')?.dataset.val||'2',
+      peakSeason:     document.querySelector('#chips-season .chip.selected')?.dataset.val||'Summer',
+      occupancy:      occ,
+      adr:            adr,
+      monthlyRevenue: parseFloat(document.getElementById('f-rev').value)||0,
+      cleaningFee:    parseFloat(document.getElementById('f-clean').value)||0,
+      minStay:        parseFloat(document.getElementById('f-minstay').value)||2,
+      pricingTool:    document.querySelector('#chips-tool .chip.selected')?.dataset.val||'None',
+      rating:         parseFloat(document.getElementById('f-rating').value)||4.8,
+      reviews:        parseFloat(document.getElementById('f-reviews').value)||0,
+      platforms:      document.querySelector('#chips-platform .chip.selected')?.dataset.val||'Airbnb only',
+      instantBook:    document.querySelector('#chips-instant .chip.selected')?.dataset.val||'No',
+      directBookings: document.querySelector('#chips-direct .chip.selected')?.dataset.val||'No',
+      upsells:        document.querySelector('#chips-upsells .chip.selected')?.dataset.val||'None',
+      email:          document.getElementById('f-email').value
+    };
+    try { sessionStorage.setItem('ssg_audit_data', JSON.stringify(auditData)); } catch(e){}
+
     const revpar  = (occ/100)*adr;
     const ceiling = adr*0.65;
     const gap     = Math.max(0,ceiling-revpar);
@@ -667,7 +690,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     document.getElementById('res-l2-body').textContent = `Rate calendar analysis detected unpriced gap nights and orphan windows. At ${occ}% occupancy, there are bookable nights being left unfilled due to minimum stay settings and calendar gaps.`;
     document.getElementById('res-l2-fix').textContent  = 'Set dynamic minimum stays — drop to 1-night on orphan gaps. Compress pricing on unbooked windows 14–28 days out to stimulate fill rate.';
 
-    // Animate total
+    // Animate total then show results
     let v=0, target=total;
     const ci=setInterval(()=>{
       v+=Math.round(target/40);
@@ -682,6 +705,12 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
     for(let i=1;i<=3;i++) document.getElementById('ps'+i).classList.add('done');
     document.getElementById('ps4').classList.add('active');
     document.getElementById('progressTrack').style.display='flex';
+  }
+
+  // Called from paywall "Unlock All 10 Layers" — goes straight to report page
+  // (In production this would go via Stripe first)
+  function goToFullReport(){
+    window.location.href = '/report';
   }
 </script>
 
