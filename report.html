@@ -265,7 +265,7 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;ba
       <div class="gen-line" id="gl15"><span class="ts">[00:20]</span> <span class="ok">report complete</span> · all 10 layers · ranked by monthly impact · pdf ready</div>
     </div>
     <div class="gen-tfoot">
-      <span>claude-sonnet-4 · ssg-methodology-v2.4</span>
+      <span>ssg-audit-engine · methodology-v2.4</span>
       <span id="genTimer">generating...</span>
     </div>
   </div>
@@ -489,7 +489,7 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;ba
 // or sessionStorage from audit form submission
 // ══════════════════════════════════════════════
 
-const API_KEY = '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';
+const _k = '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';
 
 // Get audit data — from sessionStorage (set by audit.html on form submit)
 // Falls back to demo data if nothing stored
@@ -674,12 +674,12 @@ async function callClaude(data) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': API_KEY,
+      'x-api-key': _k,
       'anthropic-version': '2023-06-01',
       'anthropic-dangerous-direct-browser-access': 'true'
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-20250514', // internal
       max_tokens: 4000,
       messages: [{ role: 'user', content: prompt }]
     })
@@ -873,11 +873,11 @@ async function init() {
 
     } catch(err) {
       console.error('Report generation error:', err);
-      console.error('Full error:', err);
-      document.getElementById('genTimer').innerHTML = 'Error: ' + err.message;
+      console.error('Report error:', err.message);
+      // Show friendly error — never expose technical details to customer
       document.getElementById('genTimer').style.color = '#e87070';
-      // Show a user-friendly message
-      document.getElementById('gl15').innerHTML = '<span style="color:#e87070">⚠ Report generation failed — ' + err.message.substring(0,80) + '</span>';
+      document.getElementById('genTimer').textContent = 'Contact support';
+      document.getElementById('gl15').innerHTML = '<span style="color:#e87070">⚠ Something went wrong generating your report. Please email summitstaygroup@gmail.com with your property details and we will send your report within 24 hours.</span>';
       document.getElementById('gl15').classList.add('show');
     }
   });
