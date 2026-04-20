@@ -7,856 +7,317 @@
   <title>Summit Stay Group — STR Revenue Intelligence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Crimson+Pro:ital,wght@0,200;0,300;0,400;0,600;1,300;1,400&family=Overpass+Mono:wght@300;400;600&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Crimson+Pro:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300;1,400&family=Overpass+Mono:wght@300;400;600&display=swap" rel="stylesheet" />
   <style>
-    /* ═══════════════════════════════════
-       DESIGN TOKENS
-    ═══════════════════════════════════ */
     :root {
-      --bg:          #060503;
-      --bg-card:     #0b0907;
-      --bg-raised:   #111009;
-      --bg-terminal: #080705;
-      --border:      rgba(212,175,55,0.22);
-      --border-dim:  rgba(212,175,55,0.08);
-      --amber:       #D4AF37;
-      --amber-dim:   #9a7e18;
-      --amber-glow:  rgba(212,175,55,0.12);
-      --cream:       #F0EBE1;
-      --cream-dim:   #C4BAA8;
-      --muted:       #6a6050;
-      --muted-light: #9a8f7a;
-      --green:       #3a8a4a;
-      --green-bright:#4CAF65;
-      --red-dim:     #8b2820;
-      --font-d: 'Playfair Display', Georgia, serif;
-      --font-b: 'Crimson Pro', Georgia, serif;
-      --font-m: 'Overpass Mono', 'Courier New', monospace;
+      --bg:#050402; --bg-card:#0a0805; --bg-raised:#0e0c08;
+      --amber:#C9A227; --amber-b:#E8BF3A; --amber-d:#8a6c10;
+      --amber-p:rgba(201,162,39,0.14); --border:rgba(201,162,39,0.22);
+      --border-d:rgba(201,162,39,0.08); --border-m:rgba(201,162,39,0.14);
+      --cream:#F2EDE3; --cream-d:#BDB5A4; --muted:#5e5647; --muted-m:#857a68;
+      --green:#3d8a4a; --green-b:#52b865;
+      --font-d:'Playfair Display',Georgia,serif;
+      --font-b:'Crimson Pro',Georgia,serif;
+      --font-m:'Overpass Mono','Courier New',monospace;
     }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--cream);font-family:var(--font-b);font-size:19px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.028;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px}
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+```
+/* ORNAMENTAL RULE */
+.orn{display:flex;align-items:center;padding:0 80px}
+.orn::before,.orn::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--amber-d),transparent);opacity:.5}
+.orn-c{padding:0 18px;font-family:var(--font-d);font-size:11px;color:var(--amber-d);letter-spacing:.5em}
 
-    body {
-      background: var(--bg);
-      color: var(--cream);
-      font-family: var(--font-b);
-      font-size: 19px;
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
+/* TICKER */
+.ticker{background:#030201;border-bottom:1px solid var(--border-d);padding:9px 0;overflow:hidden;position:relative}
+.ticker::before,.ticker::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2}
+.ticker::before{left:0;background:linear-gradient(to right,#030201,transparent)}
+.ticker::after{right:0;background:linear-gradient(to left,#030201,transparent)}
+.ticker-track{display:flex;gap:52px;animation:tick 36s linear infinite;width:max-content}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ti{display:flex;align-items:center;gap:10px;white-space:nowrap;font-family:var(--font-m);font-size:9.5px;letter-spacing:.18em;color:var(--muted)}
+.ti .v{color:var(--amber);font-weight:600}
+.ti::before{content:'◆';font-size:5px;color:var(--amber-d);opacity:.6}
 
-    /* Grain overlay */
-    body::after {
-      content: '';
-      position: fixed; inset: 0; z-index: 9998; pointer-events: none;
-      opacity: 0.025;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 180px 180px;
-    }
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(5,4,2,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border-d);padding:0 52px;display:flex;align-items:center;height:66px}
+nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(to right,transparent 0%,var(--amber-d) 20%,var(--amber) 50%,var(--amber-d) 80%,transparent);opacity:.25}
+.brand{display:flex;flex-direction:column;margin-right:auto}
+.brand .wm{font-family:var(--font-d);font-size:14px;font-weight:900;letter-spacing:.28em;color:var(--amber);text-transform:uppercase;line-height:1}
+.brand .sub{font-family:var(--font-m);font-size:8px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-top:3px}
+.nav-links{display:flex;gap:32px;list-style:none;margin-right:36px}
+.nav-links a{font-family:var(--font-m);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;white-space:nowrap;transition:color .2s}
+.nav-links a:hover{color:var(--cream)}
+.nav-ctas{display:flex;gap:10px;flex-shrink:0}
+.btn-ghost{font-family:var(--font-m);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:8px 16px;white-space:nowrap;transition:all .2s}
+.btn-ghost:hover{color:var(--amber);border-color:rgba(201,162,39,.45)}
+.btn-amber{font-family:var(--font-m);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#050402;background:var(--amber);text-decoration:none;padding:9px 20px;white-space:nowrap;transition:background .2s}
+.btn-amber:hover{background:var(--amber-b)}
 
-    /* ═══════════════════════════════════
-       TICKER
-    ═══════════════════════════════════ */
-    .ticker {
-      background: #040302;
-      border-bottom: 1px solid var(--border-dim);
-      padding: 9px 0; overflow: hidden; position: relative;
-    }
-    .ticker::before, .ticker::after {
-      content: ''; position: absolute; top: 0; bottom: 0; width: 100px; z-index: 2;
-    }
-    .ticker::before { left:0;  background: linear-gradient(to right,#040302,transparent); }
-    .ticker::after  { right:0; background: linear-gradient(to left, #040302,transparent); }
-    .ticker-track {
-      display: flex; gap: 60px;
-      animation: run-ticker 34s linear infinite;
-      width: max-content;
-    }
-    @keyframes run-ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    .t-item {
-      display: flex; align-items: center; gap: 10px; white-space: nowrap;
-      font-family: var(--font-m); font-size: 10px; letter-spacing: 0.16em;
-      color: var(--muted); text-transform: uppercase;
-    }
-    .t-item .v { color: var(--amber); font-weight: 600; }
-    .t-item .d { width: 3px; height: 3px; border-radius: 50%; background: var(--amber-dim); opacity: 0.5; }
+/* HERO */
+.hero{min-height:92vh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 90% 60% at 50% 20%,rgba(201,162,39,.08) 0%,transparent 55%),radial-gradient(ellipse 60% 80% at 0% 70%,rgba(201,162,39,.04) 0%,transparent 50%),radial-gradient(ellipse 60% 80% at 100% 70%,rgba(201,162,39,.04) 0%,transparent 50%)}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.03) 3px,rgba(0,0,0,.03) 4px)}
 
-    /* ═══════════════════════════════════
-       NAV
-    ═══════════════════════════════════ */
-    nav {
-      position: sticky; top: 0; z-index: 200;
-      background: rgba(6,5,3,0.96);
-      backdrop-filter: blur(24px);
-      border-bottom: 1px solid var(--border-dim);
-      padding: 0 52px;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 66px;
-    }
-    nav::after {
-      content: '';
-      position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
-      background: linear-gradient(to right, transparent 0%, var(--amber-dim) 30%, var(--amber) 50%, var(--amber-dim) 80%, transparent 100%);
-      opacity: 0.22;
-    }
-    .brand { display: flex; flex-direction: column; }
-    .brand .wm {
-      font-family: var(--font-d); font-size: 14px; font-weight: 900;
-      letter-spacing: 0.28em; color: var(--amber); text-transform: uppercase; line-height: 1;
-    }
-    .brand .sub {
-      font-family: var(--font-m); font-size: 8.5px; letter-spacing: 0.22em;
-      color: var(--muted); text-transform: uppercase; margin-top: 3px;
-    }
-    .nav-links { display: flex; gap: 36px; list-style: none; }
-    .nav-links a {
-      font-family: var(--font-m); font-size: 10.5px; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--muted); text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--cream); }
-    .nav-ctas { display: flex; gap: 10px; }
-    .btn-ghost {
-      font-family: var(--font-m); font-size: 10px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--muted); text-decoration: none;
-      border: 1px solid var(--border); padding: 8px 18px; border-radius: 1px;
-      transition: all 0.2s;
-    }
-    .btn-ghost:hover { color: var(--amber); border-color: rgba(212,175,55,0.45); }
-    .btn-amber {
-      font-family: var(--font-m); font-size: 10px; letter-spacing: 0.12em;
-      text-transform: uppercase; font-weight: 600;
-      color: #060503; background: var(--amber); text-decoration: none;
-      padding: 9px 22px; border-radius: 1px; transition: background 0.2s;
-    }
-    .btn-amber:hover { background: #e8c53a; }
+.hero-head{padding:60px 80px 24px;text-align:center;position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-m);font-size:9px;letter-spacing:.24em;color:var(--amber);text-transform:uppercase;border:1px solid var(--border);padding:7px 18px;margin-bottom:26px;position:relative}
+.hero-badge::before{content:'';position:absolute;top:-3px;left:-3px;width:8px;height:8px;border-top:1px solid var(--amber);border-left:1px solid var(--amber)}
+.hero-badge::after{content:'';position:absolute;bottom:-3px;right:-3px;width:8px;height:8px;border-bottom:1px solid var(--amber);border-right:1px solid var(--amber)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green-b);flex-shrink:0;animation:pg 2.2s ease-in-out infinite}
+@keyframes pg{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(82,184,101,.5)}50%{opacity:.6;box-shadow:0 0 0 5px rgba(82,184,101,0)}}
 
-    /* ═══════════════════════════════════
-       HERO — FULL WIDTH TERMINAL
-    ═══════════════════════════════════ */
-    .hero {
-      min-height: 94vh;
-      display: grid;
-      grid-template-rows: 1fr auto;
-      position: relative;
-      overflow: hidden;
-    }
+.hero-h1{font-family:var(--font-d);font-size:clamp(52px,6.8vw,104px);font-weight:900;line-height:.97;letter-spacing:-.025em;color:var(--cream)}
+.hero-h1 .it{display:block;font-style:italic;color:var(--amber);font-size:clamp(58px,7.6vw,114px);text-shadow:0 0 100px rgba(201,162,39,.22),0 0 40px rgba(201,162,39,.1)}
+.hero-h1 .sm{display:block;font-size:clamp(13px,1.4vw,18px);font-weight:200;font-style:italic;letter-spacing:.35em;color:var(--amber-d);text-transform:uppercase;margin-top:14px}
 
-    /* Atmospheric background */
-    .hero-bg {
-      position: absolute; inset: 0; pointer-events: none;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(212,175,55,0.06) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 80% at 15% 60%, rgba(212,175,55,0.03) 0%, transparent 50%),
-        radial-gradient(ellipse 50% 80% at 85% 60%, rgba(212,175,55,0.03) 0%, transparent 50%);
-    }
+.hero-orn{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:18px;opacity:.4}
+.hero-orn::before,.hero-orn::after{content:'';width:80px;height:1px;background:linear-gradient(to right,transparent,var(--amber))}
+.hero-orn::after{background:linear-gradient(to left,transparent,var(--amber))}
+.hero-orn span{font-family:var(--font-d);font-size:10px;color:var(--amber);letter-spacing:.4em}
 
-    /* Scanlines */
-    .hero-bg::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,0.04) 2px,
-        rgba(0,0,0,0.04) 4px
-      );
-      pointer-events: none;
-    }
+/* TERMINAL */
+.term-wrap{padding:14px 52px 0;position:relative;z-index:2;flex:1}
+.term-frame{position:relative;padding:8px;border:1px solid var(--border-m);box-shadow:0 0 0 3px var(--bg),0 0 0 4px var(--border-d),0 40px 80px rgba(0,0,0,.8),inset 0 0 80px rgba(201,162,39,.02)}
+.term-frame::before{content:'';position:absolute;top:-1px;left:10%;right:10%;height:1px;background:linear-gradient(to right,transparent,var(--amber),transparent);opacity:.5}
+.fc{position:absolute;width:18px;height:18px}
+.fc-tl{top:3px;left:3px;border-top:1px solid var(--amber-p);border-left:1px solid var(--amber-p)}
+.fc-tr{top:3px;right:3px;border-top:1px solid var(--amber-p);border-right:1px solid var(--amber-p)}
+.fc-bl{bottom:3px;left:3px;border-bottom:1px solid var(--amber-p);border-left:1px solid var(--amber-p)}
+.fc-br{bottom:3px;right:3px;border-bottom:1px solid var(--amber-p);border-right:1px solid var(--amber-p)}
 
-    /* ── HERO TOP: Headline + subtext ── */
-    .hero-top {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 72px 80px 40px;
-      text-align: center;
-      position: relative; z-index: 2;
-    }
+.terminal{background:#040301;border:1px solid rgba(201,162,39,.08);overflow:hidden;position:relative}
+.t-chrome{background:rgba(0,0,0,.6);border-bottom:1px solid var(--border-d);padding:11px 18px;display:flex;align-items:center;justify-content:space-between}
+.t-dots{display:flex;gap:7px}
+.t-dots span{width:11px;height:11px;border-radius:50%}
+.t-dots span:nth-child(1){background:#7a1e18}
+.t-dots span:nth-child(2){background:#7a5518}
+.t-dots span:nth-child(3){background:var(--green)}
+.t-path{font-family:var(--font-m);font-size:9px;letter-spacing:.1em;color:var(--muted)}
+.t-sbadge{display:flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase}
+.t-sdot{width:5px;height:5px;border-radius:50%}
 
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-family: var(--font-m); font-size: 9.5px; letter-spacing: 0.24em;
-      color: var(--amber); text-transform: uppercase;
-      border: 1px solid var(--border); padding: 7px 16px; border-radius: 1px;
-      margin-bottom: 32px;
-    }
-    .hero-eyebrow .live-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--green-bright);
-      animation: pulse-green 2s ease-in-out infinite;
-      flex-shrink: 0;
-    }
-    @keyframes pulse-green {
-      0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(76,175,101,0.5); }
-      50%      { opacity:0.6; box-shadow: 0 0 0 5px rgba(76,175,101,0); }
-    }
+.t-body{display:grid;grid-template-columns:300px 1fr 240px;min-height:300px}
+.t-pane{padding:18px 16px;position:relative}
+.t-pane+.t-pane{border-left:1px solid var(--border-d)}
+.t-ph{font-family:var(--font-m);font-size:8px;letter-spacing:.22em;color:var(--amber-d);text-transform:uppercase;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--border-d);display:flex;align-items:center;justify-content:space-between}
+.t-ph::before{content:'▸';color:var(--amber-d);font-size:8px;margin-right:6px}
+.t-ph .pid{color:var(--muted);font-size:7.5px}
 
-    .hero-h1 {
-      font-family: var(--font-d);
-      font-size: clamp(52px, 7vw, 108px);
-      font-weight: 900;
-      line-height: 0.96;
-      letter-spacing: -0.025em;
-      color: var(--cream);
-      margin-bottom: 10px;
-    }
-    .hero-h1 .italic-line {
-      display: block;
-      font-style: italic;
-      color: var(--amber);
-      font-size: clamp(58px, 7.6vw, 116px);
-      text-shadow: 0 0 80px rgba(212,175,55,0.2);
-    }
-    .hero-h1 .small-line {
-      display: block;
-      font-size: clamp(16px, 1.8vw, 26px);
-      font-weight: 400;
-      font-style: italic;
-      letter-spacing: 0.28em;
-      color: var(--amber-dim);
-      margin-top: 14px;
-      text-transform: uppercase;
-    }
+.dl-rows{display:flex;flex-direction:column;gap:0}
+.dl{display:grid;grid-template-columns:1fr auto;gap:10px;padding:5px 0;border-bottom:1px solid rgba(201,162,39,.04);align-items:baseline}
+.dl:last-child{border-bottom:none}
+.dl-k{font-family:var(--font-m);font-size:8.5px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.dl-v{font-family:var(--font-m);font-size:11px;color:var(--cream);text-align:right;letter-spacing:.04em}
+.dl-v.a{color:var(--amber)}
 
-    /* ── TERMINAL WINDOW ── */
-    .terminal-wrap {
-      padding: 0 52px 72px;
-      position: relative; z-index: 2;
-    }
+.t-prompt{margin-top:14px;font-family:var(--font-m);font-size:9.5px;color:var(--green);display:flex;align-items:center;gap:4px}
+.t-prompt .ps{color:var(--amber-d)}
+.t-cur{display:inline-block;width:7px;height:12px;background:var(--green);margin-left:1px;animation:blink 1s step-end infinite;vertical-align:middle}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 
-    .terminal {
-      background: var(--bg-terminal);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-      box-shadow:
-        0 0 0 1px rgba(212,175,55,0.04),
-        0 40px 80px rgba(0,0,0,0.7),
-        0 0 160px rgba(212,175,55,0.05) inset;
-      position: relative;
-    }
+.ll-rows{display:flex;flex-direction:column;gap:5px}
+.ll{display:grid;grid-template-columns:20px 1fr 68px 36px;align-items:center;gap:7px;padding:4px 6px;border-radius:1px;opacity:.25;transition:all .3s}
+.ll.active{opacity:.7}
+.ll.scanning{opacity:1;background:rgba(201,162,39,.05)}
+.ll.done{opacity:.5}
+.ll-n{font-family:var(--font-m);font-size:9px;font-weight:600;color:var(--muted)}
+.ll.scanning .ll-n,.ll.active .ll-n{color:var(--amber)}
+.ll.done .ll-n{color:var(--green)}
+.ll-name{font-family:var(--font-m);font-size:9px;color:var(--muted-m);letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ll.scanning .ll-name,.ll.active .ll-name{color:var(--cream)}
+.ll-tr{height:2px;background:rgba(201,162,39,.08);border-radius:1px;overflow:hidden}
+.ll-fi{height:100%;border-radius:1px;background:var(--amber);width:0%;transition:width .7s ease}
+.ll.done .ll-fi{background:var(--green)}
+.ll-tg{font-family:var(--font-m);font-size:7.5px;letter-spacing:.1em;text-align:right;text-transform:uppercase}
+.ll-tg.w{color:var(--muted)}.ll-tg.r{color:var(--amber)}.ll-tg.ok{color:var(--green)}
 
-    /* Embellished corner marks on terminal */
-    .terminal::before {
-      content: '';
-      position: absolute; top: -1px; left: 20%; right: 20%; height: 2px;
-      background: linear-gradient(to right, transparent, var(--amber), transparent);
-      opacity: 0.5;
-    }
+.t-log{margin-top:10px;padding-top:8px;border-top:1px solid var(--border-d);display:flex;flex-direction:column;gap:2px}
+.t-ll{font-family:var(--font-m);font-size:8px;color:var(--muted);letter-spacing:.05em;opacity:0;transition:opacity .4s}
+.t-ll.show{opacity:1}
+.t-ll .ts{color:var(--amber-d);margin-right:7px}
+.t-ll .ok{color:var(--green-b)}
+.t-ll .warn{color:var(--amber)}
 
-    /* Terminal title bar */
-    .term-bar {
-      background: rgba(0,0,0,0.5);
-      border-bottom: 1px solid var(--border-dim);
-      padding: 12px 20px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .term-dots { display: flex; gap: 7px; }
-    .term-dots span {
-      width: 11px; height: 11px; border-radius: 50%;
-    }
-    .term-dots span:nth-child(1) { background: #8b2820; }
-    .term-dots span:nth-child(2) { background: #8b6520; }
-    .term-dots span:nth-child(3) { background: var(--green); }
-    .term-title {
-      font-family: var(--font-m); font-size: 10px; letter-spacing: 0.2em;
-      color: var(--muted); text-transform: uppercase;
-    }
-    .term-status {
-      font-family: var(--font-m); font-size: 9px; letter-spacing: 0.14em;
-      color: var(--green-bright); text-transform: uppercase;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .term-status::before {
-      content: ''; width: 5px; height: 5px; border-radius: 50%;
-      background: var(--green-bright);
-      animation: pulse-green 2s ease-in-out infinite;
-    }
+.res-hdr{text-align:center;padding-bottom:12px;border-bottom:1px solid var(--border-d);margin-bottom:12px}
+.res-lbl{font-family:var(--font-m);font-size:7.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px}
+.res-num{font-family:var(--font-d);font-size:46px;font-weight:900;color:var(--amber);line-height:1;display:block;text-shadow:0 0 60px rgba(201,162,39,.25)}
+.res-sub{font-family:var(--font-m);font-size:8px;color:var(--muted);letter-spacing:.12em;display:block;margin-top:3px}
 
-    /* Terminal body — the main grid */
-    .term-body {
-      display: grid;
-      grid-template-columns: 340px 1fr 260px;
-      min-height: 360px;
-    }
+.leaks{display:flex;flex-direction:column;gap:7px}
+.lk{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;opacity:0;transition:opacity .4s}
+.lk.show{opacity:1}
+.lk-l{display:flex;flex-direction:column;gap:3px}
+.lk-n{font-family:var(--font-m);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-m)}
+.lk-tr{height:2px;background:rgba(201,162,39,.07);border-radius:1px;overflow:hidden}
+.lk-fi{height:100%;border-radius:1px;background:var(--amber);width:0%;transition:width 1.2s ease}
+.lk-v{font-family:var(--font-m);font-size:11.5px;font-weight:600;color:var(--amber);white-space:nowrap}
 
-    /* ── LEFT PANEL: property input ── */
-    .term-left {
-      border-right: 1px solid var(--border-dim);
-      padding: 24px 22px;
-    }
-    .term-panel-label {
-      font-family: var(--font-m); font-size: 8.5px; letter-spacing: 0.22em;
-      color: var(--amber); text-transform: uppercase; margin-bottom: 18px;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .term-panel-label::after {
-      content: ''; flex: 1; height: 1px; background: var(--border-dim);
-    }
+.rank-note{margin-top:12px;padding-top:8px;border-top:1px solid var(--border-d);font-family:var(--font-m);font-size:7.5px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;line-height:1.7}
+.rank-note span{color:var(--amber)}
 
-    .term-input-row {
-      margin-bottom: 14px;
-    }
-    .term-input-lbl {
-      font-family: var(--font-m); font-size: 8px; letter-spacing: 0.16em;
-      color: var(--muted); text-transform: uppercase; margin-bottom: 4px;
-      display: block;
-    }
-    .term-input-val {
-      font-family: var(--font-m); font-size: 13px; color: var(--cream);
-      background: rgba(212,175,55,0.04);
-      border: 1px solid var(--border-dim); padding: 7px 10px;
-      border-radius: 1px; display: block; width: 100%;
-      letter-spacing: 0.06em;
-    }
-    .term-input-val.highlight { color: var(--amber); border-color: var(--border); }
+.t-sbar{background:rgba(0,0,0,.5);border-top:1px solid var(--border-d);padding:8px 18px;display:flex;justify-content:space-between;align-items:center}
+.t-sbar-l{display:flex;gap:24px;font-family:var(--font-m);font-size:8px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.t-sbar-l em{color:var(--amber);font-style:normal}
+.t-sbar-r{font-family:var(--font-m);font-size:8px;letter-spacing:.1em;color:var(--muted)}
 
-    .term-submit {
-      margin-top: 20px; width: 100%;
-      background: var(--amber); color: #060503;
-      font-family: var(--font-m); font-size: 10px; letter-spacing: 0.18em;
-      text-transform: uppercase; font-weight: 600;
-      border: none; padding: 12px; cursor: pointer; border-radius: 1px;
-      transition: background 0.2s;
-      position: relative; overflow: hidden;
-    }
-    .term-submit::after {
-      content: '';
-      position: absolute; inset: 3px; border: 1px solid rgba(6,5,3,0.2);
-      border-radius: 1px;
-    }
-    .term-submit:hover { background: #e8c53a; }
+.hero-ctas{display:flex;justify-content:center;align-items:center;gap:32px;padding:24px 52px 48px;position:relative;z-index:2;border-top:1px solid var(--border-d)}
+.hero-ctas::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(to right,transparent,var(--amber),transparent);opacity:.18}
+.cta-main{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-m);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:#050402;background:var(--amber);text-decoration:none;padding:14px 32px;position:relative;overflow:hidden;transition:all .22s}
+.cta-main::before{content:'';position:absolute;inset:3px;border:1px solid rgba(5,4,2,.18);pointer-events:none}
+.cta-main:hover{background:var(--amber-b);transform:translateY(-1px);box-shadow:0 6px 28px rgba(201,162,39,.22)}
+.cta-sep{font-family:var(--font-m);font-size:10px;color:var(--muted)}
+.cta-lnk{font-family:var(--font-m);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:7px;transition:color .2s}
+.cta-lnk::before{content:'→';color:var(--amber-d)}
+.cta-lnk:hover{color:var(--amber)}
 
-    /* ── CENTRE PANEL: layers running ── */
-    .term-centre {
-      padding: 24px 22px;
-      border-right: 1px solid var(--border-dim);
-    }
+/* STATS */
+.stats-strip{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--border-d);border-bottom:1px solid var(--border-d);position:relative}
+.stats-strip::before{content:'';position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(to right,transparent 0%,var(--amber-d) 25%,var(--amber) 50%,var(--amber-d) 75%,transparent);opacity:.32}
+.stat-block{padding:52px 56px;background:var(--bg);border-right:1px solid var(--border-d)}
+.stat-block:last-child{border-right:none}
+.stat-block .num{font-family:var(--font-d);font-size:clamp(50px,5.5vw,80px);font-weight:900;color:var(--amber);line-height:1;display:block;text-shadow:0 0 60px rgba(201,162,39,.12)}
+.stat-block .lbl{font-family:var(--font-m);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);display:block;margin-top:10px}
+.stat-block .sub{font-family:var(--font-b);font-size:15px;font-style:italic;color:var(--muted);display:block;margin-top:4px}
 
-    .layers-running {
-      display: flex; flex-direction: column; gap: 9px;
-    }
+/* SECTIONS */
+.section{padding:96px 80px}
+.sec-lbl{font-family:var(--font-m);font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.sec-lbl::before{content:'◆';font-size:7px;color:var(--amber-d)}
+.sec-lbl::after{content:'';flex:0 0 28px;height:1px;background:var(--amber-d);opacity:.4}
+.sec-h2{font-family:var(--font-d);font-size:clamp(38px,4vw,60px);font-weight:900;line-height:1.04;color:var(--cream);margin-bottom:18px}
+.sec-h2 em{font-style:italic;color:var(--amber)}
+.sec-body{font-family:var(--font-b);font-size:clamp(17px,1.35vw,21px);font-weight:300;color:var(--cream-d);max-width:680px;line-height:1.72}
 
-    .layer-row {
-      display: grid;
-      grid-template-columns: 28px 1fr auto auto;
-      align-items: center; gap: 10px;
-      padding: 8px 10px;
-      border: 1px solid transparent;
-      border-radius: 2px;
-      transition: all 0.3s;
-      opacity: 0.35;
-    }
-    .layer-row.active {
-      opacity: 1;
-      background: rgba(212,175,55,0.04);
-      border-color: var(--border-dim);
-    }
-    .layer-row.complete {
-      opacity: 0.7;
-    }
-    .layer-row.scanning {
-      opacity: 1;
-      background: rgba(212,175,55,0.07);
-      border-color: var(--border);
-      animation: scan-pulse 1.5s ease-in-out infinite;
-    }
-    @keyframes scan-pulse {
-      0%,100% { background: rgba(212,175,55,0.05); }
-      50%      { background: rgba(212,175,55,0.10); }
-    }
+.layers-grid{margin-top:56px;display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border-d);overflow:hidden}
+.lc{background:var(--bg-card);padding:24px 18px;border-right:1px solid var(--border-d);border-bottom:1px solid var(--border-d);transition:background .25s;position:relative}
+.lc:nth-child(5n){border-right:none}
+.lc:nth-child(n+6){border-bottom:none}
+.lc:hover{background:var(--bg-raised)}
+.lc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,var(--amber-d),transparent);opacity:0;transition:opacity .25s}
+.lc:hover::before{opacity:.5}
+.lc-n{font-family:var(--font-d);font-size:40px;font-weight:900;color:var(--amber);opacity:.08;line-height:1;margin-bottom:9px;transition:opacity .25s}
+.lc:hover .lc-n{opacity:.2}
+.lc-tag{font-family:var(--font-m);font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.lc-name{font-family:var(--font-d);font-size:14px;font-weight:700;color:var(--cream);line-height:1.2;margin-bottom:10px}
+.lc-desc{font-family:var(--font-b);font-size:13px;color:var(--muted-m);line-height:1.55;font-weight:300}
+.lc-badge{display:inline-block;margin-top:12px;font-family:var(--font-m);font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);border:1px solid rgba(201,162,39,.22);padding:3px 8px}
 
-    .lr-num {
-      font-family: var(--font-m); font-size: 10px; color: var(--muted);
-      font-weight: 600;
-    }
-    .layer-row.active .lr-num,
-    .layer-row.scanning .lr-num { color: var(--amber); }
+.how-grid{margin-top:56px;display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border-d);overflow:hidden}
+.how-c{background:var(--bg-card);padding:42px 30px;border-right:1px solid var(--border-d);position:relative}
+.how-c:last-child{border-right:none}
+.how-c::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--amber-d),transparent);opacity:.35}
+.how-n{font-family:var(--font-d);font-size:68px;font-weight:900;color:var(--amber);opacity:.07;line-height:1;margin-bottom:20px}
+.how-t{font-family:var(--font-m);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:12px}
+.how-b{font-family:var(--font-b);font-size:17px;font-weight:300;color:var(--cream-d);line-height:1.65}
+.how-time{display:block;margin-top:20px;font-family:var(--font-m);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--border-d);padding-top:14px}
 
-    .lr-name {
-      font-family: var(--font-m); font-size: 10.5px; color: var(--muted-light);
-      letter-spacing: 0.06em; white-space: nowrap; overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .layer-row.active .lr-name,
-    .layer-row.scanning .lr-name { color: var(--cream); }
+.diff-section{padding:96px 80px;border-top:1px solid var(--border-d)}
+.diff-intro{font-family:var(--font-b);font-size:clamp(20px,1.9vw,28px);font-weight:300;line-height:1.62;color:var(--cream);max-width:840px;margin-bottom:14px}
+.diff-intro strong{color:var(--amber);font-weight:600}
+.diff-intro em{font-style:italic;color:var(--cream-d)}
+.diff-grid{margin-top:48px;display:grid;grid-template-columns:1fr 48px 1fr;align-items:stretch}
+.diff-col{border:1px solid var(--border-d);padding:38px 32px}
+.diff-col.them{background:var(--bg-card);border-right:none}
+.diff-col.us{background:var(--bg-raised);border-left:none;border-color:var(--border);position:relative}
+.diff-col.us::before{content:'';position:absolute;top:0;left:-1px;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--amber),transparent);opacity:.45}
+.diff-vs{display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:11px;font-weight:700;color:var(--muted);background:var(--bg);border-top:1px solid var(--border-d);border-bottom:1px solid var(--border-d)}
+.diff-h3{font-family:var(--font-d);font-size:21px;font-weight:700;line-height:1.2;margin-bottom:22px}
+.diff-col.them .diff-h3{color:var(--muted-m)}
+.diff-col.us .diff-h3{color:var(--cream)}
+.diff-list{list-style:none;display:flex;flex-direction:column;gap:13px}
+.diff-list li{font-family:var(--font-b);font-size:16.5px;font-weight:300;color:var(--cream-d);padding-left:20px;position:relative;line-height:1.5}
+.diff-col.them .diff-list li::before{content:'—';position:absolute;left:0;color:var(--muted);font-size:12px;top:4px}
+.diff-col.us .diff-list li{color:var(--cream)}
+.diff-col.us .diff-list li::before{content:'✦';position:absolute;left:0;color:var(--amber);font-size:8px;top:6px}
 
-    .lr-bar-wrap {
-      width: 80px; height: 2px;
-      background: var(--border-dim); border-radius: 1px; overflow: hidden;
-    }
-    .lr-bar {
-      height: 100%; border-radius: 1px;
-      background: var(--amber);
-      transition: width 0.8s ease;
-    }
+.founder-section{padding:96px 80px;border-top:1px solid var(--border-d)}
+.founder-grid{display:grid;grid-template-columns:auto 1fr;gap:56px;align-items:start}
+.founder-av{width:92px;height:92px;border-radius:50%;border:1px solid var(--border);background:var(--bg-raised);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:38px;font-weight:900;color:var(--amber);box-shadow:0 0 0 4px rgba(201,162,39,.05)}
+.founder-name{font-family:var(--font-d);font-size:25px;font-weight:700;color:var(--cream);margin-bottom:5px}
+.founder-role{font-family:var(--font-m);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
+.founder-q{font-family:var(--font-b);font-size:clamp(17px,1.55vw,22px);font-weight:300;color:var(--cream-d);line-height:1.72;max-width:700px}
+.founder-q strong{color:var(--cream);font-weight:600}
+.founder-stats{display:flex;gap:9px;flex-wrap:wrap;margin-top:28px}
+.fs{font-family:var(--font-m);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border-d);padding:6px 12px}
+.fs span{color:var(--amber);font-weight:600}
 
-    .lr-status {
-      font-family: var(--font-m); font-size: 9px; letter-spacing: 0.1em;
-      min-width: 50px; text-align: right;
-    }
-    .lr-status.done   { color: var(--green-bright); }
-    .lr-status.run    { color: var(--amber); }
-    .lr-status.wait   { color: var(--muted); }
+.cta-section{padding:112px 80px;text-align:center;border-top:1px solid var(--border-d);position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(201,162,39,.06) 0%,transparent 65%)}
+.cta-section::after{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(to right,transparent,var(--amber),transparent);opacity:.22}
+.cta-section .sec-h2{margin:0 auto 16px;max-width:680px;display:block}
+.cta-section .sec-body{margin:0 auto 48px}
+.cta-row{display:flex;justify-content:center;gap:14px;position:relative;z-index:2}
 
-    /* Scanning cursor blink */
-    .cursor-blink {
-      display: inline-block;
-      width: 7px; height: 12px;
-      background: var(--amber);
-      animation: blink-cur 1s step-end infinite;
-      vertical-align: middle; margin-left: 2px;
-    }
-    @keyframes blink-cur { 0%,100%{opacity:1} 50%{opacity:0} }
+footer{background:#030201;border-top:1px solid var(--border-d);padding:60px 80px;display:grid;grid-template-columns:1fr auto;gap:60px;align-items:start;position:relative}
+footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent 0%,var(--amber-d) 25%,var(--amber) 50%,var(--amber-d) 75%,transparent);opacity:.18}
+.f-brand .wm{font-family:var(--font-d);font-size:16px;font-weight:900;letter-spacing:.24em;color:var(--amber);text-transform:uppercase;margin-bottom:4px}
+.f-brand .tg{font-family:var(--font-m);font-size:8.5px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:20px}
+.f-brand p{font-family:var(--font-b);font-size:15px;font-weight:300;color:var(--muted);max-width:380px;line-height:1.65}
+.f-links{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.f-col h4{font-family:var(--font-m);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.f-col a,.f-col p{display:block;font-family:var(--font-b);font-size:15px;font-weight:300;color:var(--cream-d);text-decoration:none;margin-bottom:8px;transition:color .2s}
+.f-col a:hover{color:var(--amber)}
+.f-bot{border-top:1px solid var(--border-d);padding:18px 80px;background:#030201;font-family:var(--font-m);font-size:9px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;display:flex;justify-content:space-between}
 
-    /* ── RIGHT PANEL: results ── */
-    .term-right {
-      padding: 24px 20px;
-    }
+@media(max-width:1200px){.t-body{grid-template-columns:260px 1fr 210px}}
+@media(max-width:1024px){
+  .t-body{grid-template-columns:1fr}
+  .t-pane+.t-pane{border-left:none;border-top:1px solid var(--border-d)}
+  .layers-grid{grid-template-columns:repeat(2,1fr)}
+  .lc:nth-child(5n){border-right:1px solid var(--border-d)}
+  .lc:nth-child(2n){border-right:none}
+  .diff-grid{grid-template-columns:1fr}
+  .diff-vs{display:none}
+  .diff-col.them{border-right:1px solid var(--border-d)}
+}
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .nav-links,.nav-ctas{display:none}
+  .hero-head{padding:48px 20px 24px}
+  .term-wrap{padding:12px 14px 0}
+  .hero-ctas{padding:22px 20px 40px;flex-direction:column;gap:14px}
+  .orn{padding:0 20px}
+  .section,.diff-section,.cta-section,.founder-section{padding:60px 20px}
+  .stats-strip{grid-template-columns:1fr}
+  .stat-block{padding:40px 20px;border-right:none;border-bottom:1px solid var(--border-d)}
+  .layers-grid,.how-grid{grid-template-columns:1fr}
+  .lc,.how-c{border-right:none}
+  footer{padding:44px 20px;grid-template-columns:1fr}
+  .f-links{grid-template-columns:1fr 1fr;gap:24px}
+  .f-bot{padding:18px 20px;flex-direction:column;gap:6px}
+  .founder-grid{grid-template-columns:1fr;gap:20px}
+  .cta-row{flex-direction:column;align-items:center}
+}
+```
 
-    .result-total {
-      text-align: center;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border-dim);
-      margin-bottom: 20px;
-    }
-    .result-total .lbl {
-      font-family: var(--font-m); font-size: 8px; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 8px;
-    }
-    .result-total .amount {
-      font-family: var(--font-d); font-size: 44px; font-weight: 900;
-      color: var(--amber); line-height: 1;
-      text-shadow: 0 0 40px rgba(212,175,55,0.25);
-      display: block;
-    }
-    .result-total .amount.counting {
-      animation: count-flicker 0.1s ease infinite;
-    }
-    @keyframes count-flicker {
-      0%,100% { opacity: 1; }
-      50%      { opacity: 0.85; }
-    }
-    .result-total .per {
-      font-family: var(--font-m); font-size: 10px; color: var(--muted);
-      display: block; margin-top: 4px; letter-spacing: 0.12em;
-    }
-
-    .leak-items { display: flex; flex-direction: column; gap: 10px; }
-    .leak-item { opacity: 0; transition: opacity 0.4s; }
-    .leak-item.show { opacity: 1; }
-    .leak-item-top {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 4px;
-    }
-    .leak-item-name {
-      font-family: var(--font-m); font-size: 9px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--muted-light);
-    }
-    .leak-item-val {
-      font-family: var(--font-m); font-size: 11px; color: var(--amber);
-      font-weight: 600;
-    }
-    .leak-progress {
-      height: 2px; background: var(--border-dim); border-radius: 1px; overflow: hidden;
-    }
-    .leak-fill {
-      height: 100%; border-radius: 1px; background: var(--amber);
-      width: 0; transition: width 1.2s ease;
-    }
-
-    /* Terminal footer bar */
-    .term-footer {
-      background: rgba(0,0,0,0.4);
-      border-top: 1px solid var(--border-dim);
-      padding: 10px 20px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .term-footer-left {
-      font-family: var(--font-m); font-size: 9px; letter-spacing: 0.12em;
-      color: var(--muted); text-transform: uppercase;
-      display: flex; gap: 24px;
-    }
-    .term-footer-left span { color: var(--amber); }
-    .term-footer-right {
-      font-family: var(--font-m); font-size: 9px; letter-spacing: 0.1em;
-      color: var(--muted);
-    }
-
-    /* ── HERO BOTTOM: CTA strip ── */
-    .hero-cta-strip {
-      display: flex; justify-content: center; align-items: center;
-      gap: 40px; padding: 32px 80px 60px;
-      position: relative; z-index: 2;
-      border-top: 1px solid var(--border-dim);
-    }
-    .hero-cta-strip::before {
-      content: '';
-      position: absolute; top: 0; left: 20%; right: 20%; height: 1px;
-      background: linear-gradient(to right, transparent, var(--amber), transparent);
-      opacity: 0.2;
-    }
-    .cta-main {
-      display: inline-flex; align-items: center; gap: 12px;
-      font-family: var(--font-m); font-size: 11px; letter-spacing: 0.16em;
-      text-transform: uppercase; font-weight: 600;
-      color: #060503; background: var(--amber); text-decoration: none;
-      padding: 15px 36px; border-radius: 1px;
-      position: relative; overflow: hidden;
-      transition: all 0.22s;
-    }
-    .cta-main::after {
-      content: '';
-      position: absolute; inset: 3px; border: 1px solid rgba(6,5,3,0.18);
-      border-radius: 1px; pointer-events: none;
-    }
-    .cta-main:hover { background: #e8c53a; transform: translateY(-1px); box-shadow: 0 8px 32px rgba(212,175,55,0.22); }
-    .cta-divider {
-      font-family: var(--font-m); font-size: 10px; color: var(--muted);
-      letter-spacing: 0.12em;
-    }
-    .cta-secondary-link {
-      font-family: var(--font-m); font-size: 10px; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--muted); text-decoration: none;
-      display: inline-flex; align-items: center; gap: 8px;
-      transition: color 0.2s;
-    }
-    .cta-secondary-link::before { content: '—'; color: var(--amber-dim); }
-    .cta-secondary-link:hover { color: var(--amber); }
-
-    /* ═══════════════════════════════════
-       ORNAMENT DIVIDER
-    ═══════════════════════════════════ */
-    .ornament {
-      display: flex; align-items: center; gap: 16px;
-      padding: 0 80px; opacity: 0.35;
-    }
-    .ornament::before, .ornament::after {
-      content: ''; flex: 1; height: 1px;
-      background: linear-gradient(to right, transparent, var(--amber), transparent);
-    }
-    .ornament span { font-family: var(--font-d); font-size: 13px; color: var(--amber); letter-spacing: 0.3em; }
-
-    /* ═══════════════════════════════════
-       STATS STRIP
-    ═══════════════════════════════════ */
-    .stats-strip {
-      display: grid; grid-template-columns: repeat(3,1fr);
-      border-top: 1px solid var(--border-dim);
-      border-bottom: 1px solid var(--border-dim);
-      position: relative;
-    }
-    .stats-strip::before {
-      content: ''; position: absolute; top:-1px; left:0; right:0; height:1px;
-      background: linear-gradient(to right, transparent 0%, var(--amber-dim) 30%, var(--amber) 50%, var(--amber-dim) 70%, transparent 100%);
-      opacity: 0.3;
-    }
-    .stat-block {
-      padding: 56px 64px;
-      background: var(--bg);
-      border-right: 1px solid var(--border-dim);
-    }
-    .stat-block:last-child { border-right: none; }
-    .stat-block .num {
-      font-family: var(--font-d);
-      font-size: clamp(52px, 5.5vw, 80px);
-      font-weight: 900; color: var(--amber); line-height: 1; display: block;
-      text-shadow: 0 0 60px rgba(212,175,55,0.12);
-    }
-    .stat-block .lbl {
-      font-family: var(--font-m); font-size: 9.5px; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--muted); display: block; margin-top: 12px;
-    }
-    .stat-block .sub {
-      font-family: var(--font-b); font-size: 15px; font-style: italic;
-      color: var(--muted); display: block; margin-top: 4px;
-    }
-
-    /* ═══════════════════════════════════
-       SECTIONS
-    ═══════════════════════════════════ */
-    .section { padding: 100px 80px; }
-    .section-label {
-      font-family: var(--font-m); font-size: 9.5px; letter-spacing: 0.26em;
-      text-transform: uppercase; color: var(--amber); margin-bottom: 22px;
-      display: flex; align-items: center; gap: 14px;
-    }
-    .section-label::before { content: ''; width: 24px; height: 1px; background: var(--amber); opacity: 0.5; }
-    .section-h2 {
-      font-family: var(--font-d);
-      font-size: clamp(38px, 4vw, 60px);
-      font-weight: 900; line-height: 1.06; color: var(--cream); margin-bottom: 20px;
-    }
-    .section-h2 em { font-style: italic; color: var(--amber); }
-    .section-body {
-      font-family: var(--font-b); font-size: clamp(17px, 1.35vw, 21px);
-      font-weight: 300; color: var(--muted-light); max-width: 680px; line-height: 1.72;
-    }
-
-    /* LAYERS */
-    .layers-grid {
-      margin-top: 60px;
-      display: grid; grid-template-columns: repeat(5,1fr);
-      border: 1px solid var(--border-dim); overflow: hidden;
-    }
-    .layer-card {
-      background: var(--bg-card); padding: 28px 20px;
-      border-right: 1px solid var(--border-dim);
-      border-bottom: 1px solid var(--border-dim);
-      transition: background 0.25s; position: relative;
-    }
-    .layer-card:nth-child(5n) { border-right: none; }
-    .layer-card:nth-child(n+6) { border-bottom: none; }
-    .layer-card:hover { background: var(--bg-raised); }
-    .lc-num {
-      font-family: var(--font-d); font-size: 44px; font-weight: 900;
-      color: var(--amber); opacity: 0.09; line-height: 1; margin-bottom: 10px;
-      transition: opacity 0.25s;
-    }
-    .layer-card:hover .lc-num { opacity: 0.22; }
-    .lc-tag {
-      font-family: var(--font-m); font-size: 8px; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--muted); margin-bottom: 9px;
-    }
-    .lc-name {
-      font-family: var(--font-d); font-size: 14px; font-weight: 700;
-      color: var(--cream); line-height: 1.22; margin-bottom: 11px;
-    }
-    .lc-desc {
-      font-family: var(--font-b); font-size: 13.5px; color: var(--muted);
-      line-height: 1.55; font-weight: 300;
-    }
-    .lc-badge {
-      display: inline-block; margin-top: 14px;
-      font-family: var(--font-m); font-size: 8px; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--amber);
-      border: 1px solid rgba(212,175,55,0.25); padding: 3px 9px; border-radius: 1px;
-    }
-
-    /* HOW IT WORKS */
-    .how-grid {
-      margin-top: 60px;
-      display: grid; grid-template-columns: repeat(3,1fr);
-      border: 1px solid var(--border-dim); overflow: hidden;
-    }
-    .how-card {
-      background: var(--bg-card); padding: 46px 34px;
-      border-right: 1px solid var(--border-dim);
-      position: relative;
-    }
-    .how-card:last-child { border-right: none; }
-    .how-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(to right, var(--amber-dim), transparent);
-      opacity: 0.35;
-    }
-    .how-num {
-      font-family: var(--font-d); font-size: 72px; font-weight: 900;
-      color: var(--amber); opacity: 0.08; line-height: 1; margin-bottom: 22px;
-    }
-    .how-title {
-      font-family: var(--font-m); font-size: 10.5px; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--amber); margin-bottom: 14px;
-    }
-    .how-body {
-      font-family: var(--font-b); font-size: 17px; font-weight: 300;
-      color: var(--muted-light); line-height: 1.68;
-    }
-    .how-time {
-      display: block; margin-top: 22px;
-      font-family: var(--font-m); font-size: 9px; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--muted);
-      border-top: 1px solid var(--border-dim); padding-top: 16px;
-    }
-
-    /* DIFFERENCE */
-    .diff-section { padding: 100px 80px; border-top: 1px solid var(--border-dim); }
-    .diff-intro {
-      font-family: var(--font-b); font-size: clamp(21px, 2vw, 30px);
-      font-weight: 300; line-height: 1.62; color: var(--cream); max-width: 860px; margin-bottom: 16px;
-    }
-    .diff-intro strong { color: var(--amber); font-weight: 600; }
-    .diff-intro em { font-style: italic; color: var(--muted-light); }
-    .diff-grid {
-      margin-top: 52px;
-      display: grid; grid-template-columns: 1fr 52px 1fr; align-items: stretch;
-    }
-    .diff-col { border: 1px solid var(--border-dim); padding: 42px 36px; }
-    .diff-col.them { background: var(--bg-card); border-right: none; }
-    .diff-col.us {
-      background: var(--bg-raised); border-left: none; border-color: var(--border);
-      position: relative;
-    }
-    .diff-col.us::before {
-      content: ''; position: absolute; top: 0; left: -1px; bottom: 0; width: 1px;
-      background: linear-gradient(to bottom, transparent, var(--amber), transparent); opacity: 0.45;
-    }
-    .diff-vs {
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--font-d); font-size: 12px; font-weight: 700;
-      color: var(--muted); background: var(--bg);
-      border-top: 1px solid var(--border-dim); border-bottom: 1px solid var(--border-dim);
-    }
-    .diff-h3 { font-family: var(--font-d); font-size: 21px; font-weight: 700; line-height: 1.2; margin-bottom: 24px; }
-    .diff-col.them .diff-h3 { color: var(--muted); }
-    .diff-col.us   .diff-h3 { color: var(--cream); }
-    .diff-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
-    .diff-list li {
-      font-family: var(--font-b); font-size: 17px; font-weight: 300;
-      color: var(--muted-light); padding-left: 22px; position: relative; line-height: 1.5;
-    }
-    .diff-col.them .diff-list li::before { content: '—'; position: absolute; left: 0; color: var(--muted); font-size: 12px; top: 4px; }
-    .diff-col.us   .diff-list li { color: var(--cream-dim); }
-    .diff-col.us   .diff-list li::before { content: '✦'; position: absolute; left: 0; color: var(--amber); font-size: 9px; top: 6px; }
-
-    /* FOUNDER */
-    .founder-section { padding: 100px 80px; border-top: 1px solid var(--border-dim); }
-    .founder-grid { display: grid; grid-template-columns: auto 1fr; gap: 64px; align-items: start; }
-    .founder-avatar {
-      width: 96px; height: 96px; border-radius: 50%;
-      border: 1px solid var(--border); background: var(--bg-raised);
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--font-d); font-size: 40px; font-weight: 900; color: var(--amber);
-      box-shadow: 0 0 0 4px rgba(212,175,55,0.05), 0 0 40px rgba(212,175,55,0.07);
-    }
-    .founder-name { font-family: var(--font-d); font-size: 26px; font-weight: 700; color: var(--cream); margin-bottom: 6px; }
-    .founder-role {
-      font-family: var(--font-m); font-size: 9.5px; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--muted); margin-bottom: 24px;
-    }
-    .founder-quote {
-      font-family: var(--font-b); font-size: clamp(18px, 1.6vw, 22px);
-      font-weight: 300; color: var(--muted-light); line-height: 1.72; max-width: 720px;
-    }
-    .founder-quote strong { color: var(--cream); font-weight: 600; }
-    .founder-stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 30px; }
-    .fstat {
-      font-family: var(--font-m); font-size: 9px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--muted);
-      border: 1px solid var(--border-dim); padding: 7px 13px; border-radius: 1px;
-    }
-    .fstat span { color: var(--amber); font-weight: 600; }
-
-    /* CTA SECTION */
-    .cta-section {
-      padding: 120px 80px; text-align: center;
-      border-top: 1px solid var(--border-dim); position: relative; overflow: hidden;
-    }
-    .cta-section::before {
-      content: ''; position: absolute; inset: 0; pointer-events: none;
-      background: radial-gradient(ellipse 65% 75% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 65%);
-    }
-    .cta-section::after {
-      content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
-      background: linear-gradient(to right, transparent, var(--amber), transparent); opacity: 0.25;
-    }
-    .cta-section .section-h2 { margin: 0 auto 18px; max-width: 700px; }
-    .cta-section .section-body { margin: 0 auto 52px; }
-    .cta-row { display: flex; justify-content: center; gap: 16px; position: relative; z-index: 2; }
-
-    /* FOOTER */
-    footer {
-      background: #040302; border-top: 1px solid var(--border-dim);
-      padding: 64px 80px; display: grid; grid-template-columns: 1fr auto;
-      gap: 60px; align-items: start; position: relative;
-    }
-    footer::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(to right, transparent 0%, var(--amber-dim) 25%, var(--amber) 50%, var(--amber-dim) 75%, transparent 100%);
-      opacity: 0.18;
-    }
-    .footer-brand .wm {
-      font-family: var(--font-d); font-size: 17px; font-weight: 900;
-      letter-spacing: 0.24em; color: var(--amber); text-transform: uppercase; margin-bottom: 5px;
-    }
-    .footer-brand .tagline {
-      font-family: var(--font-m); font-size: 9px; letter-spacing: 0.18em;
-      color: var(--muted); text-transform: uppercase; margin-bottom: 22px;
-    }
-    .footer-brand p { font-family: var(--font-b); font-size: 15px; font-weight: 300; color: var(--muted); max-width: 400px; line-height: 1.68; }
-    .footer-links { display: grid; grid-template-columns: repeat(3,1fr); gap: 44px; }
-    .footer-col h4 { font-family: var(--font-m); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
-    .footer-col a, .footer-col p { display: block; font-family: var(--font-b); font-size: 15px; font-weight: 300; color: var(--muted-light); text-decoration: none; margin-bottom: 9px; transition: color 0.2s; }
-    .footer-col a:hover { color: var(--amber); }
-    .footer-bottom {
-      border-top: 1px solid var(--border-dim); padding: 20px 80px;
-      background: #040302;
-      font-family: var(--font-m); font-size: 9.5px; letter-spacing: 0.1em;
-      color: var(--muted); text-transform: uppercase;
-      display: flex; justify-content: space-between;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 1200px) {
-      .term-body { grid-template-columns: 280px 1fr 220px; }
-    }
-    @media (max-width: 1024px) {
-      .term-body { grid-template-columns: 1fr; }
-      .term-left, .term-centre { border-right: none; border-bottom: 1px solid var(--border-dim); }
-      .layers-grid { grid-template-columns: repeat(2,1fr); }
-      .layer-card:nth-child(5n) { border-right: 1px solid var(--border-dim); }
-      .layer-card:nth-child(2n) { border-right: none; }
-      .diff-grid { grid-template-columns: 1fr; }
-      .diff-vs { display: none; }
-      .diff-col.them { border-right: 1px solid var(--border-dim); }
-    }
-    @media (max-width: 768px) {
-      nav { padding: 0 24px; }
-      .nav-links, .nav-ctas { display: none; }
-      .hero-top { padding: 56px 24px 32px; }
-      .terminal-wrap { padding: 0 16px 52px; }
-      .hero-cta-strip { padding: 24px 24px 48px; flex-direction: column; gap: 18px; }
-      .section, .diff-section, .cta-section, .founder-section { padding: 64px 24px; }
-      .ornament { padding: 0 24px; }
-      .stats-strip { grid-template-columns: 1fr; }
-      .stat-block { padding: 44px 24px; border-right: none; border-bottom: 1px solid var(--border-dim); }
-      .layers-grid, .how-grid { grid-template-columns: 1fr; }
-      .how-card, .layer-card { border-right: none; }
-      footer { padding: 48px 24px; grid-template-columns: 1fr; }
-      .footer-links { grid-template-columns: 1fr 1fr; gap: 28px; }
-      .footer-bottom { padding: 20px 24px; flex-direction: column; gap: 8px; }
-      .founder-grid { grid-template-columns: 1fr; gap: 24px; }
-      .cta-row { flex-direction: column; align-items: center; }
-    }
   </style>
-
 </head>
 <body>
 
-<!-- TICKER -->
-
 <div class="ticker">
   <div class="ticker-track">
-    <div class="t-item"><span class="d"></span>HIGHLAND RUN RATE <span class="v">£190K+ ANNUALISED</span></div>
-    <div class="t-item"><span class="d"></span>AVG MONTHLY LEAK <span class="v">£1,380</span></div>
-    <div class="t-item"><span class="d"></span>REVIEW VELOCITY <span class="v">2+ PER MONTH</span></div>
-    <div class="t-item"><span class="d"></span>FORT WILLIAM OCC <span class="v">72%</span></div>
-    <div class="t-item"><span class="d"></span>PORTFOLIO RATING <span class="v">4.97★</span></div>
-    <div class="t-item"><span class="d"></span>REVENUE GROWTH <span class="v">+38% YOY</span></div>
-    <div class="t-item"><span class="d"></span>KAYAK UK <span class="v">TOP 3%</span></div>
-    <div class="t-item"><span class="d"></span>HIGHLAND RUN RATE <span class="v">£190K+ ANNUALISED</span></div>
-    <div class="t-item"><span class="d"></span>AVG MONTHLY LEAK <span class="v">£1,380</span></div>
-    <div class="t-item"><span class="d"></span>REVIEW VELOCITY <span class="v">2+ PER MONTH</span></div>
-    <div class="t-item"><span class="d"></span>FORT WILLIAM OCC <span class="v">72%</span></div>
-    <div class="t-item"><span class="d"></span>PORTFOLIO RATING <span class="v">4.97★</span></div>
-    <div class="t-item"><span class="d"></span>REVENUE GROWTH <span class="v">+38% YOY</span></div>
-    <div class="t-item"><span class="d"></span>KAYAK UK <span class="v">TOP 3%</span></div>
+    <div class="ti">HIGHLAND RUN RATE <span class="v">£190K+ ANNUALISED</span></div>
+    <div class="ti">AVG MONTHLY LEAK <span class="v">£1,380</span></div>
+    <div class="ti">REVIEW VELOCITY <span class="v">2+ PER MONTH</span></div>
+    <div class="ti">FORT WILLIAM OCC <span class="v">72%</span></div>
+    <div class="ti">PORTFOLIO RATING <span class="v">4.97★</span></div>
+    <div class="ti">REVENUE GROWTH <span class="v">+38% YOY</span></div>
+    <div class="ti">KAYAK UK <span class="v">TOP 3%</span></div>
+    <div class="ti">HIGHLAND RUN RATE <span class="v">£190K+ ANNUALISED</span></div>
+    <div class="ti">AVG MONTHLY LEAK <span class="v">£1,380</span></div>
+    <div class="ti">REVIEW VELOCITY <span class="v">2+ PER MONTH</span></div>
+    <div class="ti">FORT WILLIAM OCC <span class="v">72%</span></div>
+    <div class="ti">PORTFOLIO RATING <span class="v">4.97★</span></div>
+    <div class="ti">REVENUE GROWTH <span class="v">+38% YOY</span></div>
+    <div class="ti">KAYAK UK <span class="v">TOP 3%</span></div>
   </div>
 </div>
 
-<!-- NAV -->
-
 <nav>
-  <div class="brand">
-    <span class="wm">Summit Stay Group</span>
-    <span class="sub">STR Revenue Intelligence</span>
-  </div>
+  <div class="brand"><span class="wm">Summit Stay Group</span><span class="sub">STR Revenue Intelligence</span></div>
   <ul class="nav-links">
     <li><a href="/">Platform</a></li>
     <li><a href="/audit">Free Audit</a></li>
@@ -869,538 +330,273 @@
   </div>
 </nav>
 
-<!-- HERO -->
-
 <section class="hero">
-  <div class="hero-bg"></div>
-
-  <!-- Headline -->
-
-  <div class="hero-top">
-    <div class="hero-eyebrow">
-      <span class="live-dot"></span>
-      SSG Audit Engine · Running Live · v2.4
-    </div>
-    <h1 class="hero-h1">
-      Most STR Portfolios Aren't Failing.
-      <span class="italic-line">They're leaking.</span>
-      <span class="small-line">We find exactly where.</span>
-    </h1>
+  <div class="hero-head">
+    <div class="hero-badge"><span class="live-dot"></span>SSG Audit Engine · Running Live · v2.4</div>
+    <h1 class="hero-h1">Most STR Portfolios Aren't Failing.<span class="it">They're leaking.</span><span class="sm">We find exactly where.</span></h1>
+    <div class="hero-orn"><span>◆ ◆ ◆</span></div>
   </div>
 
-  <!-- TERMINAL -->
-
-  <div class="terminal-wrap">
-    <div class="terminal">
-      <!-- Title bar -->
-      <div class="term-bar">
-        <div class="term-dots"><span></span><span></span><span></span></div>
-        <div class="term-title">ssg-audit-engine · revenue-intelligence · uk-benchmarks</div>
-        <div class="term-status" id="termStatus">Scanning</div>
-      </div>
-
-```
-  <!-- Body grid -->
-  <div class="term-body">
-
-    <!-- LEFT: Property inputs -->
-    <div class="term-left">
-      <div class="term-panel-label">Property Data</div>
-
-      <div class="term-input-row">
-        <span class="term-input-lbl">Property Type</span>
-        <span class="term-input-val highlight">Highland Cottage</span>
-      </div>
-      <div class="term-input-row">
-        <span class="term-input-lbl">Location</span>
-        <span class="term-input-val highlight">Fort William, Scotland</span>
-      </div>
-      <div class="term-input-row">
-        <span class="term-input-lbl">ADR</span>
-        <span class="term-input-val">£218 / night</span>
-      </div>
-      <div class="term-input-row">
-        <span class="term-input-lbl">Occupancy Rate</span>
-        <span class="term-input-val">53%</span>
-      </div>
-      <div class="term-input-row">
-        <span class="term-input-lbl">Review Count</span>
-        <span class="term-input-val">82 reviews · 4.97★</span>
-      </div>
-      <div class="term-input-row">
-        <span class="term-input-lbl">Platform</span>
-        <span class="term-input-val">Airbnb + Booking.com</span>
-      </div>
-
-      <button class="term-submit" onclick="window.location='/audit'">
-        Run Your Audit →
-      </button>
-    </div>
-
-    <!-- CENTRE: Layers running -->
-    <div class="term-centre">
-      <div class="term-panel-label">Audit Layers</div>
-      <div class="layers-running" id="layersRunning">
-        <div class="layer-row" id="l1">
-          <span class="lr-num">01</span>
-          <span class="lr-name">RevPAR Gap Forensics</span>
-          <div class="lr-bar-wrap"><div class="lr-bar" id="b1" style="width:0%"></div></div>
-          <span class="lr-status wait" id="s1">WAITING</span>
-        </div>
-        <div class="layer-row" id="l2">
-          <span class="lr-num">02</span>
-          <span class="lr-name">Rate Calendar Forensics</span>
-          <div class="lr-bar-wrap"><div class="lr-bar" id="b2" style="width:0%"></div></div>
-          <span class="lr-status wait" id="s2">WAITING</span>
-        </div>
-        <div class="layer-row" id="l3">
-          <span class="lr-num">03</span>
-          <span class="lr-name">Booking Pace Analysis</span>
-          <div class="lr-bar-wrap"><div class="lr-bar" id="b3" style="width:0%"></div></div>
-          <span class="lr-status wait" id="s3">WAITING</span>
-        </div>
-        <div class="layer-row" id="l4">
-          <span class="lr-num">04</span>
-          <span class="lr-name">Listing Conversion Audit</span>
-          <div class="lr-bar-wrap"><div class="lr-bar" id="b4" style="width:0%"></div></div>
-          <span class="lr-status wait" id="s4">WAITING</span>
-        </div>
-        <div class="layer-row" id="l5">
-          <span class="lr-num">05</span>
-          <span class="lr-name">Review Sentiment NLP</span>
-          <div class="lr-bar-wrap"><div class="lr-bar" id="b5" style="width:0%"></div></div>
-          <span class="lr-status wait" id="s5">WAITING</span>
-        </div>
-        <div class="layer-row" id="l6">
-          <span class="lr-num">06</span>
-          <span class="lr-name">Guest Journey Audit</span>
-          <div class="lr-bar-wrap"><div class="lr-bar" id="b6" style="width:0%"></div></div>
-          <span class="lr-status wait" id="s6">WAITING</span>
-        </div>
-        <div class="layer-row" id="l7">
-          <span class="lr-num">07</span>
-          <span class="lr-name">Channel Mix & Commission</span>
-          <div class="lr-bar-wrap"><div class="lr-bar" id="b7" style="width:0%"></div></div>
-          <span class="lr-status wait" id="s7">WAITING</span>
-        </div>
-        <div class="layer-row" id="l8">
-          <span class="lr-num">08</span>
-          <span class="lr-name">Seasonal Yield Curve</span>
-          <div class="lr-bar-wrap"><div class="lr-bar" id="b8" style="width:0%"></div></div>
-          <span class="lr-status wait" id="s8">WAITING</span>
-        </div>
-        <div class="layer-row" id="l9">
-          <span class="lr-num">09</span>
-          <span class="lr-name">Net Revenue Analysis</span>
-          <div class="lr-bar-wrap"><div class="lr-bar" id="b9" style="width:0%"></div></div>
-          <span class="lr-status wait" id="s9">WAITING</span>
-        </div>
-        <div class="layer-row" id="l10">
-          <span class="lr-num">10</span>
-          <span class="lr-name">Competitive Positioning</span>
-          <div class="lr-bar-wrap"><div class="lr-bar" id="b10" style="width:0%"></div></div>
-          <span class="lr-status wait" id="s10">WAITING</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT: Results panel -->
-    <div class="term-right">
-      <div class="term-panel-label">Leakage Detected</div>
-
-      <div class="result-total">
-        <span class="lbl">Monthly Revenue Leak</span>
-        <span class="amount" id="totalAmount">£0</span>
-        <span class="per">per month unrecovered</span>
-      </div>
-
-      <div class="leak-items">
-        <div class="leak-item" id="li1">
-          <div class="leak-item-top">
-            <span class="leak-item-name">Rate Calendar</span>
-            <span class="leak-item-val">£520</span>
+  <div class="term-wrap">
+    <div class="term-frame">
+      <div class="fc fc-tl"></div><div class="fc fc-tr"></div>
+      <div class="fc fc-bl"></div><div class="fc fc-br"></div>
+      <div class="terminal">
+        <div class="t-chrome">
+          <div class="t-dots"><span></span><span></span><span></span></div>
+          <div class="t-path">ssg@audit-engine:~/revenue-intelligence/uk-benchmarks ~</div>
+          <div class="t-sbadge">
+            <span class="t-sdot" id="sdot" style="background:var(--amber)"></span>
+            <span id="stxt" style="font-family:var(--font-m);font-size:8.5px;letter-spacing:.14em;color:var(--amber);text-transform:uppercase">Scanning</span>
           </div>
-          <div class="leak-progress"><div class="leak-fill" id="lf1"></div></div>
         </div>
-        <div class="leak-item" id="li2">
-          <div class="leak-item-top">
-            <span class="leak-item-name">Listing Conversion</span>
-            <span class="leak-item-val">£360</span>
+        <div class="t-body">
+          <div class="t-pane">
+            <div class="t-ph">Input · Highland Portfolio <span class="pid">PID 4821</span></div>
+            <div class="dl-rows">
+              <div class="dl"><span class="dl-k">property_type</span><span class="dl-v a">highland_cottage</span></div>
+              <div class="dl"><span class="dl-k">location</span><span class="dl-v a">fort_william_SCO</span></div>
+              <div class="dl"><span class="dl-k">adr</span><span class="dl-v">£218.00 / night</span></div>
+              <div class="dl"><span class="dl-k">occupancy</span><span class="dl-v">0.53  (53%)</span></div>
+              <div class="dl"><span class="dl-k">revpar</span><span class="dl-v">£115.54</span></div>
+              <div class="dl"><span class="dl-k">run_rate</span><span class="dl-v">£190,000 pa</span></div>
+              <div class="dl"><span class="dl-k">reviews</span><span class="dl-v">82 · 4.97★</span></div>
+              <div class="dl"><span class="dl-k">channels</span><span class="dl-v">airbnb + booking</span></div>
+              <div class="dl"><span class="dl-k">benchmark</span><span class="dl-v">uk_highland</span></div>
+            </div>
+            <div class="t-prompt"><span class="ps">$&nbsp;</span><span>ssg-audit --layers=10 --region=UK</span><span class="t-cur"></span></div>
           </div>
-          <div class="leak-progress"><div class="leak-fill" id="lf2"></div></div>
+          <div class="t-pane">
+            <div class="t-ph">Audit Engine · 10 Layers <span class="pid" id="lcount">0/10</span></div>
+            <div class="ll-rows">
+              <div class="ll" id="ll1"><span class="ll-n">01</span><span class="ll-name">revpar_gap_forensics</span><div class="ll-tr"><div class="ll-fi" id="lf1"></div></div><span class="ll-tg w" id="lt1">WAIT</span></div>
+              <div class="ll" id="ll2"><span class="ll-n">02</span><span class="ll-name">rate_calendar_forensics</span><div class="ll-tr"><div class="ll-fi" id="lf2"></div></div><span class="ll-tg w" id="lt2">WAIT</span></div>
+              <div class="ll" id="ll3"><span class="ll-n">03</span><span class="ll-name">booking_pace_analysis</span><div class="ll-tr"><div class="ll-fi" id="lf3"></div></div><span class="ll-tg w" id="lt3">WAIT</span></div>
+              <div class="ll" id="ll4"><span class="ll-n">04</span><span class="ll-name">listing_conversion_audit</span><div class="ll-tr"><div class="ll-fi" id="lf4"></div></div><span class="ll-tg w" id="lt4">WAIT</span></div>
+              <div class="ll" id="ll5"><span class="ll-n">05</span><span class="ll-name">review_sentiment_nlp</span><div class="ll-tr"><div class="ll-fi" id="lf5"></div></div><span class="ll-tg w" id="lt5">WAIT</span></div>
+              <div class="ll" id="ll6"><span class="ll-n">06</span><span class="ll-name">guest_journey_audit</span><div class="ll-tr"><div class="ll-fi" id="lf6"></div></div><span class="ll-tg w" id="lt6">WAIT</span></div>
+              <div class="ll" id="ll7"><span class="ll-n">07</span><span class="ll-name">channel_mix_commission</span><div class="ll-tr"><div class="ll-fi" id="lf7"></div></div><span class="ll-tg w" id="lt7">WAIT</span></div>
+              <div class="ll" id="ll8"><span class="ll-n">08</span><span class="ll-name">seasonal_yield_curve</span><div class="ll-tr"><div class="ll-fi" id="lf8"></div></div><span class="ll-tg w" id="lt8">WAIT</span></div>
+              <div class="ll" id="ll9"><span class="ll-n">09</span><span class="ll-name">net_revenue_analysis</span><div class="ll-tr"><div class="ll-fi" id="lf9"></div></div><span class="ll-tg w" id="lt9">WAIT</span></div>
+              <div class="ll" id="ll10"><span class="ll-n">10</span><span class="ll-name">competitive_positioning</span><div class="ll-tr"><div class="ll-fi" id="lf10"></div></div><span class="ll-tg w" id="lt10">WAIT</span></div>
+            </div>
+            <div class="t-log">
+              <div class="t-ll" id="log1"><span class="ts">[00:00]</span> loading uk_highland_benchmarks.db <span class="ok">✓</span></div>
+              <div class="t-ll" id="log2"><span class="ts">[00:01]</span> revpar_ceiling → <span class="warn">£142.00</span> (gap: £26.46/night)</div>
+              <div class="t-ll" id="log3"><span class="ts">[00:03]</span> orphan_nights → <span class="warn">14 unpriced gaps detected</span></div>
+              <div class="t-ll" id="log4"><span class="ts">[00:05]</span> channel_commission → <span class="warn">11.2%</span> above optimal</div>
+              <div class="t-ll" id="log5"><span class="ts">[00:07]</span> <span class="ok">audit complete</span> · 6 leaks · ranking by impact</div>
+            </div>
+          </div>
+          <div class="t-pane">
+            <div class="t-ph">Leakage Report <span class="pid">6 sources</span></div>
+            <div class="res-hdr">
+              <span class="res-lbl">Monthly Revenue Leak</span>
+              <span class="res-num" id="totalAmt">£0</span>
+              <span class="res-sub">unrecovered / month</span>
+            </div>
+            <div class="leaks">
+              <div class="lk" id="lk1"><div class="lk-l"><span class="lk-n">rate_calendar</span><div class="lk-tr"><div class="lk-fi" id="lkf1"></div></div></div><span class="lk-v">£520</span></div>
+              <div class="lk" id="lk2"><div class="lk-l"><span class="lk-n">listing_conversion</span><div class="lk-tr"><div class="lk-fi" id="lkf2"></div></div></div><span class="lk-v">£360</span></div>
+              <div class="lk" id="lk3"><div class="lk-l"><span class="lk-n">guest_journey</span><div class="lk-tr"><div class="lk-fi" id="lkf3"></div></div></div><span class="lk-v">£280</span></div>
+              <div class="lk" id="lk4"><div class="lk-l"><span class="lk-n">channel_mix</span><div class="lk-tr"><div class="lk-fi" id="lkf4"></div></div></div><span class="lk-v">£220</span></div>
+              <div class="lk" id="lk5"><div class="lk-l"><span class="lk-n">yield_gap</span><div class="lk-tr"><div class="lk-fi" id="lkf5"></div></div></div><span class="lk-v">£160</span></div>
+              <div class="lk" id="lk6"><div class="lk-l"><span class="lk-n">net_revenue_drag</span><div class="lk-tr"><div class="lk-fi" id="lkf6"></div></div></div><span class="lk-v">£100</span></div>
+            </div>
+            <div class="rank-note">Ranked by impact. Fix <span>#1</span> first → recover <span>£520/mo</span> immediately.</div>
+          </div>
         </div>
-        <div class="leak-item" id="li3">
-          <div class="leak-item-top">
-            <span class="leak-item-name">Guest Journey</span>
-            <span class="leak-item-val">£280</span>
+        <div class="t-sbar">
+          <div class="t-sbar-l">
+            <span>engine:<em> v2.4</em></span>
+            <span>region:<em> uk-highland</em></span>
+            <span>response:<em id="ms"> 0ms</em></span>
+            <span>uptime:<em> 99.9%</em></span>
           </div>
-          <div class="leak-progress"><div class="leak-fill" id="lf3"></div></div>
-        </div>
-        <div class="leak-item" id="li4">
-          <div class="leak-item-top">
-            <span class="leak-item-name">Channel Mix</span>
-            <span class="leak-item-val">£220</span>
-          </div>
-          <div class="leak-progress"><div class="leak-fill" id="lf4"></div></div>
-        </div>
-        <div class="leak-item" id="li5">
-          <div class="leak-item-top">
-            <span class="leak-item-name">Yield Gap</span>
-            <span class="leak-item-val">£160</span>
-          </div>
-          <div class="leak-progress"><div class="leak-fill" id="lf5"></div></div>
-        </div>
-        <div class="leak-item" id="li6">
-          <div class="leak-item-top">
-            <span class="leak-item-name">Net Revenue Drag</span>
-            <span class="leak-item-val">£100</span>
-          </div>
-          <div class="leak-progress"><div class="leak-fill" id="lf6"></div></div>
+          <div class="t-sbar-r" id="smsg">initialising<span class="t-cur" style="width:5px;height:10px;display:inline-block;background:var(--amber);animation:blink 1s step-end infinite;vertical-align:middle;margin-left:4px"></span></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Footer bar -->
-  <div class="term-footer">
-    <div class="term-footer-left">
-      <span>Benchmark: <span>UK Highland Region</span></span>
-      <span>Response: <span id="msTimer">0ms</span></span>
-      <span>Uptime: <span>99.9%</span></span>
-    </div>
-    <div class="term-footer-right" id="footerMsg">Initialising audit engine<span class="cursor-blink"></span></div>
-  </div>
-</div>
-```
-
-  </div>
-
-  <!-- CTA strip -->
-
-  <div class="hero-cta-strip">
+  <div class="hero-ctas">
     <a href="/audit" class="cta-main">Run Your Free 2-Layer Preview →</a>
-    <span class="cta-divider">·</span>
-    <a href="/casestudy" class="cta-secondary-link">See the Case Study</a>
-    <span class="cta-divider">·</span>
-    <a href="/pricing" class="cta-secondary-link">View Pricing</a>
+    <span class="cta-sep">·</span>
+    <a href="/casestudy" class="cta-lnk">Case Study</a>
+    <span class="cta-sep">·</span>
+    <a href="/pricing" class="cta-lnk">View Pricing</a>
   </div>
 </section>
 
-<!-- ORNAMENT -->
-
-<div class="ornament"><span>◆</span></div>
-
-<!-- STATS -->
+<div class="orn"><div class="orn-c">◆ ◆ ◆</div></div>
 
 <div class="stats-strip">
-  <div class="stat-block">
-    <span class="num">£1,380</span>
-    <span class="lbl">Avg Monthly Recovery</span>
-    <span class="sub">across all audits</span>
-  </div>
-  <div class="stat-block">
-    <span class="num">38%</span>
-    <span class="lbl">Revenue Growth</span>
-    <span class="sub">9 months · same occupancy</span>
-  </div>
-  <div class="stat-block">
-    <span class="num">4.97★</span>
-    <span class="lbl">Portfolio Rating</span>
-    <span class="sub">maintained throughout</span>
-  </div>
+  <div class="stat-block"><span class="num">£1,380</span><span class="lbl">Avg Monthly Recovery</span><span class="sub">across all audits</span></div>
+  <div class="stat-block"><span class="num">38%</span><span class="lbl">Revenue Growth</span><span class="sub">9 months · same occupancy</span></div>
+  <div class="stat-block"><span class="num">4.97★</span><span class="lbl">Portfolio Rating</span><span class="sub">maintained throughout</span></div>
 </div>
 
-<div class="ornament"><span>◆</span></div>
-
-<!-- ARCHITECTURE -->
+<div class="orn"><div class="orn-c">◆</div></div>
 
 <section class="section">
-  <div class="section-label">The Architecture</div>
-  <h2 class="section-h2">Ten layers. <em>One methodology.</em></h2>
-  <p class="section-body">Every audit layer runs a different analytical model against your property data. Run a free preview on Layers 01 and 02 — or unlock all ten with a Growth plan.</p>
+  <div class="sec-lbl">The Architecture</div>
+  <h2 class="sec-h2">Ten layers. <em>One methodology.</em></h2>
+  <p class="sec-body">Every audit layer runs a different analytical model against your property data. Run a free preview on Layers 01 and 02 — or unlock all ten with a Growth plan.</p>
   <div class="layers-grid">
-    <div class="layer-card"><div class="lc-num">01</div><div class="lc-tag">Layer 01 of 10</div><div class="lc-name">RevPAR Gap Forensics</div><div class="lc-desc">Market ceiling vs actual performance. RevPAR position against the optimised ceiling for your property type, occupancy band, and location.</div><span class="lc-badge">Free preview</span></div>
-    <div class="layer-card"><div class="lc-num">02</div><div class="lc-tag">Layer 02 of 10</div><div class="lc-name">Rate Calendar Forensics</div><div class="lc-desc">Gap nights, orphan nights, compression events missed. Unbooked nights that should be priced and filled.</div><span class="lc-badge">Free preview</span></div>
-    <div class="layer-card"><div class="lc-num">03</div><div class="lc-tag">Layer 03 of 10</div><div class="lc-name">Booking Pace Analysis</div><div class="lc-desc">Lead-time distribution, last-minute discount erosion, advance booking stimulation, minimum-stay blocking patterns.</div></div>
-    <div class="layer-card"><div class="lc-num">04</div><div class="lc-tag">Layer 04 of 10</div><div class="lc-name">Listing Conversion Audit</div><div class="lc-desc">Title, description, photos, amenities, booking settings. Everything determining whether a guest clicks through. 3-second decision.</div></div>
-    <div class="layer-card"><div class="lc-num">05</div><div class="lc-tag">Layer 05 of 10</div><div class="lc-name">Review Sentiment NLP</div><div class="lc-desc">NLP across review history. Maintenance flags, rating trajectory, algorithm risk scoring, velocity threshold analysis.</div></div>
-    <div class="layer-card"><div class="lc-num">06</div><div class="lc-tag">Layer 06 of 10</div><div class="lc-name">Guest Journey Audit</div><div class="lc-desc">Pre-arrival, in-stay, post-checkout. Upsell gaps, messaging cadence, review recovery. £30–80/booking missed.</div></div>
-    <div class="layer-card"><div class="lc-num">07</div><div class="lc-tag">Layer 07 of 10</div><div class="lc-name">Channel Mix & Commission</div><div class="lc-desc">Platform dependency ratio, commission leakage, direct booking opportunity. 8–12% per booking to platforms.</div></div>
-    <div class="layer-card"><div class="lc-num">08</div><div class="lc-tag">Layer 08 of 10</div><div class="lc-name">Seasonal Yield Curve</div><div class="lc-desc">Peak capture, trough stimulation, shoulder pricing. Benchmarked against Harvy's 1.6–2.0x peak/trough ratio.</div></div>
-    <div class="layer-card"><div class="lc-num">09</div><div class="lc-tag">Layer 09 of 10</div><div class="lc-name">Net Revenue Analysis</div><div class="lc-desc">Cleaning cost ratio, true RevPAR, operational profit drag. What lands in your account vs what your dashboard shows.</div></div>
-    <div class="layer-card"><div class="lc-num">10</div><div class="lc-tag">Layer 10 of 10</div><div class="lc-name">Competitive Positioning</div><div class="lc-desc">USP clarity, market stance, target segment alignment, channel opportunity vs actual local competition.</div></div>
+    <div class="lc"><div class="lc-n">01</div><div class="lc-tag">Layer 01 of 10</div><div class="lc-name">RevPAR Gap Forensics</div><div class="lc-desc">Market ceiling vs actual performance. RevPAR position against the optimised ceiling for your property type, occupancy band, and location.</div><span class="lc-badge">Free preview</span></div>
+    <div class="lc"><div class="lc-n">02</div><div class="lc-tag">Layer 02 of 10</div><div class="lc-name">Rate Calendar Forensics</div><div class="lc-desc">Gap nights, orphan nights, compression events missed. Unbooked nights that should be priced and filled.</div><span class="lc-badge">Free preview</span></div>
+    <div class="lc"><div class="lc-n">03</div><div class="lc-tag">Layer 03 of 10</div><div class="lc-name">Booking Pace Analysis</div><div class="lc-desc">Lead-time distribution, last-minute discount erosion, advance booking stimulation, minimum-stay blocking patterns.</div></div>
+    <div class="lc"><div class="lc-n">04</div><div class="lc-tag">Layer 04 of 10</div><div class="lc-name">Listing Conversion Audit</div><div class="lc-desc">Title, description, photos, amenities, booking settings. Everything determining whether a guest clicks through.</div></div>
+    <div class="lc"><div class="lc-n">05</div><div class="lc-tag">Layer 05 of 10</div><div class="lc-name">Review Sentiment NLP</div><div class="lc-desc">NLP across review history. Maintenance flags, rating trajectory, algorithm risk scoring, velocity threshold analysis.</div></div>
+    <div class="lc"><div class="lc-n">06</div><div class="lc-tag">Layer 06 of 10</div><div class="lc-name">Guest Journey Audit</div><div class="lc-desc">Pre-arrival, in-stay, post-checkout. Upsell gaps, messaging cadence, review recovery. £30–80/booking missed.</div></div>
+    <div class="lc"><div class="lc-n">07</div><div class="lc-tag">Layer 07 of 10</div><div class="lc-name">Channel Mix & Commission</div><div class="lc-desc">Platform dependency ratio, commission leakage, direct booking opportunity. 8–12% per booking to platforms.</div></div>
+    <div class="lc"><div class="lc-n">08</div><div class="lc-tag">Layer 08 of 10</div><div class="lc-name">Seasonal Yield Curve</div><div class="lc-desc">Peak capture, trough stimulation, shoulder pricing. Benchmarked against Harvy's 1.6–2.0x peak/trough ratio.</div></div>
+    <div class="lc"><div class="lc-n">09</div><div class="lc-tag">Layer 09 of 10</div><div class="lc-name">Net Revenue Analysis</div><div class="lc-desc">Cleaning cost ratio, true RevPAR, operational profit drag. What lands in your account vs what your dashboard shows.</div></div>
+    <div class="lc"><div class="lc-n">10</div><div class="lc-tag">Layer 10 of 10</div><div class="lc-name">Competitive Positioning</div><div class="lc-desc">USP clarity, market stance, target segment alignment, channel opportunity vs actual local competition.</div></div>
   </div>
 </section>
-
-<!-- HOW IT WORKS -->
 
 <section class="section" style="padding-top:0">
-  <div class="section-label">How It Works</div>
-  <h2 class="section-h2">Three steps. <em>Twenty seconds. Real answers.</em></h2>
-  <p class="section-body">No software to learn. No consultancy retainer. No generic advice. Enter your numbers, get a forensic diagnosis built on the same methodology that recovered £86K in 9 months.</p>
+  <div class="sec-lbl">How It Works</div>
+  <h2 class="sec-h2">Three steps. <em>Twenty seconds. Real answers.</em></h2>
+  <p class="sec-body">No software to learn. No consultancy retainer. No generic advice. Enter your numbers, get a forensic diagnosis built on the same methodology that recovered £86K in 9 months.</p>
   <div class="how-grid">
-    <div class="how-card"><div class="how-num">01</div><div class="how-title">Enter Your Numbers</div><p class="how-body">Property type, location, ADR, occupancy, review count. Ninety seconds. Every field maps to a specific audit layer.</p><span class="how-time">90 seconds to complete</span></div>
-    <div class="how-card"><div class="how-num">02</div><div class="how-title">The Engine Runs</div><p class="how-body">Ten layers of analysis run simultaneously against Harvy's UK operator benchmarks. RevPAR ceiling, rate calendar, listing conversion, review velocity, yield curve — all at once.</p><span class="how-time">Under 20 seconds</span></div>
-    <div class="how-card"><div class="how-num">03</div><div class="how-title">You See Exactly Where</div><p class="how-body">Every leak identified. Every fix ranked by impact. The precise monthly figure sitting unrecovered in your portfolio — and the single most important action to take today.</p><span class="how-time">Precise per leak · Ranked actions</span></div>
+    <div class="how-c"><div class="how-n">01</div><div class="how-t">Enter Your Numbers</div><p class="how-b">Property type, location, ADR, occupancy, review count. Ninety seconds. Every field maps to a specific audit layer.</p><span class="how-time">90 seconds to complete</span></div>
+    <div class="how-c"><div class="how-n">02</div><div class="how-t">The Engine Runs</div><p class="how-b">Ten layers of analysis run simultaneously against Harvy's UK operator benchmarks. RevPAR ceiling, rate calendar, listing conversion, review velocity, yield curve — all at once.</p><span class="how-time">Under 20 seconds</span></div>
+    <div class="how-c"><div class="how-n">03</div><div class="how-t">You See Exactly Where</div><p class="how-b">Every leak identified. Every fix ranked by impact. The precise monthly figure sitting unrecovered in your portfolio — and the single most important action to take today.</p><span class="how-time">Precise per leak · Ranked actions</span></div>
   </div>
 </section>
 
-<!-- DIFFERENCE -->
-
 <div class="diff-section">
-  <div class="section-label">What Makes This Different</div>
+  <div class="sec-lbl">What Makes This Different</div>
   <p class="diff-intro">Every other tool audits your <em>listing</em>. Summit Stay Group audits your <strong>entire revenue architecture</strong>. The gap between what you earn and what you should earn lives in your pricing logic, your calendar gaps, your channel mix, your cleaning fee ratio, your review velocity.</p>
-  <p class="section-body" style="margin-top:16px">Most operators never look at these things together. We built a system that does — automatically — because Harvy looked at them every single day for 9 months and grew a portfolio by 38%.</p>
+  <p class="sec-body" style="margin-top:14px">Most operators never look at these things together. We built a system that does — automatically — because Harvy looked at them every single day for 9 months and grew a portfolio by 38%.</p>
   <div class="diff-grid">
-    <div class="diff-col them">
-      <h3 class="diff-h3">What Other Tools Give You</h3>
-      <ul class="diff-list">
-        <li>A listing URL. A title score. Photo feedback.</li>
-        <li>One platform's data only</li>
-        <li>Surface-level advice, missing multi-platform gaps</li>
-        <li>No view of direct booking revenue</li>
-        <li>No channel mix or commission analysis</li>
-        <li>No net revenue after fees</li>
-      </ul>
-    </div>
+    <div class="diff-col them"><h3 class="diff-h3">What Other Tools Give You</h3><ul class="diff-list"><li>A listing URL. A title score. Photo feedback.</li><li>One platform's data only</li><li>Surface-level advice, missing multi-platform gaps</li><li>No view of direct booking revenue</li><li>No channel mix or commission analysis</li><li>No net revenue after fees</li></ul></div>
     <div class="diff-vs">vs</div>
-    <div class="diff-col us">
-      <h3 class="diff-h3">What Summit Stay Group Gives You</h3>
-      <ul class="diff-list">
-        <li>True occupancy across all channels</li>
-        <li>Channel mix and commission leakage quantified</li>
-        <li>Direct booking opportunity identified</li>
-        <li>Pricing logic and calendar gaps mapped</li>
-        <li>Net revenue after fees — the real number</li>
-        <li>Every fix ranked in order of monthly impact</li>
-      </ul>
-    </div>
+    <div class="diff-col us"><h3 class="diff-h3">What Summit Stay Group Gives You</h3><ul class="diff-list"><li>True occupancy across all channels</li><li>Channel mix and commission leakage quantified</li><li>Direct booking opportunity identified</li><li>Pricing logic and calendar gaps mapped</li><li>Net revenue after fees — the real number</li><li>Every fix ranked in order of monthly impact</li></ul></div>
   </div>
 </div>
 
-<div class="ornament"><span>◆ ◆ ◆</span></div>
-
-<!-- FOUNDER -->
+<div class="orn"><div class="orn-c">◆ ◆ ◆</div></div>
 
 <section class="founder-section">
   <div class="founder-grid">
-    <div class="founder-avatar">H</div>
+    <div class="founder-av">H</div>
     <div>
       <div class="founder-name">Harvy Pinder-Sellings</div>
       <div class="founder-role">Founder · Summit Stay Group · STR Performance Consultancy · United Kingdom</div>
-      <p class="founder-quote">I didn't come from consultancy. I came from the operations. I grew revenue by <strong>38% in 9 months</strong> maintaining 4.97–5.0 ratings. <strong>This is not a SaaS dashboard. This is a consultant's methodology automated.</strong></p>
+      <p class="founder-q">I didn't come from consultancy. I came from the operations. I grew revenue by <strong>38% in 9 months</strong> maintaining 4.97–5.0 ratings. <strong>This is not a SaaS dashboard. This is a consultant's methodology automated.</strong></p>
       <div class="founder-stats">
-        <div class="fstat">Portfolio · <span>5 Units Scotland</span></div>
-        <div class="fstat">Growth · <span>+38% Revenue</span></div>
-        <div class="fstat">Rating · <span>4.97★ Maintained</span></div>
-        <div class="fstat">Guest Favourite · <span>×5</span></div>
-        <div class="fstat">KAYAK · <span>Top 3% UK</span></div>
+        <div class="fs">Portfolio · <span>5 Units Scotland</span></div>
+        <div class="fs">Growth · <span>+38%</span></div>
+        <div class="fs">Rating · <span>4.97★</span></div>
+        <div class="fs">Guest Favourite · <span>×5</span></div>
+        <div class="fs">KAYAK · <span>Top 3% UK</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-
 <section class="cta-section">
-  <div class="section-label" style="justify-content:center">Start Today</div>
-  <h2 class="section-h2">Your first two leaks. <em>Free. In 20 seconds.</em></h2>
-  <p class="section-body">Enter your numbers. The engine runs Layers 01 and 02 against Harvy's UK benchmarks and shows you exactly where your money is going.</p>
+  <div class="sec-lbl" style="justify-content:center">Start Today</div>
+  <h2 class="sec-h2">Your first two leaks. <em>Free. In 20 seconds.</em></h2>
+  <p class="sec-body">Enter your numbers. The engine runs Layers 01 and 02 against Harvy's UK benchmarks and shows you exactly where your money is going.</p>
   <div class="cta-row">
     <a href="/audit" class="cta-main">Run Free Preview →</a>
-    <a href="/pricing" class="btn-ghost" style="padding:15px 32px;font-size:10.5px">View Pricing</a>
+    <a href="/pricing" class="btn-ghost" style="padding:14px 28px;font-size:10px">View Pricing</a>
   </div>
 </section>
 
-<!-- FOOTER -->
-
 <footer>
-  <div class="footer-brand">
-    <div class="wm">Summit Stay Group</div>
-    <div class="tagline">STR Revenue Intelligence</div>
-    <p>The only STR revenue intelligence platform built by someone who ran the portfolio. An operator who grew revenue 38% in 9 months.</p>
-  </div>
-  <div class="footer-links">
-    <div class="footer-col"><h4>Platform</h4><a href="/">How It Works</a><a href="/audit">Free Audit</a></div>
-    <div class="footer-col"><h4>Company</h4><a href="/casestudy">Case Study</a><a href="/pricing">Pricing</a></div>
-    <div class="footer-col"><h4>Contact</h4><p>summitstaygroup@gmail.com</p><p>UK-based · Operator-led</p><p>Response within 24 hours</p></div>
+  <div class="f-brand"><div class="wm">Summit Stay Group</div><div class="tg">STR Revenue Intelligence</div><p>The only STR revenue intelligence platform built by someone who ran the portfolio. An operator who grew revenue 38% in 9 months.</p></div>
+  <div class="f-links">
+    <div class="f-col"><h4>Platform</h4><a href="/">How It Works</a><a href="/audit">Free Audit</a></div>
+    <div class="f-col"><h4>Company</h4><a href="/casestudy">Case Study</a><a href="/pricing">Pricing</a></div>
+    <div class="f-col"><h4>Contact</h4><p>summitstaygroup@gmail.com</p><p>UK-based · Operator-led</p><p>Response within 24 hours</p></div>
   </div>
 </footer>
-<div class="footer-bottom">
+<div class="f-bot">
   <span>© 2026 Summit Stay Group · Harvy Pinder-Sellings · United Kingdom</span>
   <span>summitstaygroup.co.uk</span>
 </div>
 
-<!-- ═══════════════════════════════════
-     TERMINAL ANIMATION ENGINE
-═══════════════════════════════════ -->
-
 <script>
-  const layerTimings = [600, 1100, 1700, 2300, 2900, 3600, 4300, 5100, 5900, 6800];
-  const leakTimings  = [3200, 4000, 4800, 5600, 6400, 7100];
-  const leakWidths   = ['80%','55%','43%','34%','25%','15%'];
-  const leakAmounts  = [520, 360, 280, 220, 160, 100];
+  const layerT=[500,950,1500,2100,2750,3450,4200,5000,5850,6750];
+  const leakT=[3600,4350,5150,5900,6600,7300];
+  const leakW=['80%','55%','43%','33%','24%','15%'];
+  const leakV=[520,360,280,220,160,100];
+  let msVal=0,done=0,total=0;
 
-  const totalTarget  = 1640;
-  let msCount = 0;
-  let totalShown = 0;
-  let animDone = false;
+  const msEl=document.getElementById('ms');
+  const msInt=setInterval(()=>{
+    msVal+=Math.floor(Math.random()*18)+5;
+    if(msVal>=847){msEl.textContent=' 847ms';clearInterval(msInt);}
+    else msEl.textContent=' '+msVal+'ms';
+  },52);
 
-  // ms counter
-  const msEl = document.getElementById('msTimer');
-  const msInterval = setInterval(() => {
-    msCount += Math.floor(Math.random() * 18) + 5;
-    msEl.textContent = msCount + 'ms';
-    if (msCount > 847) { msEl.textContent = '847ms'; clearInterval(msInterval); }
-  }, 60);
-
-  // Footer messages
-  const msgs = [
-    'Loading UK Highland benchmarks',
-    'Initialising RevPAR model',
-    'Mapping rate calendar gaps',
-    'Running NLP sentiment engine',
-    'Calculating channel leakage',
-    'Yield curve analysis complete',
-    'Compiling leak report',
-    'Ranking by monthly impact',
-    'Audit complete ·',
-  ];
-  let msgIdx = 0;
-  const footerEl = document.getElementById('footerMsg');
-  const msgInterval = setInterval(() => {
-    if (msgIdx < msgs.length - 1) {
-      footerEl.innerHTML = msgs[msgIdx] + '<span class="cursor-blink"></span>';
-      msgIdx++;
+  const msgs=['loading benchmarks','mapping revpar ceiling','scanning rate calendar','running nlp','calculating channel mix','ranking by impact','complete'];
+  let mi=0;
+  const smEl=document.getElementById('smsg');
+  const smInt=setInterval(()=>{
+    if(mi<msgs.length-1){
+      smEl.innerHTML=msgs[mi]+'<span style="width:5px;height:10px;display:inline-block;background:var(--amber);animation:blink 1s step-end infinite;vertical-align:middle;margin-left:4px"></span>';
+      mi++;
     } else {
-      footerEl.innerHTML = msgs[msgs.length - 1] + ' <span style="color:var(--green-bright)">6 LEAKS DETECTED</span>';
-      document.getElementById('termStatus').textContent = 'Complete';
-      document.getElementById('termStatus').style.color = 'var(--green-bright)';
-      clearInterval(msgInterval);
+      smEl.innerHTML='<span style="color:var(--green-b)">audit complete · 6 leaks found</span>';
+      document.getElementById('sdot').style.background='var(--green-b)';
+      document.getElementById('stxt').style.color='var(--green-b)';
+      document.getElementById('stxt').textContent='Complete';
+      clearInterval(smInt);
     }
-  }, 900);
+  },950);
 
-  // Layer activation
-  layerTimings.forEach((t, i) => {
-    const n = i + 1;
-    // Start scanning
-    setTimeout(() => {
-      const row = document.getElementById('l' + n);
-      const bar = document.getElementById('b' + n);
-      const stat = document.getElementById('s' + n);
-      row.className = 'layer-row scanning';
-      stat.className = 'lr-status run';
-      stat.textContent = 'SCANNING';
-      // Animate bar
-      let w = 0;
-      const barInt = setInterval(() => {
-        w += Math.random() * 12 + 4;
-        if (w >= 100) { w = 100; clearInterval(barInt); }
-        bar.style.width = w + '%';
-      }, 80);
-    }, t);
+  function showLog(id,d){setTimeout(()=>document.getElementById(id).classList.add('show'),d);}
+  showLog('log1',700);showLog('log2',1900);showLog('log3',3100);showLog('log4',4700);showLog('log5',6900);
 
-    // Complete
-    setTimeout(() => {
-      const row = document.getElementById('l' + n);
-      const stat = document.getElementById('s' + n);
-      const bar  = document.getElementById('b' + n);
-      row.className = 'layer-row complete active';
-      stat.className = 'lr-status done';
-      stat.textContent = 'DONE';
-      bar.style.width = '100%';
-    }, t + 700);
-  });
-
-  // Leak reveals + counter
-  leakTimings.forEach((t, i) => {
-    setTimeout(() => {
-      const item = document.getElementById('li' + (i+1));
-      const fill = document.getElementById('lf' + (i+1));
-      item.classList.add('show');
-      setTimeout(() => { fill.style.width = leakWidths[i]; }, 50);
-
-      // Count up total
-      const stepAmt = leakAmounts[i];
-      const stepDur = 800;
-      const steps = 30;
-      let step = 0;
-      const totalEl = document.getElementById('totalAmount');
-      const countInt = setInterval(() => {
-        step++;
-        totalShown += stepAmt / steps;
-        totalEl.textContent = '£' + Math.round(totalShown).toLocaleString();
-        if (step >= steps) clearInterval(countInt);
-      }, stepDur / steps);
-    }, t);
-  });
-
-  // Loop the animation every 12s
-  function resetAndLoop() {
-    setTimeout(() => {
-      // Reset layers
-      for (let i = 1; i <= 10; i++) {
-        document.getElementById('l' + i).className = 'layer-row';
-        document.getElementById('b' + i).style.width = '0%';
-        document.getElementById('s' + i).className = 'lr-status wait';
-        document.getElementById('s' + i).textContent = 'WAITING';
-      }
-      // Reset leaks
-      for (let i = 1; i <= 6; i++) {
-        document.getElementById('li' + i).classList.remove('show');
-        document.getElementById('lf' + i).style.width = '0%';
-      }
-      totalShown = 0;
-      document.getElementById('totalAmount').textContent = '£0';
-
-      // Re-run layers
-      layerTimings.forEach((t, i) => {
-        const n = i + 1;
-        setTimeout(() => {
-          const row = document.getElementById('l' + n);
-          const bar = document.getElementById('b' + n);
-          const stat = document.getElementById('s' + n);
-          row.className = 'layer-row scanning';
-          stat.className = 'lr-status run';
-          stat.textContent = 'SCANNING';
-          let w = 0;
-          const bi = setInterval(() => {
-            w += Math.random() * 12 + 4;
-            if (w >= 100) { w = 100; clearInterval(bi); }
-            bar.style.width = w + '%';
-          }, 80);
-        }, t);
-        setTimeout(() => {
-          document.getElementById('l' + n).className = 'layer-row complete active';
-          document.getElementById('s' + n).className = 'lr-status done';
-          document.getElementById('s' + n).textContent = 'DONE';
-          document.getElementById('b' + n).style.width = '100%';
-        }, t + 700);
-      });
-
-      // Re-run leaks
-      leakTimings.forEach((t, i) => {
-        setTimeout(() => {
-          const item = document.getElementById('li' + (i+1));
-          const fill = document.getElementById('lf' + (i+1));
-          item.classList.add('show');
-          setTimeout(() => { fill.style.width = leakWidths[i]; }, 50);
-          const stepAmt = leakAmounts[i];
-          let step = 0;
-          const ci = setInterval(() => {
-            step++;
-            totalShown += stepAmt / 30;
-            document.getElementById('totalAmount').textContent = '£' + Math.round(totalShown).toLocaleString();
-            if (step >= 30) clearInterval(ci);
-          }, 800 / 30);
-        }, t);
-      });
-
-      resetAndLoop();
-    }, 14000);
+  function runLayer(n,t){
+    setTimeout(()=>{
+      const row=document.getElementById('ll'+n),fill=document.getElementById('lf'+n),tag=document.getElementById('lt'+n);
+      row.className='ll scanning';tag.className='ll-tg r';tag.textContent='RUN';
+      let w=0;
+      const bi=setInterval(()=>{w+=Math.random()*14+5;if(w>=100){w=100;clearInterval(bi);}fill.style.width=w+'%';},68);
+      setTimeout(()=>{row.className='ll done';tag.className='ll-tg ok';tag.textContent='OK';fill.style.width='100%';done++;document.getElementById('lcount').textContent=done+'/10';},680);
+    },t);
   }
 
-  resetAndLoop();
+  function runLeak(n,t){
+    setTimeout(()=>{
+      const item=document.getElementById('lk'+n),fill=document.getElementById('lkf'+n);
+      item.classList.add('show');
+      setTimeout(()=>fill.style.width=leakW[n-1],50);
+      const v=leakV[n-1];let s=0;
+      const ci=setInterval(()=>{s++;total+=v/28;document.getElementById('totalAmt').textContent='£'+Math.round(total).toLocaleString();if(s>=28)clearInterval(ci);},750/28);
+    },t);
+  }
+
+  layerT.forEach((t,i)=>runLayer(i+1,t));
+  leakT.forEach((t,i)=>runLeak(i+1,t));
+
+  function loop(){
+    setTimeout(()=>{
+      done=0;total=0;
+      document.getElementById('totalAmt').textContent='£0';
+      document.getElementById('lcount').textContent='0/10';
+      for(let i=1;i<=10;i++){
+        document.getElementById('ll'+i).className='ll';
+        document.getElementById('lf'+i).style.width='0%';
+        document.getElementById('lt'+i).className='ll-tg w';
+        document.getElementById('lt'+i).textContent='WAIT';
+      }
+      for(let i=1;i<=6;i++){document.getElementById('lk'+i).classList.remove('show');document.getElementById('lkf'+i).style.width='0%';}
+      ['log1','log2','log3','log4','log5'].forEach(id=>document.getElementById(id).classList.remove('show'));
+      layerT.forEach((t,i)=>runLayer(i+1,t));
+      leakT.forEach((t,i)=>runLeak(i+1,t));
+      showLog('log1',700);showLog('log2',1900);showLog('log3',3100);showLog('log4',4700);showLog('log5',6900);
+      loop();
+    },14500);
+  }
+  loop();
 </script>
 
 </body>
