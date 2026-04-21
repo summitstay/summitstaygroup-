@@ -559,23 +559,11 @@ PROPERTY:
 - Active Upsells: ${data.upsells}
 
 YOUR JOB:
-Write a forensic 10-layer audit. For each layer:
-1. Tell them what you found — specifically, using their numbers
-2. Explain WHY it matters and what it is actually costing them (in £)
-3. Tell them exactly what to do about it — specific, actionable, this week if possible
-4. The finding should feel like something only an experienced operator would spot — not something they'd find by Googling
+Analyse this property and return a 10-layer forensic revenue audit. Be specific, use their exact numbers, write like a straight-talking UK operator. Find hidden money leaks. Every fix must be actionable this week.
 
-For the FINDINGS specifically:
-- Layer 01 (RevPAR): Calculate their true RevPAR gap vs what a well-run property of their type in their location should be achieving. Be specific about what's driving the gap — is it ADR, occupancy, or both? What is the compounding annual cost of this gap?
-- Layer 02 (Calendar): With a ${data.minStay || 2}-night minimum stay, calculate how many orphan gap nights this creates per month. A 2-night minimum creates gaps where a single night sits between bookings unfilled. At their ADR that's real money. Name the specific problem.
-- Layer 03 (Booking Pace): At ${data.occupancy}% occupancy with ${data.pricingTool} as their pricing tool, what is the likely booking pattern? Are they filling up too early at low rates, or too late with last-minute discounts? What lead-time problem do they have?
-- Layer 04 (Listing): ${data.instantBook === 'No' ? 'Instant Book is OFF. This is costing them 25-40% of impressions on Airbnb — the algorithm actively suppresses non-instant-book listings in search. This is probably the single most impactful quick fix on their entire listing.' : 'Instant Book is on — good. But what else could be dragging conversion?'} On ${data.platforms} — what platform dependency risk exists?
-- Layer 05 (Reviews): ${data.reviews} reviews at ${data.rating} stars. Calculate their review velocity — how many reviews per month based on their occupancy and ADR. Is that velocity strong enough to maintain algorithm favour? At ${data.rating} stars, what is the trajectory risk? What experience gaps might be hiding in the sentiment that aren't obvious from the star rating alone?
-- Layer 06 (Guest Journey): With ${data.upsells} upsells active and ${data.directBookings} direct bookings. The average STR operator misses £40-80 per booking in upsell revenue. At their booking volume, what is the monthly total they are leaving on the table? What specific upsells work for their property type and location?
-- Layer 07 (Channel Mix): On ${data.platforms}, calculate the commission drain. At £${monthlyRev} gross monthly revenue, what is actually landing in their account after platform fees? What would a modest direct booking rate of even 10-15% do to their net revenue?
-- Layer 08 (Yield): With ${data.peakSeason} as peak and ${data.pricingTool} pricing tool, what is their likely peak/trough ADR ratio? The benchmark for a well-managed UK STR is 1.6-2.0x. If they're running flat pricing or relying on a basic tool, they are almost certainly leaving significant peak money behind. Calculate the gap.
-- Layer 09 (Net Revenue): ${data.cleaningFee ? 'Their cleaning fee of £' + data.cleaningFee + ' is ' + cleaningRatio + '% of their ADR of £' + data.adr + '. ' + (cleaningRatio > 28 ? 'This is HIGH — above 25-28% starts to suppress bookings because guests see the total price including cleaning and compare it to hotels. This is a hidden conversion killer.' : 'This looks reasonable but needs checking against true net RevPAR after all deductions.') : 'No cleaning fee provided — this is a critical unknown. Cleaning fee ratio vs ADR is one of the most overlooked net revenue drags.'} What is their true RevPAR after all platform fees, cleaning costs, and operational expenses?
-- Layer 10 (Competitive): For a ${data.propertyType} with ${data.bedrooms} bedrooms in ${data.location} at ${data.rating} stars — what is their actual competitive position? What are the operators outperforming them doing differently? What single USP change would move the needle most?
+Layers: 01 RevPAR Gap, 02 Rate Calendar, 03 Booking Pace, 04 Listing Conversion, 05 Review Sentiment, 06 Guest Journey, 07 Channel Mix, 08 Seasonal Yield, 09 Net Revenue, 10 Competitive Position.
+
+For each layer give a specific finding using their numbers, calculate the monthly £ leak, and give one precise fix.
 
 Respond ONLY with a valid JSON object. No preamble, no markdown, no backticks. Exact structure:
 
