@@ -851,9 +851,13 @@ async function init() {
   const data = getAuditData();
 
   // Start generation animation
-  animateGenLog(async ()=>{
+  const reportPromise = callClaude(data);
+animateGenLog(async ()=>{
     try {
-      const report = await callClaude(data);
+      const report = await reportPromise;
+
+    
+
 
       // Hide gen screen, show report
       document.getElementById('genScreen').style.display='none';
