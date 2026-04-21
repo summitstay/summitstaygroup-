@@ -570,12 +570,62 @@ Respond ONLY with a valid JSON object. No preamble, no markdown, no backticks. E
 `;
 
 
+}
+
+// ── Call Claude API ──
+async function callClaude(data) {
+  const prompt = buildPrompt(data);
+  const response = await fetch('/.netlify/functions/audit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })
+  });
+  const result = await response.json();
+  if (!result.content || !result.content[0]) {
+    throw new Error('No content returned');
+  }
+  let text = result.content[0].text;
+  text = text.replace(/```json|```/gi,'').trim();
+  const first = text.indexOf('{');
+  const last = text.lastIndexOf('}');
+  text = text.substring(first, last + 1);
+  return JSON.parse(text);
+}
+
+function toggleLayer(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+function downloadPDF() { window.print(); }
+
+function animateGenLog(callback) {
+  const timings = [200,600,1000,1500,2000,2600,3200,3900,4700,5500,6200,7000,7800,8500,9200];
+  timings.forEach((t,i)=>{
+    setTimeout(()=>{ document.getElementById('gl'+(i+1)).classList.add('show'); },t);
+  });
+  let sec=0;
+  const ti = setInterval(()=>{ sec++; document.getElementById('genTimer').textContent=sec+'s elapsed'; },1000);
+  setTimeout(()=>{ clearInterval(ti); callback(); }, 5000);
+}
+
+async function init() {
+  const data = getAuditData();
+  const reportPromise = callClaude(data);
+  animateGenLog(async ()=>{
+    try {
+      const report = await reportPromise;
+      document.getElementById('genScreen').style.display='none';
+      document.getElementById('reportScreen').classList.add('visible');
+      renderReport(report, data);
+      window.scrollTo({top:0,behavior:'smooth'});
+    } catch(err) {
+      console.error('Report generation error:', err);
+      document.getElementById('genTimer').style.color='#e87070';
+      document.getElementById('genTimer').textContent='Contact support';
+      document.getElementById('gl15').innerHTML='<span style="color:#e87070">⚠ Something went wrong. Please email summitstaygroup@gmail.com with your property details.</span>';
+      document.getElementById('gl15').classList.add('show');
     }
   });
 }
 
-init();
-</script>
-
-</body>
-</html>
