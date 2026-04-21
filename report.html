@@ -572,6 +572,40 @@ Respond ONLY with a valid JSON object. No preamble, no markdown, no backticks. E
 
 }
 
+function renderReport(report, data) {
+  const now = new Date();
+  document.getElementById('reportId').textContent = 'RPT-'+Math.random().toString(36).substr(2,6).toUpperCase();
+  document.getElementById('reportDate').innerHTML = `Generated ${now.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}<br>${now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}`;
+  document.getElementById('reportTitle').innerHTML = `${data.name || data.location} <em>Revenue Audit</em>`;
+  document.getElementById('reportProperty').textContent = `${data.propertyType} · ${data.bedrooms} bedrooms · ${data.location} · ${data.peakSeason} peak`;
+  document.getElementById('sumLeak').textContent = '£'+report.totalMonthlyLeak.toLocaleString();
+  document.getElementById('sumAnnual').textContent = '£'+(report.totalMonthlyLeak*12).toLocaleString();
+  document.getElementById('sumLeaks').textContent = report.leaksDetected;
+  document.getElementById('sumScore').textContent = report.portfolioHealthScore;
+  document.getElementById('sumScoreLabel').textContent = report.healthScoreLabel;
+  const scoreColor = report.portfolioHealthScore >= 70 ? 'var(--green-b)' : report.portfolioHealthScore >= 45 ? 'var(--amber)' : '#e87070';
+  const bar = document.getElementById('scoreBar');
+  bar.style.background = scoreColor;
+  setTimeout(()=>{ bar.style.width = report.portfolioHealthScore+'%'; }, 300);
+  document.getElementById('healthScoreNum').textContent = report.portfolioHealthScore;
+  const hbEl = document.getElementById('healthBreakdown');
+  hbEl.innerHTML = report.healthBreakdown.map(h=>`<div class="hb-row"><span class="hb-label">${h.label}</span><div class="hb-track"><div class="hb-fill" style="width:0%" data-target="${h.score}%"></div></div><span class="hb-val">${h.score}</span></div>`).join('');
+  setTimeout(()=>{ document.querySelectorAll('.hb-fill').forEach(el=>{ el.style.width = el.dataset.target; }); }, 400);
+  const benchEl = document.getElementById('benchGrid');
+  benchEl.innerHTML = report.benchmarks.map((b,i)=>`<div class="bench-cell ${i===0||i===3||i===5?'yours':''}"><span class="bench-cell-lbl">${b.metric}</span><span class="bench-cell-val">${b.value}</span><span class="bench-cell-metric">${b.context}</span></div>`).join('');
+  const layersEl = document.getElementById('layerCards');
+  layersEl.innerHTML = report.layers.map(l=>`<div class="layer-card sev-${l.severity}"><div class="lc-header" onclick="toggleLayer(this)"><div class="lc-num">${l.number}</div><div class="lc-title-wrap"><div class="lc-layer-tag">Layer ${l.number} of 10</div><div class="lc-title">${l.name}</div></div><div class="lc-leak"><span class="lc-leak-val">£${l.monthlyLeak.toLocaleString()}</span><span class="lc-leak-lbl">/month</span></div><div class="lc-sev"><span class="sev-badge ${l.severity}">${l.severity.toUpperCase()}</span></div></div><div class="lc-body ${parseInt(l.number)<=3?'open':''}"><p style="font-family:var(--font-d);font-size:19px;font-weight:700;font-style:italic;color:var(--cream);margin-bottom:16px">${l.headline}</p><div class="lc-finding">${l.finding}</div><div class="lc-datapoints">${l.datapoints.map(dp=>`<div class="lc-dp"><span class="lc-dp-val">${dp.value}</span><span class="lc-dp-lbl">${dp.label}</span></div>`).join('')}</div><div class="lc-fix-box"><div class="lc-fix-label">◆ The Fix</div><div class="lc-fix-text">${l.fix}</div><div class="lc-impact">Expected recovery: <span>${l.expectedRecovery}/month</span></div></div></div></div>`).join('');
+  const actionsEl = document.getElementById('actionGrid');
+  const priorityClass = ['p1','p1','p2','p2','p3','p3'];
+  actionsEl.innerHTML = report.priorityActions.map((a,i)=>`<div class="action-item ${priorityClass[i]}"><div class="action-rank">${String(a.rank).padStart(2,'0')}</div><div class="action-content"><div class="action-timeframe">${a.timeframe}</div><div class="action-title">${a.title}</div><div class="action-desc">${a.description}</div></div><div><div class="action-val">£${a.monthlyValue.toLocaleString()}</div><span class="action-val-lbl">/month</span></div></div>`).join('');
+  document.getElementById('success3').textContent = '£'+Math.round(report.totalMonthlyLeak * 0.7).toLocaleString()+'/mo';
+  if (report.closingNote) {
+    document.getElementById('closingNote').textContent = report.closingNote;
+    document.getElementById('closingSection').style.display = 'block';
+  }
+  document.getElementById('pdfBtn').classList.add('visible');
+}
+
 // ── Call Claude API ──
 async function callClaude(data) {
   const prompt = buildPrompt(data);
