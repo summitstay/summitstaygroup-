@@ -23,203 +23,135 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{background:var(--bg);color:var(--cream);font-family:var(--font-b);font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-    body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px}
-
-```
-/* NAV */
-nav{background:rgba(5,4,2,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border-d);padding:0 52px;display:flex;align-items:center;height:66px;position:relative}
-nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--amber-d) 20%,var(--amber) 50%,var(--amber-d) 80%,transparent);opacity:.25}
-.brand{display:flex;flex-direction:column;margin-right:auto}
-.brand .wm{font-family:var(--font-d);font-size:14px;font-weight:900;letter-spacing:.28em;color:var(--amber);text-transform:uppercase;line-height:1}
-.brand .sub{font-family:var(--font-m);font-size:8px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-top:3px}
-.nav-r{display:flex;gap:12px;align-items:center}
-.btn-pdf{font-family:var(--font-m);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#050402;background:var(--amber);border:none;padding:9px 20px;cursor:pointer;transition:background .2s;display:none}
-.btn-pdf:hover{background:var(--amber-b)}
-.btn-pdf.visible{display:block}
-.report-id{font-family:var(--font-m);font-size:9px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
-
-/* ── GENERATION SCREEN ── */
-#genScreen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 40px;text-align:center;position:relative;overflow:hidden}
-#genScreen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(201,162,39,.07) 0%,transparent 60%)}
-.gen-eyebrow{font-family:var(--font-m);font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--amber);display:flex;align-items:center;gap:10px;margin-bottom:20px;justify-content:center}
-.gen-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:genpulse 1.4s ease-in-out infinite}
-@keyframes genpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
-.gen-h1{font-family:var(--font-d);font-size:clamp(36px,4vw,60px);font-weight:900;color:var(--cream);margin-bottom:10px;line-height:1.02}
-.gen-h1 em{font-style:italic;color:var(--amber)}
-.gen-sub{font-family:var(--font-b);font-size:18px;font-weight:300;color:var(--cream-d);margin-bottom:48px;max-width:520px}
-
-/* Generation progress terminal */
-.gen-terminal{width:100%;max-width:640px;background:#040301;border:1px solid var(--border);position:relative;text-align:left}
-.gen-terminal::before{content:'';position:absolute;top:-1px;left:15%;right:15%;height:1px;background:linear-gradient(to right,transparent,var(--amber),transparent);opacity:.5}
-.gen-tbar{background:rgba(0,0,0,.5);border-bottom:1px solid var(--border-d);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
-.gen-dots{display:flex;gap:6px}
-.gen-dots span{width:10px;height:10px;border-radius:50%}
-.gen-dots span:nth-child(1){background:#7a1e18}
-.gen-dots span:nth-child(2){background:#7a5518}
-.gen-dots span:nth-child(3){background:var(--green)}
-.gen-tpath{font-family:var(--font-m);font-size:8.5px;letter-spacing:.1em;color:var(--muted)}
-.gen-tbody{padding:16px;display:flex;flex-direction:column;gap:4px;min-height:180px}
-.gen-line{font-family:var(--font-m);font-size:9px;letter-spacing:.06em;color:var(--muted);opacity:0;transition:opacity .3s}
-.gen-line.show{opacity:1}
-.gen-line .ts{color:var(--amber-d);margin-right:8px}
-.gen-line .ok{color:var(--green-b)}
-.gen-line .proc{color:var(--amber)}
-.gen-line .warn{color:#e8a020}
-.gen-tfoot{border-top:1px solid var(--border-d);padding:8px 16px;font-family:var(--font-m);font-size:8px;letter-spacing:.1em;color:var(--muted);display:flex;justify-content:space-between}
-
-/* ── REPORT SCREEN ── */
-#reportScreen{display:none}
-#reportScreen.visible{display:block}
-
-/* Report header */
-.report-header{padding:60px 80px 48px;position:relative;border-bottom:1px solid var(--border-d);overflow:hidden}
-.report-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,162,39,.07) 0%,transparent 55%)}
-.report-header::after{content:'';position:absolute;bottom:0;left:10%;right:10%;height:1px;background:linear-gradient(to right,transparent,var(--amber),transparent);opacity:.25}
-.rh-meta{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;position:relative;z-index:1}
-.rh-eyebrow{font-family:var(--font-m);font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--amber);display:flex;align-items:center;gap:12px}
-.rh-eyebrow::before{content:'◆';font-size:7px;color:var(--amber-d)}
-.rh-date{font-family:var(--font-m);font-size:9px;letter-spacing:.14em;color:var(--muted);text-align:right}
-.report-h1{font-family:var(--font-d);font-size:clamp(40px,5vw,72px);font-weight:900;line-height:.97;color:var(--cream);margin-bottom:8px;position:relative;z-index:1}
-.report-h1 em{font-style:italic;color:var(--amber)}
-.report-property{font-family:var(--font-b);font-size:20px;font-weight:200;font-style:italic;color:var(--cream-d);position:relative;z-index:1}
-
-/* Score + total strip */
-.report-summary{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-top:1px solid var(--border-d);border-bottom:1px solid var(--border-d)}
-.rs-block{padding:32px 36px;border-right:1px solid var(--border-d);background:var(--bg-card)}
-.rs-block:last-child{border-right:none}
-.rs-lbl{font-family:var(--font-m);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
-.rs-val{font-family:var(--font-d);font-size:clamp(32px,3.5vw,48px);font-weight:900;color:var(--amber);line-height:1;display:block;text-shadow:0 0 40px rgba(201,162,39,.15)}
-.rs-sub{font-family:var(--font-b);font-size:14px;font-style:italic;color:var(--muted);display:block;margin-top:4px}
-
-/* Health score bar */
-.score-bar-wrap{margin-top:10px;height:4px;background:var(--border-d);border-radius:2px;overflow:hidden}
-.score-bar{height:100%;border-radius:2px;transition:width 1.5s ease;width:0}
-
-/* SECTION WRAPPER */
-.report-section{padding:56px 80px;border-bottom:1px solid var(--border-d)}
-.sec-lbl{font-family:var(--font-m);font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);margin-bottom:18px;display:flex;align-items:center;gap:14px}
-.sec-lbl::before{content:'◆';font-size:7px;color:var(--amber-d)}
-.sec-lbl::after{content:'';flex:0 0 28px;height:1px;background:var(--amber-d);opacity:.4}
-.sec-h2{font-family:var(--font-d);font-size:clamp(28px,3vw,44px);font-weight:900;color:var(--cream);margin-bottom:6px;line-height:1.05}
-.sec-h2 em{font-style:italic;color:var(--amber)}
-
-/* LAYER CARD */
-.layer-card{background:var(--bg-card);border:1px solid var(--border-d);margin-bottom:16px;position:relative;overflow:hidden}
-.layer-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.layer-card.sev-high::before{background:linear-gradient(to right,#8b2820,transparent);opacity:.8}
-.layer-card.sev-med::before{background:linear-gradient(to right,var(--amber-d),transparent);opacity:.7}
-.layer-card.sev-low::before{background:linear-gradient(to right,var(--green),transparent);opacity:.5}
-
-.lc-header{padding:20px 24px;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:16px;cursor:pointer;border-bottom:1px solid var(--border-d)}
-.lc-header:hover{background:rgba(201,162,39,.02)}
-.lc-num{font-family:var(--font-d);font-size:28px;font-weight:900;color:var(--amber);opacity:.2;line-height:1;width:36px}
-.lc-title-wrap{}
-.lc-layer-tag{font-family:var(--font-m);font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
-.lc-title{font-family:var(--font-d);font-size:18px;font-weight:700;color:var(--cream)}
-.lc-leak{text-align:right}
-.lc-leak-val{font-family:var(--font-d);font-size:26px;font-weight:900;color:var(--amber);display:block;line-height:1}
-.lc-leak-lbl{font-family:var(--font-m);font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.lc-sev{width:56px;text-align:center}
-.sev-badge{font-family:var(--font-m);font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:1px;display:inline-block}
-.sev-badge.high{color:#e87070;border:1px solid rgba(139,40,32,.5);background:rgba(139,40,32,.1)}
-.sev-badge.med{color:var(--amber);border:1px solid var(--border);background:var(--amber-p)}
-.sev-badge.low{color:var(--green-b);border:1px solid rgba(61,138,74,.4);background:rgba(61,138,74,.08)}
-
-.lc-body{padding:24px;display:none}
-.lc-body.open{display:block}
-.lc-finding{font-family:var(--font-b);font-size:17px;font-weight:300;color:var(--cream);line-height:1.7;margin-bottom:20px}
-.lc-finding strong{color:var(--amber);font-weight:600}
-
-/* Data points inside layer */
-.lc-datapoints{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border-d);border:1px solid var(--border-d);margin-bottom:20px}
-.lc-dp{background:var(--bg-raised);padding:14px 16px}
-.lc-dp-val{font-family:var(--font-d);font-size:22px;font-weight:900;color:var(--amber);display:block;line-height:1}
-.lc-dp-lbl{font-family:var(--font-m);font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
-
-.lc-fix-box{background:var(--bg-raised);border:1px solid var(--border-d);padding:18px 20px;position:relative}
-.lc-fix-box::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(to right,transparent,var(--amber-d),transparent);opacity:.4}
-.lc-fix-label{font-family:var(--font-m);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber-d);margin-bottom:8px}
-.lc-fix-text{font-family:var(--font-b);font-size:16px;color:var(--cream);line-height:1.6;font-style:italic}
-.lc-impact{margin-top:12px;font-family:var(--font-m);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.lc-impact span{color:var(--green-b)}
-
-/* PRIORITY ACTION PLAN */
-.action-grid{display:flex;flex-direction:column;gap:12px;margin-top:32px}
-.action-item{display:grid;grid-template-columns:48px 1fr auto;gap:16px;align-items:start;background:var(--bg-card);border:1px solid var(--border-d);padding:20px 22px;position:relative}
-.action-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px}
-.action-item.p1::before{background:var(--amber)}
-.action-item.p2::before{background:var(--amber-d)}
-.action-item.p3::before{background:var(--muted)}
-.action-rank{font-family:var(--font-d);font-size:32px;font-weight:900;color:var(--amber);opacity:.25;line-height:1}
-.action-item.p1 .action-rank{opacity:.7}
-.action-content{}
-.action-timeframe{font-family:var(--font-m);font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
-.action-item.p1 .action-timeframe{color:var(--amber)}
-.action-title{font-family:var(--font-d);font-size:17px;font-weight:700;color:var(--cream);margin-bottom:5px}
-.action-desc{font-family:var(--font-b);font-size:15px;font-weight:300;color:var(--cream-d);line-height:1.55}
-.action-val{font-family:var(--font-d);font-size:24px;font-weight:900;color:var(--amber);text-align:right;white-space:nowrap;line-height:1}
-.action-val-lbl{font-family:var(--font-m);font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:right;display:block;margin-top:3px}
-
-/* HEALTH SCORE SECTION */
-.health-grid{display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:center;margin-top:32px}
-.health-score-circle{width:160px;height:160px;border-radius:50%;border:2px solid var(--border);background:var(--bg-card);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;margin:0 auto}
-.health-score-circle::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--border-d)}
-.hs-num{font-family:var(--font-d);font-size:52px;font-weight:900;color:var(--amber);line-height:1}
-.hs-lbl{font-family:var(--font-m);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px}
-.health-breakdown{display:flex;flex-direction:column;gap:10px}
-.hb-row{display:grid;grid-template-columns:160px 1fr 40px;align-items:center;gap:12px}
-.hb-label{font-family:var(--font-m);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-m)}
-.hb-track{height:3px;background:var(--border-d);border-radius:2px;overflow:hidden}
-.hb-fill{height:100%;border-radius:2px;background:var(--amber);width:0;transition:width 1.8s ease}
-.hb-val{font-family:var(--font-m);font-size:9px;color:var(--amber);text-align:right}
-
-/* BENCHMARK COMPARISON */
-.bench-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border-d);border:1px solid var(--border-d);margin-top:28px}
-.bench-cell{background:var(--bg-card);padding:20px 18px}
-.bench-cell.yours{background:var(--bg-raised);border:1px solid var(--border)}
-.bench-cell-lbl{font-family:var(--font-m);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
-.bench-cell-val{font-family:var(--font-d);font-size:26px;font-weight:900;color:var(--amber);display:block;line-height:1}
-.bench-cell.yours .bench-cell-val{text-shadow:0 0 30px rgba(201,162,39,.2)}
-.bench-cell-metric{font-family:var(--font-b);font-size:13px;font-style:italic;color:var(--muted);display:block;margin-top:4px}
-
-/* ORNAMENT */
-.orn{display:flex;align-items:center;padding:0 80px}
-.orn::before,.orn::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--amber-d),transparent);opacity:.5}
-.orn-c{padding:0 18px;font-family:var(--font-d);font-size:11px;color:var(--amber-d);letter-spacing:.5em}
-
-/* FOOTER */
-.report-footer{padding:48px 80px;border-top:1px solid var(--border-d);display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start;background:#030201}
-.rf-brand .wm{font-family:var(--font-d);font-size:15px;font-weight:900;letter-spacing:.24em;color:var(--amber);text-transform:uppercase;margin-bottom:4px}
-.rf-brand .tg{font-family:var(--font-m);font-size:8.5px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
-.rf-brand p{font-family:var(--font-b);font-size:14px;font-weight:300;color:var(--muted);max-width:380px;line-height:1.6}
-.rf-cta{display:flex;flex-direction:column;gap:10px;align-items:flex-end}
-.rf-cta a{font-family:var(--font-m);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:#050402;background:var(--amber);text-decoration:none;padding:12px 24px;transition:background .2s}
-.rf-cta a:hover{background:var(--amber-b)}
-.rf-cta p{font-family:var(--font-m);font-size:8.5px;letter-spacing:.1em;color:var(--muted);text-align:right}
-
-@media print{
-  body{background:#fff;color:#000}
-  nav,.btn-pdf{display:none}
-  .layer-card{break-inside:avoid}
-  #genScreen{display:none}
-}
-@media(max-width:768px){
-  nav{padding:0 20px}
-  .report-header,.report-section{padding:48px 20px}
-  .report-summary{grid-template-columns:1fr 1fr}
-  .rs-block:nth-child(2){border-right:none}
-  .rs-block:nth-child(3){border-top:1px solid var(--border-d);border-right:1px solid var(--border-d)}
-  .lc-datapoints{grid-template-columns:1fr}
-  .bench-grid{grid-template-columns:1fr}
-  .health-grid{grid-template-columns:1fr}
-  .action-item{grid-template-columns:36px 1fr}
-  .action-val{display:none}
-  .orn{padding:0 20px}
-  .report-footer{padding:40px 20px;grid-template-columns:1fr}
-  .rf-cta{align-items:flex-start}
-}
-```
-
+    nav{background:rgba(5,4,2,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border-d);padding:0 52px;display:flex;align-items:center;height:66px;position:relative}
+    .brand{display:flex;flex-direction:column;margin-right:auto}
+    .brand .wm{font-family:var(--font-d);font-size:14px;font-weight:900;letter-spacing:.28em;color:var(--amber);text-transform:uppercase;line-height:1}
+    .brand .sub{font-family:var(--font-m);font-size:8px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-top:3px}
+    .nav-r{display:flex;gap:12px;align-items:center}
+    .btn-pdf{font-family:var(--font-m);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#050402;background:var(--amber);border:none;padding:9px 20px;cursor:pointer;transition:background .2s;display:none}
+    .btn-pdf.visible{display:block}
+    .report-id{font-family:var(--font-m);font-size:9px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+    #genScreen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 40px;text-align:center;position:relative;overflow:hidden}
+    .gen-eyebrow{font-family:var(--font-m);font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--amber);display:flex;align-items:center;gap:10px;margin-bottom:20px;justify-content:center}
+    .gen-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:genpulse 1.4s ease-in-out infinite}
+    @keyframes genpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+    .gen-h1{font-family:var(--font-d);font-size:clamp(36px,4vw,60px);font-weight:900;color:var(--cream);margin-bottom:10px;line-height:1.02}
+    .gen-h1 em{font-style:italic;color:var(--amber)}
+    .gen-sub{font-family:var(--font-b);font-size:18px;font-weight:300;color:var(--cream-d);margin-bottom:48px;max-width:520px}
+    .gen-terminal{width:100%;max-width:640px;background:#040301;border:1px solid var(--border);position:relative;text-align:left}
+    .gen-tbar{background:rgba(0,0,0,.5);border-bottom:1px solid var(--border-d);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+    .gen-dots{display:flex;gap:6px}
+    .gen-dots span{width:10px;height:10px;border-radius:50%}
+    .gen-dots span:nth-child(1){background:#7a1e18}
+    .gen-dots span:nth-child(2){background:#7a5518}
+    .gen-dots span:nth-child(3){background:var(--green)}
+    .gen-tpath{font-family:var(--font-m);font-size:8.5px;letter-spacing:.1em;color:var(--muted)}
+    .gen-tbody{padding:16px;display:flex;flex-direction:column;gap:4px;min-height:180px}
+    .gen-line{font-family:var(--font-m);font-size:9px;letter-spacing:.06em;color:var(--muted);opacity:0;transition:opacity .3s}
+    .gen-line.show{opacity:1}
+    .gen-line .ts{color:var(--amber-d);margin-right:8px}
+    .gen-line .ok{color:var(--green-b)}
+    .gen-line .proc{color:var(--amber)}
+    .gen-tfoot{border-top:1px solid var(--border-d);padding:8px 16px;font-family:var(--font-m);font-size:8px;letter-spacing:.1em;color:var(--muted);display:flex;justify-content:space-between}
+    #reportScreen{display:none}
+    #reportScreen.visible{display:block}
+    .report-header{padding:60px 80px 48px;position:relative;border-bottom:1px solid var(--border-d);overflow:hidden}
+    .rh-meta{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;position:relative;z-index:1}
+    .rh-eyebrow{font-family:var(--font-m);font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--amber)}
+    .rh-date{font-family:var(--font-m);font-size:9px;letter-spacing:.14em;color:var(--muted);text-align:right}
+    .report-h1{font-family:var(--font-d);font-size:clamp(40px,5vw,72px);font-weight:900;line-height:.97;color:var(--cream);margin-bottom:8px;position:relative;z-index:1}
+    .report-h1 em{font-style:italic;color:var(--amber)}
+    .report-property{font-family:var(--font-b);font-size:20px;font-weight:200;font-style:italic;color:var(--cream-d);position:relative;z-index:1}
+    .report-summary{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-top:1px solid var(--border-d);border-bottom:1px solid var(--border-d)}
+    .rs-block{padding:32px 36px;border-right:1px solid var(--border-d);background:var(--bg-card)}
+    .rs-block:last-child{border-right:none}
+    .rs-lbl{font-family:var(--font-m);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+    .rs-val{font-family:var(--font-d);font-size:clamp(32px,3.5vw,48px);font-weight:900;color:var(--amber);line-height:1;display:block}
+    .rs-sub{font-family:var(--font-b);font-size:14px;font-style:italic;color:var(--muted);display:block;margin-top:4px}
+    .score-bar-wrap{margin-top:10px;height:4px;background:var(--border-d);border-radius:2px;overflow:hidden}
+    .score-bar{height:100%;border-radius:2px;transition:width 1.5s ease;width:0}
+    .report-section{padding:56px 80px;border-bottom:1px solid var(--border-d)}
+    .sec-lbl{font-family:var(--font-m);font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);margin-bottom:18px;display:flex;align-items:center;gap:14px}
+    .sec-h2{font-family:var(--font-d);font-size:clamp(28px,3vw,44px);font-weight:900;color:var(--cream);margin-bottom:6px;line-height:1.05}
+    .sec-h2 em{font-style:italic;color:var(--amber)}
+    .layer-card{background:var(--bg-card);border:1px solid var(--border-d);margin-bottom:16px;position:relative;overflow:hidden}
+    .layer-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+    .layer-card.sev-high::before{background:linear-gradient(to right,#8b2820,transparent);opacity:.8}
+    .layer-card.sev-med::before{background:linear-gradient(to right,var(--amber-d),transparent);opacity:.7}
+    .layer-card.sev-low::before{background:linear-gradient(to right,var(--green),transparent);opacity:.5}
+    .lc-header{padding:20px 24px;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:16px;cursor:pointer;border-bottom:1px solid var(--border-d)}
+    .lc-num{font-family:var(--font-d);font-size:28px;font-weight:900;color:var(--amber);opacity:.2;line-height:1;width:36px}
+    .lc-layer-tag{font-family:var(--font-m);font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+    .lc-title{font-family:var(--font-d);font-size:18px;font-weight:700;color:var(--cream)}
+    .lc-leak{text-align:right}
+    .lc-leak-val{font-family:var(--font-d);font-size:26px;font-weight:900;color:var(--amber);display:block;line-height:1}
+    .lc-leak-lbl{font-family:var(--font-m);font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+    .lc-sev{width:56px;text-align:center}
+    .sev-badge{font-family:var(--font-m);font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:1px;display:inline-block}
+    .sev-badge.high{color:#e87070;border:1px solid rgba(139,40,32,.5);background:rgba(139,40,32,.1)}
+    .sev-badge.med{color:var(--amber);border:1px solid var(--border);background:var(--amber-p)}
+    .sev-badge.low{color:var(--green-b);border:1px solid rgba(61,138,74,.4);background:rgba(61,138,74,.08)}
+    .lc-body{padding:24px;display:none}
+    .lc-body.open{display:block}
+    .lc-finding{font-family:var(--font-b);font-size:17px;font-weight:300;color:var(--cream);line-height:1.7;margin-bottom:20px}
+    .lc-datapoints{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border-d);border:1px solid var(--border-d);margin-bottom:20px}
+    .lc-dp{background:var(--bg-raised);padding:14px 16px}
+    .lc-dp-val{font-family:var(--font-d);font-size:22px;font-weight:900;color:var(--amber);display:block;line-height:1}
+    .lc-dp-lbl{font-family:var(--font-m);font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
+    .lc-fix-box{background:var(--bg-raised);border:1px solid var(--border-d);padding:18px 20px;position:relative}
+    .lc-fix-label{font-family:var(--font-m);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber-d);margin-bottom:8px}
+    .lc-fix-text{font-family:var(--font-b);font-size:16px;color:var(--cream);line-height:1.6;font-style:italic}
+    .lc-impact{margin-top:12px;font-family:var(--font-m);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+    .lc-impact span{color:var(--green-b)}
+    .action-grid{display:flex;flex-direction:column;gap:12px;margin-top:32px}
+    .action-item{display:grid;grid-template-columns:48px 1fr auto;gap:16px;align-items:start;background:var(--bg-card);border:1px solid var(--border-d);padding:20px 22px;position:relative}
+    .action-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px}
+    .action-item.p1::before{background:var(--amber)}
+    .action-item.p2::before{background:var(--amber-d)}
+    .action-item.p3::before{background:var(--muted)}
+    .action-rank{font-family:var(--font-d);font-size:32px;font-weight:900;color:var(--amber);opacity:.25;line-height:1}
+    .action-timeframe{font-family:var(--font-m);font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+    .action-title{font-family:var(--font-d);font-size:17px;font-weight:700;color:var(--cream);margin-bottom:5px}
+    .action-desc{font-family:var(--font-b);font-size:15px;font-weight:300;color:var(--cream-d);line-height:1.55}
+    .action-val{font-family:var(--font-d);font-size:24px;font-weight:900;color:var(--amber);text-align:right;white-space:nowrap;line-height:1}
+    .action-val-lbl{font-family:var(--font-m);font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:right;display:block;margin-top:3px}
+    .health-grid{display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:center;margin-top:32px}
+    .health-score-circle{width:160px;height:160px;border-radius:50%;border:2px solid var(--border);background:var(--bg-card);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto}
+    .hs-num{font-family:var(--font-d);font-size:52px;font-weight:900;color:var(--amber);line-height:1}
+    .hs-lbl{font-family:var(--font-m);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+    .health-breakdown{display:flex;flex-direction:column;gap:10px}
+    .hb-row{display:grid;grid-template-columns:160px 1fr 40px;align-items:center;gap:12px}
+    .hb-label{font-family:var(--font-m);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-m)}
+    .hb-track{height:3px;background:var(--border-d);border-radius:2px;overflow:hidden}
+    .hb-fill{height:100%;border-radius:2px;background:var(--amber);width:0;transition:width 1.8s ease}
+    .hb-val{font-family:var(--font-m);font-size:9px;color:var(--amber);text-align:right}
+    .bench-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border-d);border:1px solid var(--border-d);margin-top:28px}
+    .bench-cell{background:var(--bg-card);padding:20px 18px}
+    .bench-cell.yours{background:var(--bg-raised);border:1px solid var(--border)}
+    .bench-cell-lbl{font-family:var(--font-m);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+    .bench-cell-val{font-family:var(--font-d);font-size:26px;font-weight:900;color:var(--amber);display:block;line-height:1}
+    .bench-cell-metric{font-family:var(--font-b);font-size:13px;font-style:italic;color:var(--muted);display:block;margin-top:4px}
+    .orn{display:flex;align-items:center;padding:0 80px}
+    .orn::before,.orn::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--amber-d),transparent);opacity:.5}
+    .orn-c{padding:0 18px;font-family:var(--font-d);font-size:11px;color:var(--amber-d);letter-spacing:.5em}
+    .report-footer{padding:48px 80px;border-top:1px solid var(--border-d);display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start;background:#030201}
+    .rf-brand .wm{font-family:var(--font-d);font-size:15px;font-weight:900;letter-spacing:.24em;color:var(--amber);text-transform:uppercase;margin-bottom:4px}
+    .rf-brand .tg{font-family:var(--font-m);font-size:8.5px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+    .rf-brand p{font-family:var(--font-b);font-size:14px;font-weight:300;color:var(--muted);max-width:380px;line-height:1.6}
+    .rf-cta{display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+    .rf-cta a{font-family:var(--font-m);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:#050402;background:var(--amber);text-decoration:none;padding:12px 24px;transition:background .2s}
+    @media(max-width:768px){
+      nav{padding:0 20px}
+      .report-header,.report-section{padding:48px 20px}
+      .report-summary{grid-template-columns:1fr 1fr}
+      .lc-datapoints{grid-template-columns:1fr}
+      .bench-grid{grid-template-columns:1fr}
+      .health-grid{grid-template-columns:1fr}
+      .action-item{grid-template-columns:36px 1fr}
+      .action-val{display:none}
+      .orn{padding:0 20px}
+      .report-footer{padding:40px 20px;grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
@@ -231,17 +163,14 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;ba
   </div>
   <div class="nav-r">
     <span class="report-id" id="reportId"></span>
-    <button class="btn-pdf" id="pdfBtn" onclick="downloadPDF()">Download PDF ↓</button>
+    <button class="btn-pdf" id="pdfBtn" onclick="window.print()">Download PDF ↓</button>
   </div>
 </nav>
-
-<!-- ══ GENERATION SCREEN ══ -->
 
 <div id="genScreen">
   <div class="gen-eyebrow"><span class="gen-dot"></span>SSG Audit Engine · Generating Full Report</div>
   <h1 class="gen-h1">Running <em>all 10 layers.</em></h1>
   <p class="gen-sub">Benchmarking your portfolio against UK market data. Building your forensic diagnosis. This takes about 20 seconds.</p>
-
   <div class="gen-terminal">
     <div class="gen-tbar">
       <div class="gen-dots"><span></span><span></span><span></span></div>
@@ -271,12 +200,7 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;ba
   </div>
 </div>
 
-<!-- ══ REPORT SCREEN ══ -->
-
 <div id="reportScreen">
-
-  <!-- REPORT HEADER -->
-
   <div class="report-header">
     <div class="rh-meta">
       <div class="rh-eyebrow">Full 10-Layer Revenue Intelligence Report</div>
@@ -285,8 +209,6 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;ba
     <h1 class="report-h1" id="reportTitle">Revenue Audit</h1>
     <div class="report-property" id="reportProperty"></div>
   </div>
-
-  <!-- SUMMARY STRIP -->
 
   <div class="report-summary">
     <div class="rs-block">
@@ -314,8 +236,6 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;ba
 
   <div class="orn" style="margin:0"><div class="orn-c">◆</div></div>
 
-  <!-- HEALTH SCORE BREAKDOWN -->
-
   <div class="report-section">
     <div class="sec-lbl">Portfolio Health Score</div>
     <h2 class="sec-h2">Where your portfolio <em>stands.</em></h2>
@@ -326,134 +246,33 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;ba
           <span class="hs-lbl">out of 100</span>
         </div>
       </div>
-      <div class="health-breakdown" id="healthBreakdown">
-        <!-- filled by JS -->
-      </div>
+      <div class="health-breakdown" id="healthBreakdown"></div>
     </div>
   </div>
-
-  <!-- BENCHMARK COMPARISON -->
 
   <div class="report-section" style="padding-top:0">
     <div class="sec-lbl">Market Benchmarks</div>
     <h2 class="sec-h2">Your numbers <em>vs the market.</em></h2>
-    <div class="bench-grid" id="benchGrid">
-      <!-- filled by JS -->
-    </div>
+    <div class="bench-grid" id="benchGrid"></div>
   </div>
 
   <div class="orn"><div class="orn-c">◆ ◆ ◆</div></div>
-
-  <!-- 10 LAYER FINDINGS -->
 
   <div class="report-section">
     <div class="sec-lbl">Forensic Audit · All 10 Layers</div>
     <h2 class="sec-h2">Every leak. <em>Every fix. Ranked.</em></h2>
-    <div id="layerCards" style="margin-top:28px">
-      <!-- filled by JS -->
-    </div>
+    <div id="layerCards" style="margin-top:28px"></div>
   </div>
 
   <div class="orn"><div class="orn-c">◆</div></div>
-
-  <!-- PRIORITY ACTION PLAN -->
 
   <div class="report-section">
     <div class="sec-lbl">Priority Action Plan</div>
     <h2 class="sec-h2">What to fix. <em>In what order.</em></h2>
-    <p style="font-family:var(--font-b);font-size:18px;font-weight:300;color:var(--cream-d);max-width:600px;line-height:1.7;margin-bottom:0">Ranked by monthly £ impact. Fix #1 first. Every action is specific to your portfolio — not generic advice.</p>
-    <div class="action-grid" id="actionGrid">
-      <!-- filled by JS -->
-    </div>
+    <div class="action-grid" id="actionGrid"></div>
   </div>
 
   <div class="orn"><div class="orn-c">◆</div></div>
-
-  <!-- IMPLEMENTATION ROADMAP -->
-
-  <div class="report-section">
-    <div class="sec-lbl">Implementation Roadmap</div>
-    <h2 class="sec-h2">How to <em>action this report.</em></h2>
-    <p style="font-family:var(--font-b);font-size:18px;font-weight:300;color:var(--cream-d);max-width:660px;line-height:1.72;margin-bottom:40px">This is the order in which to work through your findings. Start with the highest-impact fixes that cost nothing to implement. Build from there.</p>
-
-```
-<!-- Phase 1 -->
-<div style="margin-bottom:32px">
-  <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-    <div style="font-family:var(--font-m);font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);border:1px solid var(--border);padding:5px 12px">Phase 1 · This Week</div>
-    <div style="flex:1;height:1px;background:var(--border-d)"></div>
-    <div style="font-family:var(--font-m);font-size:8.5px;color:var(--muted);letter-spacing:.1em">Zero cost. Maximum impact.</div>
-  </div>
-  <div style="background:var(--bg-card);border:1px solid var(--border-d);padding:24px 28px;position:relative">
-    <div style="position:absolute;top:0;left:0;bottom:0;width:2px;background:var(--amber)"></div>
-    <div id="phase1Content" style="font-family:var(--font-b);font-size:17px;font-weight:300;color:var(--cream-d);line-height:1.7">
-      <p>1. Turn on Instant Book if it is currently off — this is the single highest-leverage free action available to most operators. The Airbnb algorithm suppresses non-instant-book listings in search. You will see impression uplift within 48 hours.</p>
-      <p style="margin-top:10px">2. Review your minimum stay settings and identify any orphan gap nights in your calendar this month. Manually drop the minimum stay to 1 night for any gap of 1 night sitting between bookings. Price that night at 85% of your standard ADR to ensure fill.</p>
-      <p style="margin-top:10px">3. Check your last 10 reviews. Look for any recurring language — guests mentioning the same thing twice is a signal. Fix any maintenance or experience issue flagged in reviews before your next guest arrives.</p>
-    </div>
-  </div>
-</div>
-
-<!-- Phase 2 -->
-<div style="margin-bottom:32px">
-  <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-    <div style="font-family:var(--font-m);font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);border:1px solid var(--border);padding:5px 12px">Phase 2 · This Month</div>
-    <div style="flex:1;height:1px;background:var(--border-d)"></div>
-    <div style="font-family:var(--font-m);font-size:8.5px;color:var(--muted);letter-spacing:.1em">Structural fixes. Build the engine.</div>
-  </div>
-  <div style="background:var(--bg-card);border:1px solid var(--border-d);padding:24px 28px;position:relative">
-    <div style="position:absolute;top:0;left:0;bottom:0;width:2px;background:var(--amber-d)"></div>
-    <div style="font-family:var(--font-b);font-size:17px;font-weight:300;color:var(--cream-d);line-height:1.7">
-      <p>4. Build your pre-arrival message sequence. Send a message 3 days before check-in with an early check-in offer (£25-40), a local recommendations guide, and a direct ask for a 5-star review at checkout. This alone recovers £30-80 per booking in missed upsell revenue.</p>
-      <p style="margin-top:10px">5. Audit your pricing calendar for the next 90 days. Identify your shoulder weeks — the weeks either side of your peak periods — and adjust minimum stays and pricing specifically for those windows. Shoulder season is where most operators leave the most money.</p>
-      <p style="margin-top:10px">6. Recalculate your true net RevPAR. Take your gross monthly revenue, subtract platform commission (typically 14-17% on Airbnb), subtract cleaning costs, subtract any management fees. The number left is what your property actually earns. Compare it to your ADR and occupancy. Most operators are surprised by how far apart these numbers are.</p>
-    </div>
-  </div>
-</div>
-
-<!-- Phase 3 -->
-<div style="margin-bottom:32px">
-  <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-    <div style="font-family:var(--font-m);font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);border:1px solid var(--border);padding:5px 12px">Phase 3 · Next 60–90 Days</div>
-    <div style="flex:1;height:1px;background:var(--border-d)"></div>
-    <div style="font-family:var(--font-m);font-size:8.5px;color:var(--muted);letter-spacing:.1em">Strategic. Compounding returns.</div>
-  </div>
-  <div style="background:var(--bg-card);border:1px solid var(--border-d);padding:24px 28px;position:relative">
-    <div style="position:absolute;top:0;left:0;bottom:0;width:2px;background:var(--muted)"></div>
-    <div style="font-family:var(--font-b);font-size:17px;font-weight:300;color:var(--cream-d);line-height:1.7">
-      <p>7. Start building your direct booking channel. This does not mean building a full website immediately. Start by collecting guest email addresses post-stay and creating a simple direct booking offer for return guests — even a 5% discount vs Airbnb pricing saves you the 14-17% commission. Net result: you earn more, guest pays less, platform takes nothing.</p>
-      <p style="margin-top:10px">8. Analyse your competitive set. Search for properties of similar type, size and location to yours on Airbnb. Look at the top 5 performers. What do their photos show that yours don't? What do their titles say? What do their reviews focus on? This is free market research. Most operators never do it.</p>
-      <p style="margin-top:10px">9. Re-run this audit in 90 days. The point of a forensic audit is not a one-time snapshot — it is a baseline. Once you have implemented the Phase 1 and 2 actions, your numbers will have moved. A second audit will show you what shifted, what improved, and where the next layer of opportunity sits.</p>
-    </div>
-  </div>
-</div>
-
-<!-- What success looks like -->
-<div style="background:rgba(201,162,39,.05);border:1px solid var(--border);padding:28px 32px;position:relative;margin-top:8px">
-  <div style="position:absolute;top:-1px;left:15%;right:15%;height:1px;background:linear-gradient(to right,transparent,var(--amber),transparent);opacity:.4"></div>
-  <div style="font-family:var(--font-m);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:12px">What Success Looks Like at 90 Days</div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border-d)" id="successMetrics">
-    <div style="background:var(--bg-raised);padding:16px 18px">
-      <span style="font-family:var(--font-d);font-size:28px;font-weight:900;color:var(--amber);display:block;line-height:1" id="success1">+8–15%</span>
-      <span style="font-family:var(--font-m);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px">ADR Uplift</span>
-    </div>
-    <div style="background:var(--bg-raised);padding:16px 18px">
-      <span style="font-family:var(--font-d);font-size:28px;font-weight:900;color:var(--amber);display:block;line-height:1" id="success2">+5–12pt</span>
-      <span style="font-family:var(--font-m);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px">Occupancy Gain</span>
-    </div>
-    <div style="background:var(--bg-raised);padding:16px 18px">
-      <span style="font-family:var(--font-d);font-size:28px;font-weight:900;color:var(--amber);display:block;line-height:1" id="success3">£X/mo</span>
-      <span style="font-family:var(--font-m);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px">Recovery Target</span>
-    </div>
-  </div>
-</div>
-```
-
-  </div>
-
-  <div class="orn"><div class="orn-c">◆ ◆ ◆</div></div>
-
-  <!-- CLOSING NOTE -->
 
   <div class="report-section" id="closingSection" style="display:none">
     <div class="sec-lbl">A Note From Harvy</div>
@@ -466,8 +285,6 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;ba
 
   <div class="orn"><div class="orn-c">◆</div></div>
 
-  <!-- REPORT FOOTER -->
-
   <div class="report-footer">
     <div class="rf-brand">
       <div class="wm">Summit Stay Group</div>
@@ -477,28 +294,17 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;ba
     <div class="rf-cta">
       <a href="/pricing">Upgrade Your Plan →</a>
       <a href="/audit" style="background:var(--bg-raised);color:var(--amber);border:1px solid var(--border)">Run Another Audit</a>
-      <p>summitstaygroup.co.uk</p>
+      <p style="font-family:var(--font-m);font-size:8.5px;letter-spacing:.1em;color:var(--muted);text-align:right">summitstaygroup.co.uk</p>
     </div>
   </div>
-
-</div><!-- /reportScreen -->
+</div>
 
 <script>
-// ══════════════════════════════════════════════
-// AUDIT ENGINE — reads URL params from Stripe redirect
-// or sessionStorage from audit form submission
-// ══════════════════════════════════════════════
-
-
-
-// Get audit data — from sessionStorage (set by audit.html on form submit)
-// Falls back to demo data if nothing stored
 function getAuditData() {
   try {
     const stored = sessionStorage.getItem('ssg_audit_data');
     if (stored) return JSON.parse(stored);
-  } catch(e){}
-  // Demo data fallback
+  } catch(e) {}
   return {
     name: 'Riverside Cottage',
     location: 'Lake District, Cumbria',
@@ -521,92 +327,35 @@ function getAuditData() {
   };
 }
 
-// ── Build the system prompt for Claude ──
 function buildPrompt(data) {
-  const revpar = Math.round(data.adr * (data.occupancy/100));
+  const revpar = Math.round(data.adr * (data.occupancy / 100));
   const monthlyRev = data.monthlyRevenue || Math.round(revpar * 30);
-  const cleaningRatio = data.cleaningFee && data.adr ? Math.round((data.cleaningFee/data.adr)*100) : null;
-
-  return `You are Harvy Pinder-Sellings — founder of Summit Stay Group and a UK STR operator who grew a 5-unit Highland portfolio from £104K to £190K+ annualised in 9 months. You are writing a personal revenue audit for a fellow STR operator.
-
-YOUR VOICE:
-- Write like a straight-talking operator, not a consultant
-- Use plain English — no jargon, no corporate language
-- Be specific and blunt. "Your cleaning fee is eating 38% of your ADR" not "your fee structure may be suboptimal"
-- Every finding must reference their actual numbers
-- Every fix must be something they can action this week, not vague strategy
-- Occasionally say things that are uncomfortable to read because they're true
-- Think about the HIDDEN things — the stuff that isn't obvious, the compounding effects, the things that look fine on the surface but are quietly draining money
-- You are finding money they didn't know they were losing
+  const cleaningRatio = data.cleaningFee && data.adr ? Math.round((data.cleaningFee / data.adr) * 100) : null;
+  return `You are Harvy Pinder-Sellings, UK STR operator and founder of Summit Stay Group. Write a forensic 10-layer revenue audit for this property. Be blunt, specific, use their exact numbers. Find hidden money leaks. Every fix must be actionable this week.
 
 PROPERTY:
 - Name: ${data.name || 'Their Property'}
 - Location: ${data.location}
 - Type: ${data.propertyType}, ${data.bedrooms} bedrooms
 - Peak Season: ${data.peakSeason}
-- Occupancy (last 90 days): ${data.occupancy}%
+- Occupancy: ${data.occupancy}%
 - ADR: £${data.adr}/night
-- RevPAR: £${revpar} (that's ADR × occupancy rate)
-- Monthly Gross Revenue: £${monthlyRev}
-- Cleaning Fee: £${data.cleaningFee || 'not provided'}${cleaningRatio ? ' (' + cleaningRatio + '% of ADR)' : ''}
-- Minimum Stay: ${data.minStay || 2} nights
+- RevPAR: £${revpar}
+- Monthly Revenue: £${monthlyRev}
+- Cleaning Fee: £${data.cleaningFee || 'unknown'}${cleaningRatio ? ' (' + cleaningRatio + '% of ADR)' : ''}
+- Min Stay: ${data.minStay || 2} nights
 - Pricing Tool: ${data.pricingTool}
-- Review Rating: ${data.rating}★
-- Total Reviews: ${data.reviews}
-- Platform(s): ${data.platforms}
+- Rating: ${data.rating} stars
+- Reviews: ${data.reviews}
+- Platforms: ${data.platforms}
 - Instant Book: ${data.instantBook}
 - Direct Bookings: ${data.directBookings}
-- Active Upsells: ${data.upsells}
+- Upsells: ${data.upsells}
 
-YOUR JOB:
-Analyse this property and return a 10-layer forensic revenue audit. Be specific, use their exact numbers, write like a straight-talking UK operator. Find hidden money leaks. Every fix must be actionable this week.
-
-Layers: 01 RevPAR Gap, 02 Rate Calendar, 03 Booking Pace, 04 Listing Conversion, 05 Review Sentiment, 06 Guest Journey, 07 Channel Mix, 08 Seasonal Yield, 09 Net Revenue, 10 Competitive Position.
-
-For each layer give a specific finding using their numbers, calculate the monthly £ leak, and give one precise fix.
-
-Respond ONLY with a valid JSON object. No preamble, no markdown, no backticks. Exact structure:
-{"totalMonthlyLeak":0,"annualOpportunity":0,"leaksDetected":0,"portfolioHealthScore":0,"healthScoreLabel":"","healthBreakdown":[{"label":"RevPAR vs Market","score":0}],"benchmarks":[{"metric":"","value":"","context":""}],"layers":[{"number":"01","name":"","severity":"med","monthlyLeak":0,"headline":"","finding":"","datapoints":[{"value":"","label":""}],"fix":"","expectedRecovery":""}],"priorityActions":[{"rank":1,"timeframe":"","title":"","description":"","monthlyValue":0}],"closingNote":""}
-`;
-
-
+Respond ONLY with a valid JSON object, no markdown, no backticks, no preamble. Exact structure:
+{"totalMonthlyLeak":800,"annualOpportunity":9600,"leaksDetected":7,"portfolioHealthScore":42,"healthScoreLabel":"Needs Attention","healthBreakdown":[{"label":"RevPAR vs Market","score":35},{"label":"Calendar Efficiency","score":45},{"label":"Listing & Conversion","score":40},{"label":"Review Velocity","score":60},{"label":"Channel Strategy","score":30},{"label":"Yield & Pricing","score":38}],"benchmarks":[{"metric":"Your RevPAR","value":"£${revpar}","context":"Your current"},{"metric":"Market Ceiling","value":"£220","context":"What you should hit"},{"metric":"Monthly Gap","value":"£1,800","context":"Unrecovered"},{"metric":"Your Occupancy","value":"${data.occupancy}%","context":"Your current"},{"metric":"Strong Benchmark","value":"72%","context":"Target range"},{"metric":"Net vs Gross","value":"68%","context":"What lands in account"}],"layers":[{"number":"01","name":"RevPAR Gap","severity":"high","monthlyLeak":320,"headline":"Your RevPAR is significantly below what this property type should achieve in this market.","finding":"Based on your ADR of £${data.adr} and ${data.occupancy}% occupancy your RevPAR sits at £${revpar}. For a ${data.propertyType} in ${data.location} the market ceiling is materially higher. The gap compounds annually into serious lost income.","datapoints":[{"value":"£${revpar}","label":"Your RevPAR"},{"value":"£220","label":"Market ceiling"},{"value":"£${Math.round((220 - revpar) * 30)}","label":"Monthly gap"}],"fix":"Close the RevPAR gap by addressing both ADR and occupancy simultaneously. Review your base pricing against the top 5 competitors in your area this week and adjust to within 5% of the market leader.","expectedRecovery":"£320"},{"number":"02","name":"Rate Calendar","severity":"high","monthlyLeak":180,"headline":"Your minimum stay setting is creating unfillable gap nights every month.","finding":"A ${data.minStay}-night minimum stay creates orphan nights between bookings that cannot be filled at that restriction. Each orphan night at your ADR of £${data.adr} is pure lost revenue. With typical booking patterns this likely costs you 2-3 nights per month minimum.","datapoints":[{"value":"${data.minStay} nights","label":"Min stay"},{"value":"2-3","label":"Orphan nights/month"},{"value":"£${Math.round(data.adr * 2.5)}","label":"Monthly cost"}],"fix":"Set minimum stay to 1 night for any calendar gap of exactly 1 night between existing bookings. Price those nights at 90% of your standard ADR. Do this manually in your calendar today.","expectedRecovery":"£180"},{"number":"03","name":"Booking Pace","severity":"med","monthlyLeak":120,"headline":"Without a dynamic pricing tool you are leaving peak money on the table.","finding":"Using ${data.pricingTool} for pricing means you are not capturing compression events, local demand spikes, or last-minute premium pricing opportunities. Manual pricing almost always underprices peak periods and overprices slow periods.","datapoints":[{"value":"${data.pricingTool}","label":"Current tool"},{"value":"8-12%","label":"Typical revenue uplift"},{"value":"£${Math.round(monthlyRev * 0.10)}","label":"Estimated monthly miss"}],"fix":"Sign up for PriceLabs or Wheelhouse free trial this week. Connect it to your listing and set the base price to your current ADR. Let it run for 14 days and compare your booking pace to the previous fortnight.","expectedRecovery":"£120"},{"number":"04","name":"Listing Conversion","severity":"high","monthlyLeak":${data.instantBook === 'No' ? 150 : 80},"headline":"${data.instantBook === 'No' ? 'Instant Book is off — the Airbnb algorithm is actively suppressing your listing in search.' : 'Your listing has conversion opportunities that are costing you bookings.'}","finding":"${data.instantBook === 'No' ? 'Airbnb suppresses non-instant-book listings in search results. Guests searching with instant book filter enabled cannot see you at all. This filter is used by the majority of Airbnb guests. Turning this on is the single highest-leverage free action available to you.' : 'Even with Instant Book on your listing title, photos and amenity presentation may be losing guests at the comparison stage. On ' + data.platforms + ' you are competing on thumbnail alone in search results.'}","datapoints":[{"value":"${data.instantBook}","label":"Instant Book status"},{"value":"${data.platforms}","label":"Platforms"},{"value":"25-40%","label":"Search suppression risk"}],"fix":"${data.instantBook === 'No' ? 'Turn on Instant Book today. Go to Airbnb listing settings and enable it. You will see impression uplift within 48 hours. This costs nothing.' : 'Rewrite your listing title to include your strongest USP in the first 40 characters. Update your cover photo to show the most aspirational view or feature of the property.'}","expectedRecovery":"£${data.instantBook === 'No' ? 150 : 80}"},{"number":"05","name":"Review Sentiment","severity":"med","monthlyLeak":80,"headline":"Your review velocity needs monitoring to protect your algorithm position.","finding":"At ${data.reviews} reviews and ${data.rating} stars your baseline is solid. But review velocity matters as much as score. If you are not actively requesting reviews after every stay you are leaving social proof on the table. A drop below 4.8 triggers algorithm suppression on Airbnb.","datapoints":[{"value":"${data.rating}★","label":"Current rating"},{"value":"${data.reviews}","label":"Total reviews"},{"value":"4.8★","label":"Algorithm threshold"}],"fix":"Send a checkout message to every guest that includes a direct link to leave a review and a personal thank you. Do this within 1 hour of checkout. Set a reminder on your phone for every checkout day.","expectedRecovery":"£80"},{"number":"06","name":"Guest Journey","severity":"med","monthlyLeak":120,"headline":"You have no active upsells — you are leaving £40-80 per booking on the table.","finding":"With ${data.upsells} active upsells you are missing the easiest revenue in STR. Pre-arrival upsells — early check-in, late checkout, local experience recommendations with affiliate links — add £40-80 per booking with zero additional occupancy required.","datapoints":[{"value":"${data.upsells}","label":"Active upsells"},{"value":"£40-80","label":"Missed per booking"},{"value":"£120+","label":"Monthly opportunity"}],"fix":"Create three upsell messages: early check-in offer (£30), late checkout offer (£30), and a local recommendations guide with 2-3 affiliate links. Send the first message 3 days before arrival. Start this week.","expectedRecovery":"£120"},{"number":"07","name":"Channel Mix","severity":"high","monthlyLeak":${Math.round(monthlyRev * 0.15)},"headline":"You are paying 14-17% commission on every booking — that is money that should be yours.","finding":"On ${data.platforms} you are paying platform commission on your entire revenue of £${monthlyRev}/month. At 15% average commission that is £${Math.round(monthlyRev * 0.15)} per month going to platforms. With ${data.directBookings} direct bookings you have zero channel diversification.","datapoints":[{"value":"15%","label":"Avg commission rate"},{"value":"£${Math.round(monthlyRev * 0.15)}","label":"Monthly commission cost"},{"value":"${data.directBookings}","label":"Direct bookings"}],"fix":"Start collecting guest email addresses post-stay. Send a direct booking offer to past guests offering a 5% discount versus your Airbnb price. You earn more, they pay less, platform takes nothing. Set this up this month.","expectedRecovery":"£${Math.round(monthlyRev * 0.15)}"},{"number":"08","name":"Seasonal Yield","severity":"med","monthlyLeak":100,"headline":"Your peak season pricing is almost certainly not capturing the full demand premium.","finding":"With ${data.peakSeason} as your peak season and ${data.pricingTool} as your pricing tool you are likely running a flatter pricing curve than the market. The benchmark for a well-managed UK STR is a 1.6-2.0x peak to trough ADR ratio. Most operators without dynamic pricing sit at 1.2-1.4x.","datapoints":[{"value":"1.6-2.0x","label":"Benchmark peak/trough"},{"value":"${data.peakSeason}","label":"Your peak season"},{"value":"£${Math.round(data.adr * 0.6)}","label":"Potential peak premium"}],"fix":"Identify your 8 highest demand weekends in the next 6 months. Manually increase your ADR by 25-40% for those specific dates. Check competitor pricing on those dates first to calibrate.","expectedRecovery":"£100"},{"number":"09","name":"Net Revenue","severity":"med","monthlyLeak":${cleaningRatio && cleaningRatio > 28 ? 90 : 60},"headline":"${cleaningRatio && cleaningRatio > 28 ? 'Your cleaning fee at ' + cleaningRatio + '% of ADR is likely suppressing booking conversion.' : 'Your true net revenue after all fees is significantly lower than your gross figures suggest.'}","finding":"${cleaningRatio ? 'Your cleaning fee of £' + data.cleaningFee + ' represents ' + cleaningRatio + '% of your £' + data.adr + ' ADR. ' + (cleaningRatio > 28 ? 'Above 25-28% guests start comparing total cost to hotels and abandoning at checkout. This is a hidden conversion killer.' : 'This is within acceptable range but your true net RevPAR after platform fees and cleaning is materially lower than your headline ADR suggests.') : 'Without knowing your cleaning fee structure it is impossible to calculate your true net RevPAR. Most operators are surprised how far net revenue sits below gross when platform fees and cleaning are deducted.'}","datapoints":[{"value":"£${data.cleaningFee || 'unknown'}","label":"Cleaning fee"},{"value":"${cleaningRatio ? cleaningRatio + '%' : 'unknown'}","label":"% of ADR"},{"value":"£${Math.round(monthlyRev * 0.83)}","label":"Est. net after fees"}],"fix":"Calculate your true net RevPAR this week: gross revenue minus platform commission (15%) minus cleaning costs. If your cleaning fee exceeds 28% of ADR consider bundling it into your nightly rate and reducing the cleaning fee line.","expectedRecovery":"£${cleaningRatio && cleaningRatio > 28 ? 90 : 60}"},{"number":"10","name":"Competitive Position","severity":"med","monthlyLeak":80,"headline":"Your competitive positioning has gaps that are costing you bookings to better-presented properties.","finding":"For a ${data.propertyType} in ${data.location} with ${data.rating} stars you have a solid foundation. But competitive positioning is about more than stars — it is about USP clarity, photo quality, title strength and market stance. The top performers in your market are winning on presentation as much as price.","datapoints":[{"value":"${data.rating}★","label":"Your rating"},{"value":"${data.bedrooms} bed","label":"Property size"},{"value":"${data.location}","label":"Market"}],"fix":"Search Airbnb for the top 5 properties of similar type in your area. Study their titles, cover photos, and review language. Identify one thing each does better than you and implement your version of it this month.","expectedRecovery":"£80"}],"priorityActions":[{"rank":1,"timeframe":"Do This Week","title":"${data.instantBook === 'No' ? 'Turn On Instant Book' : 'Activate Dynamic Pricing'}","description":"${data.instantBook === 'No' ? 'Enable Instant Book in your Airbnb listing settings today. The algorithm suppresses your listing from guests using the instant book filter — which is most guests. This is free and takes 2 minutes.' : 'Sign up for PriceLabs free trial and connect it to your listing. This single action typically delivers 8-12% revenue uplift within the first 30 days.'}","monthlyValue":${data.instantBook === 'No' ? 150 : 120}},{"rank":2,"timeframe":"Do This Week","title":"Fix Orphan Gap Nights","description":"Review your calendar for the next 60 days and identify any single nights sitting between bookings. Drop the minimum stay to 1 night for those gaps and price at 90% ADR. Each night filled is pure recovered revenue.","monthlyValue":180},{"rank":3,"timeframe":"This Month","title":"Build Pre-Arrival Upsell Sequence","description":"Create a 3-message pre-arrival sequence: early check-in offer, local guide with affiliate links, and checkout review request. Send 3 days before arrival. This recovers £40-80 per booking with zero additional effort at booking time.","monthlyValue":120},{"rank":4,"timeframe":"This Month","title":"Calculate True Net RevPAR","description":"Subtract all platform commission and cleaning costs from last month's gross revenue. This number is your real earnings baseline. Most operators are shocked. Once you know it you can start optimising it.","monthlyValue":90},{"rank":5,"timeframe":"Next 60 Days","title":"Start Direct Booking Channel","description":"Email your last 20 guests with a direct booking offer — 5% off their next stay if they book direct. This avoids 15% platform commission on return guests. Net result: you earn more and they pay less.","monthlyValue":${Math.round(monthlyRev * 0.08)}},{"rank":6,"timeframe":"Next 90 Days","title":"Competitive Listing Audit","description":"Study the top 5 competitors in your market on Airbnb. Identify one improvement each does better than you — photos, title, amenities, USP. Implement the best ideas. This is free market research most operators never do.","monthlyValue":80}],"closingNote":"The numbers in this report are conservative estimates based on your inputs and UK STR benchmarks. The real figure sitting unrecovered in your portfolio is likely higher. Start with the Week 1 actions — they cost nothing and move the needle fastest. You have a solid foundation at ${data.rating} stars. The opportunity is in the gaps between what you are earning and what this property is capable of earning."}`;
 }
 
-function renderReport(report, data) {
-  const now = new Date();
-  document.getElementById('reportId').textContent = 'RPT-'+Math.random().toString(36).substr(2,6).toUpperCase();
-  document.getElementById('reportDate').innerHTML = `Generated ${now.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}<br>${now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}`;
-  document.getElementById('reportTitle').innerHTML = `${data.name || data.location} <em>Revenue Audit</em>`;
-  document.getElementById('reportProperty').textContent = `${data.propertyType} · ${data.bedrooms} bedrooms · ${data.location} · ${data.peakSeason} peak`;
-  document.getElementById('sumLeak').textContent = '£'+report.totalMonthlyLeak.toLocaleString();
-  document.getElementById('sumAnnual').textContent = '£'+(report.totalMonthlyLeak*12).toLocaleString();
-  document.getElementById('sumLeaks').textContent = report.leaksDetected;
-  document.getElementById('sumScore').textContent = report.portfolioHealthScore;
-  document.getElementById('sumScoreLabel').textContent = report.healthScoreLabel;
-  const scoreColor = report.portfolioHealthScore >= 70 ? 'var(--green-b)' : report.portfolioHealthScore >= 45 ? 'var(--amber)' : '#e87070';
-  const bar = document.getElementById('scoreBar');
-  bar.style.background = scoreColor;
-  setTimeout(()=>{ bar.style.width = report.portfolioHealthScore+'%'; }, 300);
-  document.getElementById('healthScoreNum').textContent = report.portfolioHealthScore;
-  const hbEl = document.getElementById('healthBreakdown');
-  hbEl.innerHTML = report.healthBreakdown.map(h=>`<div class="hb-row"><span class="hb-label">${h.label}</span><div class="hb-track"><div class="hb-fill" style="width:0%" data-target="${h.score}%"></div></div><span class="hb-val">${h.score}</span></div>`).join('');
-  setTimeout(()=>{ document.querySelectorAll('.hb-fill').forEach(el=>{ el.style.width = el.dataset.target; }); }, 400);
-  const benchEl = document.getElementById('benchGrid');
-  benchEl.innerHTML = report.benchmarks.map((b,i)=>`<div class="bench-cell ${i===0||i===3||i===5?'yours':''}"><span class="bench-cell-lbl">${b.metric}</span><span class="bench-cell-val">${b.value}</span><span class="bench-cell-metric">${b.context}</span></div>`).join('');
-  const layersEl = document.getElementById('layerCards');
-  layersEl.innerHTML = report.layers.map(l=>`<div class="layer-card sev-${l.severity}"><div class="lc-header" onclick="toggleLayer(this)"><div class="lc-num">${l.number}</div><div class="lc-title-wrap"><div class="lc-layer-tag">Layer ${l.number} of 10</div><div class="lc-title">${l.name}</div></div><div class="lc-leak"><span class="lc-leak-val">£${l.monthlyLeak.toLocaleString()}</span><span class="lc-leak-lbl">/month</span></div><div class="lc-sev"><span class="sev-badge ${l.severity}">${l.severity.toUpperCase()}</span></div></div><div class="lc-body ${parseInt(l.number)<=3?'open':''}"><p style="font-family:var(--font-d);font-size:19px;font-weight:700;font-style:italic;color:var(--cream);margin-bottom:16px">${l.headline}</p><div class="lc-finding">${l.finding}</div><div class="lc-datapoints">${l.datapoints.map(dp=>`<div class="lc-dp"><span class="lc-dp-val">${dp.value}</span><span class="lc-dp-lbl">${dp.label}</span></div>`).join('')}</div><div class="lc-fix-box"><div class="lc-fix-label">◆ The Fix</div><div class="lc-fix-text">${l.fix}</div><div class="lc-impact">Expected recovery: <span>${l.expectedRecovery}/month</span></div></div></div></div>`).join('');
-  const actionsEl = document.getElementById('actionGrid');
-  const priorityClass = ['p1','p1','p2','p2','p3','p3'];
-  actionsEl.innerHTML = report.priorityActions.map((a,i)=>`<div class="action-item ${priorityClass[i]}"><div class="action-rank">${String(a.rank).padStart(2,'0')}</div><div class="action-content"><div class="action-timeframe">${a.timeframe}</div><div class="action-title">${a.title}</div><div class="action-desc">${a.description}</div></div><div><div class="action-val">£${a.monthlyValue.toLocaleString()}</div><span class="action-val-lbl">/month</span></div></div>`).join('');
-  document.getElementById('success3').textContent = '£'+Math.round(report.totalMonthlyLeak * 0.7).toLocaleString()+'/mo';
-  if (report.closingNote) {
-    document.getElementById('closingNote').textContent = report.closingNote;
-    document.getElementById('closingSection').style.display = 'block';
-  }
-  document.getElementById('pdfBtn').classList.add('visible');
-}
-
-// ── Call Claude API ──
 async function callClaude(data) {
   const prompt = buildPrompt(data);
   const response = await fetch('/.netlify/functions/audit', {
@@ -615,51 +364,102 @@ async function callClaude(data) {
     body: JSON.stringify({ prompt })
   });
   const result = await response.json();
-  if (!result.content || !result.content[0]) {
-    throw new Error('No content returned');
-  }
+  if (!result.content || !result.content[0]) throw new Error('No content returned');
   let text = result.content[0].text;
-  text = text.replace(/```json|```/gi,'').trim();
+  text = text.replace(/```json|```/gi, '').trim();
   const first = text.indexOf('{');
   const last = text.lastIndexOf('}');
-  text = text.substring(first, last + 1);
-  return JSON.parse(text);
+  return JSON.parse(text.substring(first, last + 1));
+}
+
+function renderReport(report, data) {
+  const now = new Date();
+  document.getElementById('reportId').textContent = 'RPT-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+  document.getElementById('reportDate').innerHTML = `Generated ${now.toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'})}<br>${now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'})}`;
+  document.getElementById('reportTitle').innerHTML = `${data.name || data.location} <em>Revenue Audit</em>`;
+  document.getElementById('reportProperty').textContent = `${data.propertyType} · ${data.bedrooms} bedrooms · ${data.location} · ${data.peakSeason} peak`;
+  document.getElementById('sumLeak').textContent = '£' + report.totalMonthlyLeak.toLocaleString();
+  document.getElementById('sumAnnual').textContent = '£' + (report.totalMonthlyLeak * 12).toLocaleString();
+  document.getElementById('sumLeaks').textContent = report.leaksDetected;
+  document.getElementById('sumScore').textContent = report.portfolioHealthScore;
+  document.getElementById('sumScoreLabel').textContent = report.healthScoreLabel;
+  const scoreColor = report.portfolioHealthScore >= 70 ? 'var(--green-b)' : report.portfolioHealthScore >= 45 ? 'var(--amber)' : '#e87070';
+  const bar = document.getElementById('scoreBar');
+  bar.style.background = scoreColor;
+  setTimeout(() => { bar.style.width = report.portfolioHealthScore + '%'; }, 300);
+  document.getElementById('healthScoreNum').textContent = report.portfolioHealthScore;
+  document.getElementById('healthBreakdown').innerHTML = report.healthBreakdown.map(h =>
+    `<div class="hb-row"><span class="hb-label">${h.label}</span><div class="hb-track"><div class="hb-fill" style="width:0%" data-target="${h.score}%"></div></div><span class="hb-val">${h.score}</span></div>`
+  ).join('');
+  setTimeout(() => { document.querySelectorAll('.hb-fill').forEach(el => { el.style.width = el.dataset.target; }); }, 400);
+  document.getElementById('benchGrid').innerHTML = report.benchmarks.map((b, i) =>
+    `<div class="bench-cell ${i===0||i===3||i===5?'yours':''}"><span class="bench-cell-lbl">${b.metric}</span><span class="bench-cell-val">${b.value}</span><span class="bench-cell-metric">${b.context}</span></div>`
+  ).join('');
+  document.getElementById('layerCards').innerHTML = report.layers.map(l =>
+    `<div class="layer-card sev-${l.severity}">
+      <div class="lc-header" onclick="toggleLayer(this)">
+        <div class="lc-num">${l.number}</div>
+        <div class="lc-title-wrap"><div class="lc-layer-tag">Layer ${l.number} of 10</div><div class="lc-title">${l.name}</div></div>
+        <div class="lc-leak"><span class="lc-leak-val">£${l.monthlyLeak.toLocaleString()}</span><span class="lc-leak-lbl">/month</span></div>
+        <div class="lc-sev"><span class="sev-badge ${l.severity}">${l.severity.toUpperCase()}</span></div>
+      </div>
+      <div class="lc-body ${parseInt(l.number) <= 3 ? 'open' : ''}">
+        <p style="font-family:var(--font-d);font-size:19px;font-weight:700;font-style:italic;color:var(--cream);margin-bottom:16px;line-height:1.3">${l.headline}</p>
+        <div class="lc-finding">${l.finding}</div>
+        <div class="lc-datapoints">${l.datapoints.map(dp => `<div class="lc-dp"><span class="lc-dp-val">${dp.value}</span><span class="lc-dp-lbl">${dp.label}</span></div>`).join('')}</div>
+        <div class="lc-fix-box"><div class="lc-fix-label">◆ The Fix</div><div class="lc-fix-text">${l.fix}</div><div class="lc-impact">Expected recovery: <span>${l.expectedRecovery}/month</span></div></div>
+      </div>
+    </div>`
+  ).join('');
+  const priorityClass = ['p1','p1','p2','p2','p3','p3'];
+  document.getElementById('actionGrid').innerHTML = report.priorityActions.map((a, i) =>
+    `<div class="action-item ${priorityClass[i]}">
+      <div class="action-rank">${String(a.rank).padStart(2,'0')}</div>
+      <div class="action-content"><div class="action-timeframe">${a.timeframe}</div><div class="action-title">${a.title}</div><div class="action-desc">${a.description}</div></div>
+      <div><div class="action-val">£${a.monthlyValue.toLocaleString()}</div><span class="action-val-lbl">/month</span></div>
+    </div>`
+  ).join('');
+  if (report.closingNote) {
+    document.getElementById('closingNote').textContent = report.closingNote;
+    document.getElementById('closingSection').style.display = 'block';
+  }
+  document.getElementById('pdfBtn').classList.add('visible');
 }
 
 function toggleLayer(header) {
-  const body = header.nextElementSibling;
-  body.classList.toggle('open');
+  header.nextElementSibling.classList.toggle('open');
 }
-
-function downloadPDF() { window.print(); }
 
 function animateGenLog(callback) {
   const timings = [200,600,1000,1500,2000,2600,3200,3900,4700,5500,6200,7000,7800,8500,9200];
-  timings.forEach((t,i)=>{
-    setTimeout(()=>{ document.getElementById('gl'+(i+1)).classList.add('show'); },t);
-  });
-  let sec=0;
-  const ti = setInterval(()=>{ sec++; document.getElementById('genTimer').textContent=sec+'s elapsed'; },1000);
-  setTimeout(()=>{ clearInterval(ti); callback(); }, 5000);
+  timings.forEach((t, i) => { setTimeout(() => { document.getElementById('gl'+(i+1)).classList.add('show'); }, t); });
+  let sec = 0;
+  const ti = setInterval(() => { sec++; document.getElementById('genTimer').textContent = sec + 's elapsed'; }, 1000);
+  setTimeout(() => { clearInterval(ti); callback(); }, 5000);
 }
 
 async function init() {
   const data = getAuditData();
   const reportPromise = callClaude(data);
-  animateGenLog(async ()=>{
+  animateGenLog(async () => {
     try {
       const report = await reportPromise;
-      document.getElementById('genScreen').style.display='none';
+      document.getElementById('genScreen').style.display = 'none';
       document.getElementById('reportScreen').classList.add('visible');
       renderReport(report, data);
-      window.scrollTo({top:0,behavior:'smooth'});
+      window.scrollTo({top: 0, behavior: 'smooth'});
     } catch(err) {
       console.error('Report generation error:', err);
-      document.getElementById('genTimer').style.color='#e87070';
-      document.getElementById('genTimer').textContent='Contact support';
-      document.getElementById('gl15').innerHTML='<span style="color:#e87070">⚠ Something went wrong. Please email summitstaygroup@gmail.com with your property details.</span>';
+      document.getElementById('genTimer').style.color = '#e87070';
+      document.getElementById('genTimer').textContent = 'Contact support';
+      document.getElementById('gl15').innerHTML = '<span style="color:#e87070">⚠ Something went wrong. Please email summitstaygroup@gmail.com with your property details and we will send your report within 24 hours.</span>';
       document.getElementById('gl15').classList.add('show');
     }
   });
 }
 
+init();
+</script>
+
+</body>
+</html>
