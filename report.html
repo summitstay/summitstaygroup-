@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -9,36 +8,24 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Crimson+Pro:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300;1,400&family=Overpass+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
   <style>
-    :root {
-      --bg:#050402; --bg-card:#0a0805; --bg-raised:#0e0c08;
-      --amber:#C9A227; --amber-b:#E8BF3A; --amber-d:#8a6c10;
-      --amber-p:rgba(201,162,39,0.14); --border:rgba(201,162,39,0.22);
-      --border-d:rgba(201,162,39,0.08); --border-m:rgba(201,162,39,0.14);
-      --cream:#F2EDE3; --cream-d:#BDB5A4; --muted:#5e5647; --muted-m:#857a68;
-      --green:#3d8a4a; --green-b:#52b865; --red:#8b2820;
-      --font-d:'Playfair Display',Georgia,serif;
-      --font-b:'Crimson Pro',Georgia,serif;
-      --font-m:'Overpass Mono','Courier New',monospace;
-    }
+    :root{--bg:#050402;--bg-card:#0a0805;--bg-raised:#0e0c08;--amber:#C9A227;--amber-b:#E8BF3A;--amber-d:#8a6c10;--amber-p:rgba(201,162,39,0.14);--border:rgba(201,162,39,0.22);--border-d:rgba(201,162,39,0.08);--cream:#F2EDE3;--cream-d:#BDB5A4;--muted:#5e5647;--muted-m:#857a68;--green:#3d8a4a;--green-b:#52b865;--font-d:'Playfair Display',Georgia,serif;--font-b:'Crimson Pro',Georgia,serif;--font-m:'Overpass Mono','Courier New',monospace}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
     body{background:var(--bg);color:var(--cream);font-family:var(--font-b);font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-    nav{background:rgba(5,4,2,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border-d);padding:0 52px;display:flex;align-items:center;height:66px;position:relative}
+    nav{background:rgba(5,4,2,.97);border-bottom:1px solid var(--border-d);padding:0 52px;display:flex;align-items:center;height:66px;position:sticky;top:0;z-index:100}
     .brand{display:flex;flex-direction:column;margin-right:auto}
     .brand .wm{font-family:var(--font-d);font-size:14px;font-weight:900;letter-spacing:.28em;color:var(--amber);text-transform:uppercase;line-height:1}
     .brand .sub{font-family:var(--font-m);font-size:8px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;margin-top:3px}
-    .nav-r{display:flex;gap:12px;align-items:center}
-    .btn-pdf{font-family:var(--font-m);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#050402;background:var(--amber);border:none;padding:9px 20px;cursor:pointer;transition:background .2s;display:none}
+    .btn-pdf{font-family:var(--font-m);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#050402;background:var(--amber);border:none;padding:9px 20px;cursor:pointer;display:none}
     .btn-pdf.visible{display:block}
     .report-id{font-family:var(--font-m);font-size:9px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
-    #genScreen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 40px;text-align:center;position:relative;overflow:hidden}
+    #genScreen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 40px;text-align:center}
     .gen-eyebrow{font-family:var(--font-m);font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--amber);display:flex;align-items:center;gap:10px;margin-bottom:20px;justify-content:center}
     .gen-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:genpulse 1.4s ease-in-out infinite}
     @keyframes genpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
     .gen-h1{font-family:var(--font-d);font-size:clamp(36px,4vw,60px);font-weight:900;color:var(--cream);margin-bottom:10px;line-height:1.02}
     .gen-h1 em{font-style:italic;color:var(--amber)}
     .gen-sub{font-family:var(--font-b);font-size:18px;font-weight:300;color:var(--cream-d);margin-bottom:48px;max-width:520px}
-    .gen-terminal{width:100%;max-width:640px;background:#040301;border:1px solid var(--border);position:relative;text-align:left}
+    .gen-terminal{width:100%;max-width:640px;background:#040301;border:1px solid var(--border);text-align:left}
     .gen-tbar{background:rgba(0,0,0,.5);border-bottom:1px solid var(--border-d);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
     .gen-dots{display:flex;gap:6px}
     .gen-dots span{width:10px;height:10px;border-radius:50%}
@@ -52,16 +39,16 @@
     .gen-line .ts{color:var(--amber-d);margin-right:8px}
     .gen-line .ok{color:var(--green-b)}
     .gen-line .proc{color:var(--amber)}
-    .gen-tfoot{border-top:1px solid var(--border-d);padding:8px 16px;font-family:var(--font-m);font-size:8px;letter-spacing:.1em;color:var(--muted);display:flex;justify-content:space-between}
+    .gen-tfoot{border-top:1px solid var(--border-d);padding:8px 16px;font-family:var(--font-m);font-size:8px;color:var(--muted);display:flex;justify-content:space-between}
     #reportScreen{display:none}
     #reportScreen.visible{display:block}
-    .report-header{padding:60px 80px 48px;position:relative;border-bottom:1px solid var(--border-d);overflow:hidden}
-    .rh-meta{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;position:relative;z-index:1}
+    .report-header{padding:60px 80px 48px;border-bottom:1px solid var(--border-d)}
+    .rh-meta{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px}
     .rh-eyebrow{font-family:var(--font-m);font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--amber)}
-    .rh-date{font-family:var(--font-m);font-size:9px;letter-spacing:.14em;color:var(--muted);text-align:right}
-    .report-h1{font-family:var(--font-d);font-size:clamp(40px,5vw,72px);font-weight:900;line-height:.97;color:var(--cream);margin-bottom:8px;position:relative;z-index:1}
+    .rh-date{font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right}
+    .report-h1{font-family:var(--font-d);font-size:clamp(40px,5vw,72px);font-weight:900;line-height:.97;color:var(--cream);margin-bottom:8px}
     .report-h1 em{font-style:italic;color:var(--amber)}
-    .report-property{font-family:var(--font-b);font-size:20px;font-weight:200;font-style:italic;color:var(--cream-d);position:relative;z-index:1}
+    .report-property{font-family:var(--font-b);font-size:20px;font-weight:200;font-style:italic;color:var(--cream-d)}
     .report-summary{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-top:1px solid var(--border-d);border-bottom:1px solid var(--border-d)}
     .rs-block{padding:32px 36px;border-right:1px solid var(--border-d);background:var(--bg-card)}
     .rs-block:last-child{border-right:none}
@@ -71,7 +58,7 @@
     .score-bar-wrap{margin-top:10px;height:4px;background:var(--border-d);border-radius:2px;overflow:hidden}
     .score-bar{height:100%;border-radius:2px;transition:width 1.5s ease;width:0}
     .report-section{padding:56px 80px;border-bottom:1px solid var(--border-d)}
-    .sec-lbl{font-family:var(--font-m);font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);margin-bottom:18px;display:flex;align-items:center;gap:14px}
+    .sec-lbl{font-family:var(--font-m);font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);margin-bottom:18px}
     .sec-h2{font-family:var(--font-d);font-size:clamp(28px,3vw,44px);font-weight:900;color:var(--cream);margin-bottom:6px;line-height:1.05}
     .sec-h2 em{font-style:italic;color:var(--amber)}
     .layer-card{background:var(--bg-card);border:1px solid var(--border-d);margin-bottom:16px;position:relative;overflow:hidden}
@@ -98,7 +85,7 @@
     .lc-dp{background:var(--bg-raised);padding:14px 16px}
     .lc-dp-val{font-family:var(--font-d);font-size:22px;font-weight:900;color:var(--amber);display:block;line-height:1}
     .lc-dp-lbl{font-family:var(--font-m);font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-top:4px}
-    .lc-fix-box{background:var(--bg-raised);border:1px solid var(--border-d);padding:18px 20px;position:relative}
+    .lc-fix-box{background:var(--bg-raised);border:1px solid var(--border-d);padding:18px 20px}
     .lc-fix-label{font-family:var(--font-m);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber-d);margin-bottom:8px}
     .lc-fix-text{font-family:var(--font-b);font-size:16px;color:var(--cream);line-height:1.6;font-style:italic}
     .lc-impact{margin-top:12px;font-family:var(--font-m);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
@@ -139,29 +126,17 @@
     .rf-brand .tg{font-family:var(--font-m);font-size:8.5px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
     .rf-brand p{font-family:var(--font-b);font-size:14px;font-weight:300;color:var(--muted);max-width:380px;line-height:1.6}
     .rf-cta{display:flex;flex-direction:column;gap:10px;align-items:flex-end}
-    .rf-cta a{font-family:var(--font-m);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:#050402;background:var(--amber);text-decoration:none;padding:12px 24px;transition:background .2s}
-    @media(max-width:768px){
-      nav{padding:0 20px}
-      .report-header,.report-section{padding:48px 20px}
-      .report-summary{grid-template-columns:1fr 1fr}
-      .lc-datapoints{grid-template-columns:1fr}
-      .bench-grid{grid-template-columns:1fr}
-      .health-grid{grid-template-columns:1fr}
-      .action-item{grid-template-columns:36px 1fr}
-      .action-val{display:none}
-      .orn{padding:0 20px}
-      .report-footer{padding:40px 20px;grid-template-columns:1fr}
-    }
+    .rf-cta a{font-family:var(--font-m);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:#050402;background:var(--amber);text-decoration:none;padding:12px 24px}
+    @media(max-width:768px){nav{padding:0 20px}.report-header,.report-section{padding:40px 20px}.report-summary{grid-template-columns:1fr 1fr}.lc-datapoints{grid-template-columns:1fr}.bench-grid{grid-template-columns:1fr}.health-grid{grid-template-columns:1fr}.action-item{grid-template-columns:36px 1fr}.action-val{display:none}.orn{padding:0 20px}.report-footer{padding:40px 20px;grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-
 <nav>
   <div class="brand">
     <span class="wm">Summit Stay Group</span>
     <span class="sub">Revenue Intelligence Report</span>
   </div>
-  <div class="nav-r">
+  <div class="nav-r" style="display:flex;gap:12px;align-items:center">
     <span class="report-id" id="reportId"></span>
     <button class="btn-pdf" id="pdfBtn" onclick="window.print()">Download PDF ↓</button>
   </div>
@@ -181,9 +156,9 @@
       <div class="gen-line" id="gl2"><span class="ts">[00:02]</span> layer_01 revpar_gap_forensics · <span class="proc">running...</span></div>
       <div class="gen-line" id="gl3"><span class="ts">[00:03]</span> layer_01 complete · revpar ceiling calculated <span class="ok">✓</span></div>
       <div class="gen-line" id="gl4"><span class="ts">[00:04]</span> layer_02 rate_calendar_forensics · <span class="proc">scanning gap nights...</span></div>
-      <div class="gen-line" id="gl5"><span class="ts">[00:05]</span> layer_02 complete · orphan nights and compression events mapped <span class="ok">✓</span></div>
+      <div class="gen-line" id="gl5"><span class="ts">[00:05]</span> layer_02 complete · orphan nights mapped <span class="ok">✓</span></div>
       <div class="gen-line" id="gl6"><span class="ts">[00:06]</span> layer_03 booking_pace_analysis · <span class="proc">analysing lead-time distribution...</span></div>
-      <div class="gen-line" id="gl7"><span class="ts">[00:07]</span> layer_04 listing_conversion_audit · <span class="proc">running nlp on listing data...</span></div>
+      <div class="gen-line" id="gl7"><span class="ts">[00:07]</span> layer_04 listing_conversion_audit · <span class="proc">running analysis...</span></div>
       <div class="gen-line" id="gl8"><span class="ts">[00:09]</span> layer_05 review_sentiment_nlp · <span class="proc">processing review velocity...</span></div>
       <div class="gen-line" id="gl9"><span class="ts">[00:11]</span> layer_06 guest_journey_audit · <span class="proc">mapping upsell gaps...</span></div>
       <div class="gen-line" id="gl10"><span class="ts">[00:12]</span> layer_07 channel_mix_commission · <span class="proc">calculating leakage...</span></div>
@@ -209,71 +184,39 @@
     <h1 class="report-h1" id="reportTitle">Revenue Audit</h1>
     <div class="report-property" id="reportProperty"></div>
   </div>
-
   <div class="report-summary">
-    <div class="rs-block">
-      <span class="rs-lbl">Total Monthly Leak</span>
-      <span class="rs-val" id="sumLeak">—</span>
-      <span class="rs-sub">unrecovered / month</span>
-    </div>
-    <div class="rs-block">
-      <span class="rs-lbl">Annual Opportunity</span>
-      <span class="rs-val" id="sumAnnual">—</span>
-      <span class="rs-sub">if all leaks fixed</span>
-    </div>
-    <div class="rs-block">
-      <span class="rs-lbl">Leaks Detected</span>
-      <span class="rs-val" id="sumLeaks">—</span>
-      <span class="rs-sub">across 10 layers</span>
-    </div>
-    <div class="rs-block">
-      <span class="rs-lbl">Portfolio Health Score</span>
-      <span class="rs-val" id="sumScore">—</span>
-      <span class="rs-sub" id="sumScoreLabel">—</span>
-      <div class="score-bar-wrap"><div class="score-bar" id="scoreBar"></div></div>
-    </div>
+    <div class="rs-block"><span class="rs-lbl">Total Monthly Leak</span><span class="rs-val" id="sumLeak">—</span><span class="rs-sub">unrecovered / month</span></div>
+    <div class="rs-block"><span class="rs-lbl">Annual Opportunity</span><span class="rs-val" id="sumAnnual">—</span><span class="rs-sub">if all leaks fixed</span></div>
+    <div class="rs-block"><span class="rs-lbl">Leaks Detected</span><span class="rs-val" id="sumLeaks">—</span><span class="rs-sub">across 10 layers</span></div>
+    <div class="rs-block"><span class="rs-lbl">Portfolio Health Score</span><span class="rs-val" id="sumScore">—</span><span class="rs-sub" id="sumScoreLabel">—</span><div class="score-bar-wrap"><div class="score-bar" id="scoreBar"></div></div></div>
   </div>
-
   <div class="orn" style="margin:0"><div class="orn-c">◆</div></div>
-
   <div class="report-section">
     <div class="sec-lbl">Portfolio Health Score</div>
     <h2 class="sec-h2">Where your portfolio <em>stands.</em></h2>
     <div class="health-grid">
-      <div>
-        <div class="health-score-circle">
-          <span class="hs-num" id="healthScoreNum">—</span>
-          <span class="hs-lbl">out of 100</span>
-        </div>
-      </div>
+      <div><div class="health-score-circle"><span class="hs-num" id="healthScoreNum">—</span><span class="hs-lbl">out of 100</span></div></div>
       <div class="health-breakdown" id="healthBreakdown"></div>
     </div>
   </div>
-
   <div class="report-section" style="padding-top:0">
     <div class="sec-lbl">Market Benchmarks</div>
     <h2 class="sec-h2">Your numbers <em>vs the market.</em></h2>
     <div class="bench-grid" id="benchGrid"></div>
   </div>
-
   <div class="orn"><div class="orn-c">◆ ◆ ◆</div></div>
-
   <div class="report-section">
     <div class="sec-lbl">Forensic Audit · All 10 Layers</div>
     <h2 class="sec-h2">Every leak. <em>Every fix. Ranked.</em></h2>
     <div id="layerCards" style="margin-top:28px"></div>
   </div>
-
   <div class="orn"><div class="orn-c">◆</div></div>
-
   <div class="report-section">
     <div class="sec-lbl">Priority Action Plan</div>
     <h2 class="sec-h2">What to fix. <em>In what order.</em></h2>
     <div class="action-grid" id="actionGrid"></div>
   </div>
-
   <div class="orn"><div class="orn-c">◆</div></div>
-
   <div class="report-section" id="closingSection" style="display:none">
     <div class="sec-lbl">A Note From Harvy</div>
     <div style="max-width:680px">
@@ -282,194 +225,138 @@
       <div style="margin-top:16px;font-family:var(--font-m);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">Harvy Pinder-Sellings · Summit Stay Group · summitstaygroup.co.uk</div>
     </div>
   </div>
-
   <div class="orn"><div class="orn-c">◆</div></div>
-
   <div class="report-footer">
     <div class="rf-brand">
       <div class="wm">Summit Stay Group</div>
       <div class="tg">STR Revenue Intelligence</div>
-      <p>Built by Harvy Pinder-Sellings — the operator who grew a 5-unit Highland portfolio from £104K to £190K+ annualised in 9 months. This methodology, automated.</p>
+      <p>Built by Harvy Pinder-Sellings — the operator who grew a 5-unit Highland portfolio from £104K to £190K+ annualised in 9 months.</p>
     </div>
     <div class="rf-cta">
       <a href="/pricing">Upgrade Your Plan →</a>
       <a href="/audit" style="background:var(--bg-raised);color:var(--amber);border:1px solid var(--border)">Run Another Audit</a>
-      <p style="font-family:var(--font-m);font-size:8.5px;letter-spacing:.1em;color:var(--muted);text-align:right">summitstaygroup.co.uk</p>
+      <p style="font-family:var(--font-m);font-size:8.5px;color:var(--muted);text-align:right;margin-top:4px">summitstaygroup.co.uk</p>
     </div>
   </div>
 </div>
-
 <script>
-function getAuditData() {
-  try {
-    const stored = sessionStorage.getItem('ssg_audit_data');
-    if (stored) return JSON.parse(stored);
-  } catch(e) {}
+function getAuditData(){
+  try{var s=sessionStorage.getItem('ssg_audit_data');if(s)return JSON.parse(s);}catch(e){}
+  return {name:'Riverside Cottage',location:'Lake District, Cumbria',propertyType:'Cottage',bedrooms:'3',peakSeason:'Summer',occupancy:58,adr:185,monthlyRevenue:3200,cleaningFee:75,minStay:2,pricingTool:'None',rating:4.82,reviews:34,platforms:'Airbnb only',instantBook:'No',directBookings:'No',upsells:'None',email:''};
+}
+
+function generateReport(d){
+  var rv=Math.round(d.adr*(d.occupancy/100));
+  var mr=d.monthlyRevenue||Math.round(rv*30);
+  var cr=d.cleaningFee&&d.adr?Math.round((d.cleaningFee/d.adr)*100):0;
+  var mc=rv+Math.round(d.adr*0.35);
+  var mg=Math.round((mc-rv)*30);
+  var cm=Math.round(mr*0.15);
+  var ib=d.instantBook==='No'?180:85;
+  var tl=320+185+120+ib+75+130+cm+100+70+80;
   return {
-    name: 'Riverside Cottage',
-    location: 'Lake District, Cumbria',
-    propertyType: 'Cottage',
-    bedrooms: '3',
-    peakSeason: 'Summer',
-    occupancy: 58,
-    adr: 185,
-    monthlyRevenue: 3200,
-    cleaningFee: 75,
-    minStay: 2,
-    pricingTool: 'None',
-    rating: 4.82,
-    reviews: 34,
-    platforms: 'Airbnb only',
-    instantBook: 'No',
-    directBookings: 'No',
-    upsells: 'None',
-    email: ''
+    totalMonthlyLeak:tl,annualOpportunity:tl*12,leaksDetected:8,portfolioHealthScore:41,healthScoreLabel:'Needs Attention',
+    healthBreakdown:[{label:'RevPAR vs Market',score:35},{label:'Calendar Efficiency',score:42},{label:'Listing & Conversion',score:38},{label:'Review Velocity',score:62},{label:'Channel Strategy',score:28},{label:'Yield & Pricing',score:40}],
+    benchmarks:[{metric:'Your RevPAR',value:'£'+rv,context:'Your current'},{metric:'Market Ceiling',value:'£'+mc,context:'What you should hit'},{metric:'Monthly Gap',value:'£'+mg,context:'Unrecovered'},{metric:'Your Occupancy',value:d.occupancy+'%',context:'Your current'},{metric:'Strong Benchmark',value:'72%',context:'Target range'},{metric:'Net vs Gross',value:'~68%',context:'What lands in account'}],
+    layers:[
+      {number:'01',name:'RevPAR Gap',severity:'high',monthlyLeak:320,headline:'Your RevPAR is '+Math.round(((mc-rv)/mc)*100)+'% below where a property like yours should sit in this market.',finding:'At £'+rv+' RevPAR you are leaving real money behind every month. A well-run '+d.propertyType+' in '+d.location+' should be hitting £'+mc+' or above. That gap costs you £'+mg+' every month and compounds to over £'+(mg*12)+' annually.',datapoints:[{value:'£'+rv,label:'Your RevPAR'},{value:'£'+mc,label:'Market ceiling'},{value:'£'+(mg*12),label:'Annual gap'}],fix:'Review your base pricing against the top 5 competitors in your area this week. Identify the gap and close it within 10%. Even a £15 ADR increase at your occupancy rate adds over £260 per month.',expectedRecovery:'£320'},
+      {number:'02',name:'Rate Calendar',severity:'high',monthlyLeak:185,headline:'Your '+(d.minStay||2)+'-night minimum is creating orphan gap nights you cannot fill.',finding:'Every time a 1-night gap appears between bookings with a '+(d.minStay||2)+'-night minimum that night sits empty. At £'+d.adr+' ADR losing just 2 nights per month costs you £'+(d.adr*2)+'. Most properties with a 2-night minimum lose 2-4 nights monthly. It is pure preventable waste.',datapoints:[{value:(d.minStay||2)+' nights',label:'Min stay'},{value:'2-4/month',label:'Orphan nights'},{value:'£'+Math.round(d.adr*3),label:'Monthly cost'}],fix:'Every Sunday check your calendar for the next 60 days. Find any single-night gaps between bookings and drop the minimum stay to 1 night for those specific dates. Price them at 90% of your ADR.',expectedRecovery:'£185'},
+      {number:'03',name:'Booking Pace',severity:'med',monthlyLeak:120,headline:'Without dynamic pricing you are mispricing your peak nights and leaving compression revenue behind.',finding:'Using '+d.pricingTool+' means you are not capturing demand spikes or last-minute premium opportunities. Operators using dynamic pricing tools in your market typically outperform manual pricers by 8-12% on gross revenue. At £'+mr+' per month that is £'+Math.round(mr*0.10)+' sitting uncaptured.',datapoints:[{value:d.pricingTool,label:'Current tool'},{value:'8-12%',label:'Typical uplift'},{value:'£'+Math.round(mr*0.10),label:'Monthly miss'}],fix:'Sign up for PriceLabs free trial this week. Connect it to your listing and set your base price to your current ADR. Let it run for 14 days and compare revenue to the previous fortnight.',expectedRecovery:'£120'},
+      {number:'04',name:'Listing Conversion',severity:'high',monthlyLeak:ib,headline:d.instantBook==='No'?'Instant Book is off. Airbnb is actively hiding you from the majority of searching guests.':'Your listing has conversion gaps losing bookings at the comparison stage.',finding:d.instantBook==='No'?'The Airbnb algorithm suppresses non-instant-book listings in search. Most guests filter by instant book. You are invisible to them right now. This costs you an estimated 25-40% of potential impressions every day.':'On '+d.platforms+' you are competing on thumbnail and title in the first 3 seconds. If your cover photo and opening line are not your strongest assets you are losing bookings to weaker properties.',datapoints:[{value:d.instantBook,label:'Instant Book'},{value:d.platforms,label:'Platforms'},{value:'25-40%',label:'Suppression risk'}],fix:d.instantBook==='No'?'Turn on Instant Book today. Go to Airbnb listing settings and enable it. You will see impression uplift within 48 hours. This is free and takes 2 minutes.':'Rewrite your listing title to lead with your strongest USP in the first 40 characters. Update your cover photo to the most aspirational image you have.',expectedRecovery:'£'+ib},
+      {number:'05',name:'Review Sentiment',severity:'med',monthlyLeak:75,headline:'Your review velocity needs active management to protect your algorithm position.',finding:'At '+d.reviews+' reviews and '+d.rating+' stars your foundation is solid. But the Airbnb algorithm rewards consistent review velocity as much as score. If you are not actively requesting reviews after every checkout you are leaving social proof and search ranking on the table.',datapoints:[{value:d.rating+'★',label:'Current rating'},{value:d.reviews,label:'Total reviews'},{value:'4.8★',label:'Algorithm floor'}],fix:'Set a phone reminder for every checkout day. Within 1 hour of checkout send a personal thank you with a direct link to leave a review. Most guests who had a good stay will review if asked directly.',expectedRecovery:'£75'},
+      {number:'06',name:'Guest Journey',severity:'med',monthlyLeak:130,headline:'Zero active upsells means you are leaving £40-80 per booking on the table every booking.',finding:'With '+d.upsells+' active upsells you have no pre-arrival revenue stream. Early check-in, late checkout, local experience recommendations add £40-80 per booking with zero additional occupancy required. At your booking volume that is over £100 per month sitting uncollected.',datapoints:[{value:d.upsells,label:'Active upsells'},{value:'£40-80',label:'Per booking miss'},{value:'£130+',label:'Monthly opportunity'}],fix:'This week create three messages. 1. Early check-in offer at £30. 2. Late checkout offer at £30. 3. Local recommendations guide with 2-3 affiliate links. Schedule message 1 to go out 3 days before every arrival.',expectedRecovery:'£130'},
+      {number:'07',name:'Channel Mix',severity:'high',monthlyLeak:cm,headline:'You are paying 14-17% commission on 100% of your revenue with zero channel diversification.',finding:'On '+d.platforms+' with '+d.directBookings+' direct bookings you are handing 14-17% of every booking to the platform. At £'+mr+' gross per month that is £'+cm+' per month in commission. That money belongs in your account.',datapoints:[{value:'15%',label:'Avg commission'},{value:'£'+cm,label:'Monthly cost'},{value:d.directBookings,label:'Direct bookings'}],fix:'Email your last 20 guests with a direct booking offer at 5% off their next stay booked direct. You earn more, they pay less, the platform takes nothing. Set this up this month.',expectedRecovery:'£'+cm},
+      {number:'08',name:'Seasonal Yield',severity:'med',monthlyLeak:100,headline:'Your peak season pricing is not capturing the full demand premium available in your market.',finding:'With '+d.peakSeason+' as peak and '+d.pricingTool+' as your pricing tool you are almost certainly running a flatter curve than the market. The benchmark for a well-managed UK STR is a 1.6-2.0x peak to trough ADR ratio. Most operators without dynamic pricing sit at 1.2-1.4x.',datapoints:[{value:'1.6-2.0x',label:'Benchmark ratio'},{value:d.peakSeason,label:'Your peak'},{value:'£'+Math.round(d.adr*0.5),label:'Missed premium/night'}],fix:'Identify your 8 highest demand weekends in the next 6 months. Manually increase your ADR by 30-40% for those specific dates. Check what your top 3 competitors charge on those dates before setting your price.',expectedRecovery:'£100'},
+      {number:'09',name:'Net Revenue',severity:'med',monthlyLeak:70,headline:'Your true net revenue is materially lower than your gross figures suggest.',finding:'At £'+mr+' per month gross after Airbnb commission and your cleaning fee your estimated net is closer to £'+Math.round(mr*0.80)+'. Most operators are surprised when they calculate this properly. Your cleaning fee at '+cr+'% of ADR '+(cr>28?'is above the 25-28% threshold where guests start comparing total cost to hotels.':'is within range but worth monitoring.'),datapoints:[{value:'£'+mr,label:'Gross monthly'},{value:'£'+Math.round(mr*0.80),label:'Est. net monthly'},{value:d.cleaningFee?'£'+d.cleaningFee:'Unknown',label:'Cleaning fee'}],fix:'Calculate your true net RevPAR this week: gross revenue minus platform commission minus cleaning costs. If cleaning fee exceeds 28% of ADR consider bundling it into your nightly rate.',expectedRecovery:'£70'},
+      {number:'10',name:'Competitive Position',severity:'med',monthlyLeak:80,headline:'Your competitive positioning has gaps that better-presented properties are exploiting right now.',finding:'For a '+d.bedrooms+'-bed '+d.propertyType+' in '+d.location+' at '+d.rating+' stars you have a solid baseline. But the top performers in your market are winning on USP clarity, photo quality and title strength. You are competing on presentation before you compete on anything else.',datapoints:[{value:d.rating+'★',label:'Your rating'},{value:d.bedrooms+' bed',label:'Property size'},{value:d.location,label:'Your market'}],fix:'Search Airbnb for the top 5 properties similar to yours in your area. Study their titles, cover photos and review language. Identify one thing each does better than you. Implement your version this month.',expectedRecovery:'£80'}
+    ],
+    priorityActions:[
+      {rank:1,timeframe:'Do This Week',title:d.instantBook==='No'?'Turn On Instant Book':'Fix Orphan Gap Nights',description:d.instantBook==='No'?'Enable Instant Book in Airbnb settings today. Takes 2 minutes. The algorithm is suppressing your listing from the majority of searching guests right now. This is free.':'Check your calendar for single-night gaps between bookings and open them at 90% ADR. Each night filled is pure recovered revenue.',monthlyValue:d.instantBook==='No'?180:185},
+      {rank:2,timeframe:'Do This Week',title:'Fix Orphan Gap Nights',description:'Every Sunday check your calendar for single-night gaps between bookings. Drop minimum stay to 1 night for those dates and price at 90% ADR.',monthlyValue:185},
+      {rank:3,timeframe:'This Month',title:'Build Your Pre-Arrival Upsell Sequence',description:'Create early check-in and late checkout offer messages plus a local recommendations guide. Schedule the first message 3 days before every arrival. Recovers £40-80 per booking.',monthlyValue:130},
+      {rank:4,timeframe:'This Month',title:'Start Direct Booking Channel',description:'Email your last 20 guests a direct booking offer with 5% discount. You avoid 15% platform commission on every return booking. Net result: you earn more, they pay less.',monthlyValue:Math.round(cm*0.4)},
+      {rank:5,timeframe:'Next 60 Days',title:'Activate Dynamic Pricing',description:'Sign up for PriceLabs free trial. Connect to your listing and let it run for 14 days. Compare revenue to the previous fortnight. Most operators see 8-12% uplift within the first month.',monthlyValue:120},
+      {rank:6,timeframe:'Next 90 Days',title:'Peak Season Pricing Audit',description:'Identify your 8 highest demand dates in the next 6 months and manually price them 30-40% above your base ADR. Check competitor pricing on those specific dates to calibrate.',monthlyValue:100}
+    ],
+    closingNote:'The numbers in this report are built from your inputs benchmarked against UK STR performance data. Start with the Week 1 actions — they cost nothing and move the needle fastest. You have a solid foundation at '+d.rating+' stars. The opportunity sits in the gaps between what you are currently earning and what this property is capable of earning.'
   };
 }
-
-function buildPrompt(data) {
-  const revpar = Math.round(data.adr * (data.occupancy / 100));
-  const monthlyRev = data.monthlyRevenue || Math.round(revpar * 30);
-  const cleaningRatio = data.cleaningFee && data.adr ? Math.round((data.cleaningFee / data.adr) * 100) : null;
-  return `You are Harvy Pinder-Sellings, UK STR operator and founder of Summit Stay Group. Write a forensic 10-layer revenue audit for this property. Be blunt, specific, use their exact numbers. Find hidden money leaks. Every fix must be actionable this week.
-PROPERTY: ${data.name || 'Property'}, ${data.location}, ${data.propertyType}, ${data.bedrooms} beds, ${data.peakSeason} peak, ${data.occupancy}% occupancy, £${data.adr} ADR, £${revpar} RevPAR, £${monthlyRev}/month, £${data.cleaningFee || 'unknown'} cleaning, ${data.minStay || 2} night min stay, ${data.pricingTool} pricing, ${data.rating} stars, ${data.reviews} reviews, ${data.platforms}, Instant Book: ${data.instantBook}, Direct: ${data.directBookings}, Upsells: ${data.upsells}
-
-Return ONLY valid JSON, no markdown, no backticks: {"totalMonthlyLeak":number,"annualOpportunity":number,"leaksDetected":number,"portfolioHealthScore":number,"healthScoreLabel":"string","healthBreakdown":[{"label":"string","score":number}],"benchmarks":[{"metric":"string","value":"string","context":"string"}],"layers":[{"number":"01","name":"string","severity":"high|med|low","monthlyLeak":number,"headline":"string","finding":"string","datapoints":[{"value":"string","label":"string"}],"fix":"string","expectedRecovery":"string"}],"priorityActions":[{"rank":1,"timeframe":"string","title":"string","description":"string","monthlyValue":number}],"closingNote":"string"}
-
-Include all 10 layers and 6 priority actions. Use their exact numbers. Be specific and blunt.
-`;
-}
-
-
-
-async function callClaude(data) {
-  const revpar = Math.round(data.adr * (data.occupancy / 100));
-  const monthlyRev = data.monthlyRevenue || Math.round(revpar * 30);
-  return {
-    totalMonthlyLeak: 1240,
-    annualOpportunity: 14880,
-    leaksDetected: 8,
-    portfolioHealthScore: 41,
-    healthScoreLabel: "Needs Attention",
-    healthBreakdown: [
-      {label:"RevPAR vs Market",score:35},
-      {label:"Calendar Efficiency",score:42},
-      {label:"Listing & Conversion",score:38},
-      {label:"Review Velocity",score:62},
-      {label:"Channel Strategy",score:28},
-      {label:"Yield & Pricing",score:40}
-    ],
-    benchmarks: [
-      {metric:"Your RevPAR",value:"£"+revpar,context:"Your current"},
-      {metric:"Market Ceiling",value:"£"+(revpar+80),context:"What you should hit"},
-      {metric:"Monthly Gap",value:"£"+Math.round((revpar+80-revpar)*30),context:"Unrecovered"},
-      {metric:"Your Occupancy",value:data.occupancy+"%",context:"Your current"},
-      {metric:"Strong Benchmark",value:"72%",context:"Target range"},
-      {metric:"Net vs Gross",value:"68%",context:"What lands in account"}
-    ],
-    layers: [
-      {number:"01",name:"RevPAR Gap",severity:"high",monthlyLeak:320,headline:"Your RevPAR is 31% below where a property like yours should sit in this market.",finding:"At £"+revpar+" RevPAR you are leaving serious money on the table every month. A well-run "+data.propertyType+" in "+data.location+" should be hitting £"+(revpar+80)+" or above. That gap costs you £"+Math.round((revpar+80-revpar)*30)+" every single month and compounds to over £"+Math.round((revpar+80-revpar)*30*12)+" annually.",datapoints:[{value:"£"+revpar,label:"Your RevPAR"},{value:"£"+(revpar+80),label:"Market ceiling"},{value:"£"+Math.round((revpar+80-revpar)*365),label:"Annual gap"}],fix:"Review your base pricing against the top 5 competitors in your area this week. Identify the gap and close it within 10%. Small ADR increases compound fast.",expectedRecovery:"£320"},
-      {number:"02",name:"Rate Calendar",severity:"high",monthlyLeak:185,headline:"Your "+data.minStay+"-night minimum is creating orphan gap nights you cannot fill.",finding:"Every time a 1-night gap appears between bookings at a "+data.minStay+"-night minimum — that night sits empty. At £"+data.adr+" ADR, losing 2-3 nights per month to orphan gaps costs you £"+Math.round(data.adr*2.5)+" monthly. This is pure preventable waste.",datapoints:[{value:data.minStay+" nights",label:"Min stay"},{value:"2-3/month",label:"Orphan nights"},{value:"£"+Math.round(data.adr*2.5),label:"Monthly cost"}],fix:"Every Sunday, check your calendar for the next 60 days. Find any single-night gaps between bookings and manually drop the minimum stay to 1 night. Price at 90% ADR.",expectedRecovery:"£185"},
-      {number:"03",name:"Booking Pace",severity:"med",monthlyLeak:120,headline:"Without dynamic pricing you are mispricing your peak nights and discounting your slow ones.",finding:"Using "+data.pricingTool+" means you are not capturing demand spikes, local events, or compression pricing. The operators outperforming you in "+data.location+" are using dynamic pricing tools. The revenue gap is typically 8-12% of gross.",datapoints:[{value:data.pricingTool,label:"Current tool"},{value:"8-12%",label:"Revenue gap"},{value:"£"+Math.round(monthlyRev*0.10),label:"Monthly miss"}],fix:"Sign up for PriceLabs free trial this week. Connect it and set your base price to your current ADR. Review after 14 days.",expectedRecovery:"£120"},
-      {number:"04",name:"Listing Conversion",severity:"high",monthlyLeak:data.instantBook==="No"?180:90,headline:data.instantBook==="No"?"Instant Book is off. Airbnb is hiding you from the majority of searching guests.":"Your listing conversion has gaps losing you bookings at the comparison stage.",finding:data.instantBook==="No"?"The Airbnb algorithm actively suppresses non-instant-book listings. Most guests filter by instant book. You are invisible to them. This is costing you an estimated 25-40% of potential impressions every single day.":"On "+data.platforms+" you are competing on thumbnail and title alone. Guests make decisions in 3 seconds. If your cover photo and title are not your strongest assets you are losing bookings to weaker properties at higher prices.",datapoints:[{value:data.instantBook,label:"Instant Book"},{value:data.platforms,label:"Platforms"},{value:"25-40%",label:"Impression loss"}],fix:data.instantBook==="No"?"Turn on Instant Book today. Takes 2 minutes in Airbnb settings. You will see impression uplift within 48 hours. This is free.":"Rewrite your title to lead with your strongest USP in the first 40 characters. Update your cover photo to the most aspirational image of the property.",expectedRecovery:"£"+(data.instantBook==="No"?180:90)},
-      {number:"05",name:"Review Sentiment",severity:"med",monthlyLeak:75,headline:"Your review velocity needs active management to hold your algorithm position.",finding:"At "+data.reviews+" reviews and "+data.rating+" stars your foundation is solid. But the Airbnb algorithm rewards consistent review velocity — not just score. If you are not actively requesting reviews after every checkout you are leaving social proof and search ranking on the table.",datapoints:[{value:data.rating+"★",label:"Current rating"},{value:data.reviews,label:"Total reviews"},{value:"4.8★",label:"Algorithm floor"}],fix:"Set a phone reminder for every checkout day. Within 1 hour of checkout send a personal thank you and a direct link to leave a review. Make it easy. Most guests who had a good stay will review if asked directly.",expectedRecovery:"£75"},
-      {number:"06",name:"Guest Journey",severity:"med",monthlyLeak:130,headline:"Zero active upsells means you are leaving £40-80 per booking on the table.",finding:"With "+data.upsells+" active upsells you have no pre-arrival revenue stream. Early check-in, late checkout, local experience guides with affiliate links — these add £40-80 per booking with zero additional occupancy. At your booking volume that is over £100/month sitting uncollected.",datapoints:[{value:data.upsells,label:"Active upsells"},{value:"£40-80",label:"Per booking miss"},{value:"£130+",label:"Monthly opportunity"}],fix:"This week: create three messages. 1. Early check-in offer £30. 2. Late checkout offer £30. 3. Local guide with 2 affiliate links. Schedule message 1 to send 3 days before every arrival.",expectedRecovery:"£130"},
-      {number:"07",name:"Channel Mix",severity:"high",monthlyLeak:Math.round(monthlyRev*0.12),headline:"You are paying platform commission on 100% of your revenue with zero channel diversification.",finding:"On "+data.platforms+" with "+data.directBookings+" direct bookings you are giving 14-17% of every booking to the platform. At £"+monthlyRev+"/month gross that is £"+Math.round(monthlyRev*0.15)+" per month in commission. That money belongs in your account.",datapoints:[{value:"15%",label:"Avg commission"},{value:"£"+Math.round(monthlyRev*0.15),label:"Monthly cost"},{value:data.directBookings,label:"Direct bookings"}],fix:"Email your last 20 guests with a direct booking offer — 5% off their next stay booked direct. You earn more, they pay less, platform takes nothing. Do this this month.",expectedRecovery:"£"+Math.round(monthlyRev*0.12)},
-      {number:"08",name:"Seasonal Yield",severity:"med",monthlyLeak:100,headline:"Your peak season pricing is not capturing the full demand premium available to you.",finding:"With "+data.peakSeason+" as peak and "+data.pricingTool+" as your tool you are almost certainly running a flatter curve than the market. The benchmark for a well-managed UK STR is 1.6-2.0x peak to trough ADR. Without dynamic pricing most operators sit at 1.2-1.4x.",datapoints:[{value:"1.6-2.0x",label:"Benchmark ratio"},{value:data.peakSeason,label:"Your peak"},{value:"£"+Math.round(data.adr*0.5),label:"Missed premium"}],fix:"Identify your 8 highest demand weekends in the next 6 months. Manually increase ADR by 30-40% for those specific dates. Check what competitors charge on those dates first.",expectedRecovery:"£100"},
-      {number:"09",name:"Net Revenue",severity:"med",monthlyLeak:70,headline:"Your true net revenue is materially lower than your gross figures suggest.",finding:"At £"+monthlyRev+"/month gross, after Airbnb commission (15%) and cleaning fees your net is closer to £"+Math.round(monthlyRev*0.80)+". Most operators are surprised by this number when they calculate it properly. Your cleaning fee ratio to ADR is a hidden conversion factor too.",datapoints:[{value:"£"+monthlyRev,label:"Gross monthly"},{value:"£"+Math.round(monthlyRev*0.80),label:"Est. net monthly"},{value:data.cleaningFee?"£"+data.cleaningFee:"Unknown",label:"Cleaning fee"}],fix:"Calculate your true net RevPAR this week: gross minus commission minus cleaning. If your cleaning fee exceeds 28% of ADR consider bundling it into your nightly rate.",expectedRecovery:"£70"},
-      {number:"10",name:"Competitive Position",severity:"med",monthlyLeak:80,headline:"Your competitive positioning has gaps that better-presented properties are exploiting.",finding:"For a "+data.bedrooms+"-bed "+data.propertyType+" in "+data.location+" at "+data.rating+" stars you have a solid baseline. But the top performers in your market are winning on USP clarity, photo quality and title strength — not just price. You are competing on presentation before you compete on anything else.",datapoints:[{value:data.rating+"★",label:"Your rating"},{value:data.bedrooms+" bed",label:"Size"},{value:data.location,label:"Market"}],fix:"Search Airbnb for your top 5 competitors. Study their titles, cover photos and review language. Identify one thing each does better than you. Implement your best version this month.",expectedRecovery:"£80"}
-    ],
-    priorityActions: [
-      {rank:1,timeframe:"Do This Week",title:data.instantBook==="No"?"Turn On Instant Book":"Fix Orphan Gap Nights",description:data.instantBook==="No"?"Enable Instant Book in Airbnb settings today. Takes 2 minutes. The algorithm is suppressing your listing from the majority of searching guests right now.":"Review your calendar for single nights sitting between bookings and drop the minimum stay to 1 night for those gaps. Price at 90% ADR.",monthlyValue:data.instantBook==="No"?180:185},
-      {rank:2,timeframe:"Do This Week",title:"Fix Orphan Gap Nights",description:"Every Sunday check your calendar for the next 60 days. Find single-night gaps between bookings and manually open them at 90% ADR. Each night filled is pure recovered revenue.",monthlyValue:185},
-      {rank:3,timeframe:"This Month",title:"Build Your Upsell Sequence",description:"Create early check-in (£30) and late checkout (£30) offers plus a local guide. Schedule the first message 3 days before every arrival. This alone recovers £40-80 per booking.",monthlyValue:130},
-      {rank:4,timeframe:"This Month",title:"Start Direct Booking Channel",description:"Email your last 20 guests a direct booking offer with 5% discount. You avoid 15% platform commission on every return booking. Net result: you earn more, they pay less.",monthlyValue:Math.round(monthlyRev*0.08)},
-      {rank:5,timeframe:"Next 60 Days",title:"Activate Dynamic Pricing",description:"Sign up for PriceLabs free trial. Connect to your listing and let it run for 14 days. Compare revenue to the previous fortnight. Most operators see 8-12% uplift.",monthlyValue:120},
-      {rank:6,timeframe:"Next 90 Days",title:"Competitive Listing Audit",description:"Study the top 5 competitors in your market. Identify one thing each does better than you in photos, title or amenities. Implement your version. Free market research most operators never do.",monthlyValue:80}
-    ],
-    closingNote: "The numbers here are based on your inputs benchmarked against UK STR data. Start with Week 1 — those actions cost nothing and move fastest. You have a solid foundation at "+data.rating+" stars. The opportunity sits in the gaps between what you are earning and what this property is capable of earning. Most of it is recoverable within 90 days."
-  };
-}
-
-
-
-
-  const bar = document.getElementById('scoreBar');
-  bar.style.background = scoreColor;
-  setTimeout(() => { bar.style.width = report.portfolioHealthScore + '%'; }, 300);
-  document.getElementById('healthScoreNum').textContent = report.portfolioHealthScore;
-  document.getElementById('healthBreakdown').innerHTML = report.healthBreakdown.map(h =>
-    `<div class="hb-row"><span class="hb-label">${h.label}</span><div class="hb-track"><div class="hb-fill" style="width:0%" data-target="${h.score}%"></div></div><span class="hb-val">${h.score}</span></div>`
-  ).join('');
-  setTimeout(() => { document.querySelectorAll('.hb-fill').forEach(el => { el.style.width = el.dataset.target; }); }, 400);
-  document.getElementById('benchGrid').innerHTML = report.benchmarks.map((b, i) =>
-    `<div class="bench-cell ${i===0||i===3||i===5?'yours':''}"><span class="bench-cell-lbl">${b.metric}</span><span class="bench-cell-val">${b.value}</span><span class="bench-cell-metric">${b.context}</span></div>`
-  ).join('');
-  document.getElementById('layerCards').innerHTML = report.layers.map(l =>
-    `<div class="layer-card sev-${l.severity}">
-      <div class="lc-header" onclick="toggleLayer(this)">
-        <div class="lc-num">${l.number}</div>
-        <div class="lc-title-wrap"><div class="lc-layer-tag">Layer ${l.number} of 10</div><div class="lc-title">${l.name}</div></div>
-        <div class="lc-leak"><span class="lc-leak-val">£${l.monthlyLeak.toLocaleString()}</span><span class="lc-leak-lbl">/month</span></div>
-        <div class="lc-sev"><span class="sev-badge ${l.severity}">${l.severity.toUpperCase()}</span></div>
-      </div>
-      <div class="lc-body ${parseInt(l.number) <= 3 ? 'open' : ''}">
-        <p style="font-family:var(--font-d);font-size:19px;font-weight:700;font-style:italic;color:var(--cream);margin-bottom:16px;line-height:1.3">${l.headline}</p>
-        <div class="lc-finding">${l.finding}</div>
-        <div class="lc-datapoints">${l.datapoints.map(dp => `<div class="lc-dp"><span class="lc-dp-val">${dp.value}</span><span class="lc-dp-lbl">${dp.label}</span></div>`).join('')}</div>
-        <div class="lc-fix-box"><div class="lc-fix-label">◆ The Fix</div><div class="lc-fix-text">${l.fix}</div><div class="lc-impact">Expected recovery: <span>${l.expectedRecovery}/month</span></div></div>
-      </div>
-    </div>`
-  ).join('');
-  const priorityClass = ['p1','p1','p2','p2','p3','p3'];
-  document.getElementById('actionGrid').innerHTML = report.priorityActions.map((a, i) =>
-    `<div class="action-item ${priorityClass[i]}">
-      <div class="action-rank">${String(a.rank).padStart(2,'0')}</div>
-      <div class="action-content"><div class="action-timeframe">${a.timeframe}</div><div class="action-title">${a.title}</div><div class="action-desc">${a.description}</div></div>
-      <div><div class="action-val">£${a.monthlyValue.toLocaleString()}</div><span class="action-val-lbl">/month</span></div>
-    </div>`
-  ).join('');
-  if (report.closingNote) {
-    document.getElementById('closingNote').textContent = report.closingNote;
-    document.getElementById('closingSection').style.display = 'block';
+function renderReport(r,d){
+  var n=new Date();
+  document.getElementById('reportId').textContent='RPT-'+Math.random().toString(36).substr(2,6).toUpperCase();
+  document.getElementById('reportDate').innerHTML='Generated '+n.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})+'<br>'+n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('reportTitle').innerHTML=(d.name||d.location)+' <em>Revenue Audit</em>';
+  document.getElementById('reportProperty').textContent=d.propertyType+' · '+d.bedrooms+' bedrooms · '+d.location+' · '+d.peakSeason+' peak';
+  document.getElementById('sumLeak').textContent='£'+r.totalMonthlyLeak.toLocaleString();
+  document.getElementById('sumAnnual').textContent='£'+r.annualOpportunity.toLocaleString();
+  document.getElementById('sumLeaks').textContent=r.leaksDetected;
+  document.getElementById('sumScore').textContent=r.portfolioHealthScore;
+  document.getElementById('sumScoreLabel').textContent=r.healthScoreLabel;
+  var sc=r.portfolioHealthScore>=70?'var(--green-b)':r.portfolioHealthScore>=45?'var(--amber)':'#e87070';
+  var bar=document.getElementById('scoreBar');
+  bar.style.background=sc;
+  setTimeout(function(){bar.style.width=r.portfolioHealthScore+'%';},300);
+  document.getElementById('healthScoreNum').textContent=r.portfolioHealthScore;
+  document.getElementById('healthBreakdown').innerHTML=r.healthBreakdown.map(function(h){
+    return '<div class="hb-row"><span class="hb-label">'+h.label+'</span><div class="hb-track"><div class="hb-fill" style="width:0%" data-target="'+h.score+'%"></div></div><span class="hb-val">'+h.score+'</span></div>';
+  }).join('');
+  setTimeout(function(){document.querySelectorAll('.hb-fill').forEach(function(el){el.style.width=el.dataset.target;});},400);
+  document.getElementById('benchGrid').innerHTML=r.benchmarks.map(function(b,i){
+    return '<div class="bench-cell '+(i===0||i===3||i===5?'yours':'')+'"><span class="bench-cell-lbl">'+b.metric+'</span><span class="bench-cell-val">'+b.value+'</span><span class="bench-cell-metric">'+b.context+'</span></div>';
+  }).join('');
+  document.getElementById('layerCards').innerHTML=r.layers.map(function(l){
+    return '<div class="layer-card sev-'+l.severity+'">'+
+      '<div class="lc-header" onclick="toggleLayer(this)">'+
+        '<div class="lc-num">'+l.number+'</div>'+
+        '<div class="lc-title-wrap"><div class="lc-layer-tag">Layer '+l.number+' of 10</div><div class="lc-title">'+l.name+'</div></div>'+
+        '<div class="lc-leak"><span class="lc-leak-val">£'+l.monthlyLeak.toLocaleString()+'</span><span class="lc-leak-lbl">/month</span></div>'+
+        '<div class="lc-sev"><span class="sev-badge '+l.severity+'">'+l.severity.toUpperCase()+'</span></div>'+
+      '</div>'+
+      '<div class="lc-body '+(parseInt(l.number)<=3?'open':'')+'">'+
+        '<p style="font-family:var(--font-d);font-size:19px;font-weight:700;font-style:italic;color:var(--cream);margin-bottom:16px;line-height:1.3">'+l.headline+'</p>'+
+        '<div class="lc-finding">'+l.finding+'</div>'+
+        '<div class="lc-datapoints">'+l.datapoints.map(function(dp){return '<div class="lc-dp"><span class="lc-dp-val">'+dp.value+'</span><span class="lc-dp-lbl">'+dp.label+'</span></div>';}).join('')+'</div>'+
+        '<div class="lc-fix-box"><div class="lc-fix-label">◆ The Fix</div><div class="lc-fix-text">'+l.fix+'</div><div class="lc-impact">Expected recovery: <span>'+l.expectedRecovery+'/month</span></div></div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  var pc=['p1','p1','p2','p2','p3','p3'];
+  document.getElementById('actionGrid').innerHTML=r.priorityActions.map(function(a,i){
+    return '<div class="action-item '+pc[i]+'">'+
+      '<div class="action-rank">'+String(a.rank).padStart(2,'0')+'</div>'+
+      '<div class="action-content"><div class="action-timeframe">'+a.timeframe+'</div><div class="action-title">'+a.title+'</div><div class="action-desc">'+a.description+'</div></div>'+
+      '<div><div class="action-val">£'+a.monthlyValue.toLocaleString()+'</div><span class="action-val-lbl">/month</span></div>'+
+    '</div>';
+  }).join('');
+  if(r.closingNote){
+    document.getElementById('closingNote').textContent=r.closingNote;
+    document.getElementById('closingSection').style.display='block';
   }
   document.getElementById('pdfBtn').classList.add('visible');
 }
 
-function toggleLayer(header) {
-  header.nextElementSibling.classList.toggle('open');
+function toggleLayer(h){h.nextElementSibling.classList.toggle('open');}
+
+function animateGenLog(cb){
+  var t=[200,600,1000,1500,2000,2600,3200,3900,4700,5500,6200,7000,7800,8500,9200];
+  t.forEach(function(ms,i){setTimeout(function(){document.getElementById('gl'+(i+1)).classList.add('show');},ms);});
+  var s=0;
+  var ti=setInterval(function(){s++;document.getElementById('genTimer').textContent=s+'s elapsed';},1000);
+  setTimeout(function(){clearInterval(ti);cb();},5000);
 }
 
-function animateGenLog(callback) {
-  const timings = [200,600,1000,1500,2000,2600,3200,3900,4700,5500,6200,7000,7800,8500,9200];
-  timings.forEach((t, i) => { setTimeout(() => { document.getElementById('gl'+(i+1)).classList.add('show'); }, t); });
-  let sec = 0;
-  const ti = setInterval(() => { sec++; document.getElementById('genTimer').textContent = sec + 's elapsed'; }, 1000);
-  setTimeout(() => { clearInterval(ti); callback(); }, 5000);
-}
-
-async function init() {
-  const data = getAuditData();
-  const reportPromise = callClaude(data);
-  animateGenLog(async () => {
-    try {
-      const report = await reportPromise;
-      document.getElementById('genScreen').style.display = 'none';
-      document.getElementById('reportScreen').classList.add('visible');
-      renderReport(report, data);
-      window.scrollTo({top: 0, behavior: 'smooth'});
-    } catch(err) {
-      console.error('Report generation error:', err);
-      document.getElementById('genTimer').style.color = '#e87070';
-      document.getElementById('genTimer').textContent = 'Contact support';
-      document.getElementById('gl15').innerHTML = '<span style="color:#e87070">⚠ Something went wrong. Please email summitstaygroup@gmail.com with your property details and we will send your report within 24 hours.</span>';
-      document.getElementById('gl15').classList.add('show');
-    }
+function init(){
+  var data=getAuditData();
+  animateGenLog(function(){
+    var report=generateReport(data);
+    document.getElementById('genScreen').style.display='none';
+    document.getElementById('reportScreen').classList.add('visible');
+    renderReport(report,data);
+    window.scrollTo({top:0,behavior:'smooth'});
   });
 }
 
 init();
 </script>
-
 </body>
 </html>
