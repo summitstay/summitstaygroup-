@@ -717,6 +717,9 @@ function goToFullReport(){
   window.addEventListener('DOMContentLoaded',()=>{
     const params = new URLSearchParams(window.location.search);
     if(params.get('admin')==='ssg2026'){
+      const pw = prompt('Access code:');
+      if(pw !== 'PhaTbrIckWaLl1') return;
+
       document.querySelectorAll('.paywall').forEach(el=>{
         const btn = document.createElement('button');
         btn.className='pw-cta';
