@@ -709,9 +709,26 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 
   // Called from paywall "Unlock All 10 Layers" — goes straight to report page
   // (In production this would go via Stripe first)
-  function goToFullReport(){
+function goToFullReport(){
     window.location.href = '/report';
   }
+
+  // Admin bypass — check on load
+  window.addEventListener('DOMContentLoaded',()=>{
+    const params = new URLSearchParams(window.location.search);
+    if(params.get('admin')==='ssg2026'){
+      document.querySelectorAll('.paywall').forEach(el=>{
+        const btn = document.createElement('button');
+        btn.className='pw-cta';
+        btn.textContent='ADMIN — View Full Report';
+        btn.style.marginTop='20px';
+        btn.onclick=()=>window.location.href='/report';
+        el.appendChild(btn);
+      });
+    }
+  });
+
+  
 </script>
 
 </body>
